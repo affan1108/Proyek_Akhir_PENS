@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Payment;
+
+class PaymentController extends Controller
+{
+    public function payment(){
+        //SAMPLE REQUEST START HERE
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-bLySRwVU1rLQ2e80YHvoIIbF';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => 10000,
+            ),
+            'customer_details' => array(
+                'first_name' => 'budi',
+                'last_name' => 'pratama',
+                'email' => 'budi.pra@example.com',
+                'phone' => '08111222333',
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        return view('pay', ['snap_token'=>$snapToken]);
+    }
+
+    public function payment_post(Request $request){
+        $json = json_decode($request->get('json','user_id','invoice_id'));
+        // return $json;
+        $order = new Payment;
+        $order->status = $json->transaction_status;
+        $order->user_id = $request->user_id;
+        $order->invoice_id = $request->invoice_id;
+        $order->diterima = isset($request->diterima) ? $request->diterima : null;
+        // $order->number = $request->get('number');
+        $order->transaction_id = $json->transaction_id;
+        $order->order_id = $json->order_id;
+        $order->gross_amount = $json->gross_amount;
+        $order->payment_type = $json->payment_type;
+        $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
+        $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
+        return $order->save() ? redirect(('pesanansaya'))->with('alert-success', 'Order berhasil dibuat') : redirect(('pesanansaya'))->with('alert-failed', 'Terjadi kesalahan');
+    }
+
+    public function nilai($id){
+        $data = Payment::find($id);
+        return view('nilaipesanan',compact('data'));
+    }
+
+    public function penilaian(Request $request, $id)
+    {
+        $data = Payment::findOrFail($id);
+        $data->rating = $request->rating;
+        // $data->foto = $request->foto;
+        $data->deskripsi = $request->deskripsi;
+        if($request->hasFile('foto')){
+            $data['foto']=$request->file('foto')->getClientOriginalName();
+        }
+        
+        $data->update();
+        return redirect()->route('riwayatpesanan')->with('toast_success', 'Data Berhasil Di update');
+    }
+}
