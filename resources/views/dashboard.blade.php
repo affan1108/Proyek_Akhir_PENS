@@ -129,26 +129,6 @@
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        @foreach($carts as $cart)
-                            @if($cart->user == Auth::user()->id)
-                                <a href="/invoice/{{$cart->id}}" class="dropdown-item">
-                                    
-                                    <div class="media">
-                                        <img src="dist/img/user1-128x128.jpg" alt="User Avatar"
-                                            class="img-size-50 mr-3 img-circle">
-                                        <div class="media-body">
-                                            <h3 class="dropdown-item-title">
-                                                {{$cart->nama}}
-                                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                            </h3>
-                                            <p class="text-sm">Warna: {{$cart->warna}}</p>
-                                            <p class="text-sm text-muted">Rp. {{$cart->harga}}</p>
-                                        </div>
-                                    </div>
-                                    
-                                </a>
-                            @endif
-                        @endforeach
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
                     </div>
@@ -161,7 +141,7 @@
         <aside class="main-sidebar sidebar-primary elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link bg-success">
-                <img src="assets/images/logo2.png" alt="Logo Ameliia Collection"
+                <img src="{{asset('assets/images/logo2.png')}}" alt="Logo Ameliia Collection"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="d-block"> Ameliia Collection</span>
             </a>
@@ -171,7 +151,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="assets/images/user.png" class="img-circle elevation-2" alt="User Image">
+                        <img src="{{asset('assets/images/user.png')}}" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
@@ -191,14 +171,24 @@
                                 </p>
                             </a>
                         </li>
-                        @if(auth()->user()->name!="admin")
-                        <!-- <li class="nav-header"><strong>USER</strong></li> -->
-
+                        @if(auth()->user()->name=="admin")
+                        <li class="nav-header"><strong>USER</strong></li>
+                        @endif
                         <li class="nav-item">
                             <a href="{{url('/pesanansaya')}}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
-                                    Pesanan Saya
+                                    @if(App\Models\Payment::all()->count() == 0)
+                                        Pesanan Saya
+                                    @else
+                                        Pesanan Saya
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('diterima', '0')->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -218,7 +208,6 @@
                                 </p>
                             </a>
                         </li>
-                        @endif
                         @if(auth()->user()->name=="admin")
                         <li class="nav-header"><strong>ADMIN</strong></li>
                         <li class="nav-item">
@@ -226,6 +215,12 @@
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
                                     Daftar Pesanan
+                                    <span class="badge badge-success right">
+                                    <?php
+                                        $notif = App\Models\Payment::where('diterima', '0')->count();
+                                        echo $notif;
+                                    ?>
+                                    </span>
                                 </p>
                             </a>
                         </li>
@@ -244,7 +239,8 @@
                                     Daftar Penilaian
                                 </p>
                             </a>
-                        </li><li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a href="{{url('/home')}}" class="nav-link">
                                 <i class="nav-icon fas fa-truck"></i>
                                 <p>

@@ -26,4 +26,14 @@ class Keranjang extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+
+    public function produk()
+    {
+        return $this->belongsTo(Hijab::class);
+    }
+
+    public function warna()
+    {
+        return $this->belongsTo(Warna::class);
+    }
 }

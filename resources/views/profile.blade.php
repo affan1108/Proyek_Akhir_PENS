@@ -152,7 +152,7 @@
         <aside class="main-sidebar sidebar-primary elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link bg-success">
-                <img src="assets/images/logo2.png" alt="Logo Ameliia Collection"
+                <img src="{{asset('assets/images/logo2.png')}}" alt="Logo Ameliia Collection"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="d-block"> Ameliia Collection</span>
             </a>
@@ -160,11 +160,11 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex callout callout-success">
                     <div class="image">
-                        <img src="assets/images/user.png" class="img-circle elevation-2" alt="User Image">
+                        <img src="{{asset('assets/images/user.png')}}" class="img-circle elevation-2" alt="User Image">
                     </div>
-                    <div class="info">
+                    <div class="info nav-link">
                         <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
                     </div>
                 </div>
@@ -174,8 +174,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/dashboard')}}" class="nav-link bg-success-active">
+                        <li class="nav-item">
+                            <a href="{{url('/dashboard')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -232,6 +232,14 @@
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
                                     Daftar Penilaian
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
                                 </p>
                             </a>
                         </li>
@@ -332,10 +340,10 @@
                                     <ul class="nav nav-pills">
                                         <li class="nav-item"><a class="nav-link active" href="#activity"
                                                 data-toggle="tab">About Me</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#timeline"
+                                        <!-- <li class="nav-item"><a class="nav-link" href="#timeline"
                                                 data-toggle="tab">Timeline</a></li>
                                         <li class="nav-item"><a class="nav-link" href="#settings"
-                                                data-toggle="tab">Settings</a></li>
+                                                data-toggle="tab">Settings</a></li> -->
                                     </ul>
                                 </div>
                                 <div class="card-body">

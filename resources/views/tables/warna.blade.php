@@ -195,8 +195,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/dashboard')}}" class="nav-link bg-success-active">
+                        <li class="nav-item">
+                            <a href="{{url('/dashboard')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -210,7 +210,17 @@
                             <a href="{{url('/pesanansaya')}}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
+                                    @if(App\Models\Payment::all()->count() == 0)
                                     Pesanan Saya
+                                    @else
+                                    Pesanan Saya
+                                    <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('diterima', '0')->count();
+                                            echo $notif;
+                                        ?>
+                                    </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -226,7 +236,17 @@
                             <a href="{{url('/penilaianpesanan')}}" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
+                                    @if(App\Models\Payment::where('diterima', '0')->count())
                                     Penilaian Pesanan
+                                    @else
+                                    Penilaian Pesanan
+                                    <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('rating', null)->count();
+                                            echo $notif;
+                                        ?>
+                                    </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -252,12 +272,30 @@
                             <a href="{{url('/daftarpenilaian')}}" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
+                                    @if(App\Models\Payment::where('diterima', '0')->count())
                                     Daftar Penilaian
+                                    @else
+                                    Daftar Penilaian
+                                    <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::whereNotNull('rating')->count();
+                                            echo $notif;
+                                        ?>
+                                    </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="#" class="nav-link active bg-success">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Tables
@@ -266,7 +304,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/warna" class="nav-link">
+                                    <a href="/warna" class="nav-link active bg-success">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Tabel Warna</p>
                                     </a>
@@ -285,6 +323,8 @@
                                 </li>
                                 @endif
                             </ul>
+                        </li>
+                    </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
@@ -367,7 +407,7 @@
                                                             #
                                                         </td>
                                                         <td>
-                                                            {{$row->nama}}
+                                                            {{$row->produk->nama}}
                                                         </td>
                                                         <td>
                                                             {{$row->warna}}
@@ -415,35 +455,37 @@
                                                 aria-label="Close"></button> -->
                                         </div>
                                         <form action="/addwarna" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <label for="nama">Nama Produk</label>
-                                            <input type="text" class="form-control" id="nama" name="nama"
-                                                placeholder="Nama Produk">
-                                        </div>
-                                        <div class="modal-body">
-                                            <label for="warna">Warna</label>
-                                            <input type="text" class="form-control" id="warna" name="warna"
-                                                placeholder="Warna">
-                                        </div>
-                                        <div class="modal-body">
-                                            <label for="stok">Stok</label>
-                                            <input type="text" class="form-control" id="stok" name="stok"
-                                                placeholder="Jumlah Stok">
-                                        </div>
-                                        <div class="modal-body">
-                                            <label for="ukuran">Ukuran</label>
-                                            <select class="form-control select2bs4" style="width: 100%;" name="ukuran">
-                                            @foreach (App\Models\Ukuran::all() as $u)
-                                                <option value="{{ $u->nama }}">{{ $u->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
+                                            @csrf
+                                            <div class="modal-body">
+                                                <label for="nama">Nama Produk</label>
+
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="produk_id">
+                                                    @foreach (App\Models\Hijab::all() as $u)
+                                                    <option value="{{ $u->id }}">{{ $u->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="warna">Warna</label>
+                                                <input type="text" class="form-control" id="warna" name="warna"
+                                                    placeholder="Warna">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="stok">Stok</label>
+                                                <input type="text" class="form-control" id="stok" name="stok"
+                                                    placeholder="Jumlah Stok">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="ukuran">Ukuran</label>
+                                                <input type="text" class="form-control" id="ukuran" name="ukuran"
+                                                    placeholder="Ukuran">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>

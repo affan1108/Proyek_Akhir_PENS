@@ -346,7 +346,7 @@
                                     <div class="col-sm-4 invoice-col">
                                         <b>Invoice #007612</b><br>
                                         <br>
-                                        <b>Order ID:</b> 4F3S8J<br>
+                                        <!-- <b>Order ID:</b> 4F3S8J<br> -->
                                         <!-- <b>Payment Due:</b> 2/22/2014<br> -->
                                         <b>Account:</b> AC-00{{ Auth::user()->id }}
                                     </div>
@@ -369,19 +369,19 @@
                                                     <!-- <th>Aksi</th> -->
                                                 </tr>
                                             </thead>
-                                                @if ($data->user == Auth::user()->id)
+                                                @if ($data->user->id == Auth::user()->id)
                                                 <tbody>
                                                     <tr>
                                                     
                                                         <td>{{$data->jumlah}}</td>
-                                                        <td>{{$data->nama}}</td>
+                                                        <td>{{$data->produk->nama}}</td>
                                                         <td>
-                                                            {{$data->warna}}
+                                                            {{$data->warna->warna}}
                                                         </td>
                                                         <!-- <td>{{$data->ukuran}}</td> -->
                                                         <!-- <td>Rp. {{$data->harga}}</td> -->
                                                         <td>
-                                                            {{$data->harga}}
+                                                            {{$data->produk->harga}}
                                                         </td>
                                                         <td>
                                                             @if($data->voucher_id == null)
@@ -425,7 +425,7 @@
                                                 </tr>
                                             </thead>
                                             
-                                                @if ($data->user == Auth::user()->id)
+                                                @if ($data->user->id == Auth::user()->id)
                                                 <tbody>
                                                     <tr>
                                                         <!-- <td>{{$ongkir->layanan}}</td> -->
@@ -485,7 +485,7 @@
                                                 <?php
                                                             if(isset($data->hitung)){
                                                                 $jmlh = $data->jumlah;
-                                                                $hrg = $data->harga;
+                                                                $hrg = $data->produk->harga;
                                                                 $ongkir = $ongkir->ongkir;
                                                                 if($data->voucher_id != null){
                                                                     $vouch = $data->voucher->harga;

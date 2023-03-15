@@ -183,7 +183,17 @@
                             <a href="{{url('/pesanansaya')}}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
-                                    Pesanan Saya
+                                    @if(App\Models\Payment::all()->count() == 0)
+                                        Pesanan Saya
+                                    @else
+                                        Pesanan Saya
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('diterima', '0')->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -226,6 +236,14 @@
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
                                     Daftar Penilaian
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
                                 </p>
                             </a>
                         </li>
@@ -316,10 +334,10 @@
                             <form action="/keranjang" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="hidden" name="user" value="{{auth()->user()->id}}">
+                                    <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
                                 </div>
                                 <div class="form-group">
-                                    <input type="hidden" name="nama" value="{{$data->nama}}">
+                                    <input type="hidden" name="produk_id" value="{{$data->id}}">
                                     <h3>{{$data->nama}}</h3>
                                     <!-- <p>{{$data->deskripsi}}</p> -->
                                 </div>
@@ -328,24 +346,20 @@
                                 <div class="form-group">
                                     <h4 class="mt-3">Pilihan Warna <small>(Pilih salah satu)</small></h4>
                                     <select class="form-control select2bs4 js-example-basic form-control"
-                                        style="width: 100%;" id="warna" name="warna">
-                                        <!-- @foreach (\App\Models\Warna::all() as $r)
-                                            <option value="{{ $r->id }}">{{ $r->nama }}</option>
-                                        @endforeach -->
-                                        <?php
-                                                $warna = explode(',', $data['warna']);
-                                                $warna = json_decode($data->warna);
-                                                foreach($warna as $lu){
-                                                       echo '<option value="'.$lu.'" >'.$lu.'</option>';
-                                                    }
-                                              ?>
-                                              <!-- <select class="form-control select2" name="some_user_id[]" style="width:100%" multiple id="some_user_id">                                             
-                                               
-                                           </select> -->
-                                        <!-- <option value="{{ $data->warna }}">{{ $data->warna}}</option> -->
-                                        <!-- <option value="{{ $r->id }}">{{ $r->warna}}</option> -->
+                                        style="width: 100%;" id="warna" name="warna_id">
+                                        @foreach (App\Models\Warna::all() as $r)
+                                            @if($data->id == $r->produk_id)
+                                            <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
+                                            @endif
+                                        @endforeach
                                     </select>
+                                    <!-- <input type="text" id="stok" name="stok"> -->
+                                    <!-- <div id="poll">
+                                        <span>jumlah stok {{$r->stok}}</span>
+                                    </div> -->
+                                    <!-- <span id="stok" >jumlah stok {{$r->stok}}</span> -->
                                 </div>
+                                
                                 <!-- <div class="form-group">
                                     <h4 class="mt-3">Pilihan Ukuran <small>(Pilih salah satu)</small></h4>
                                     <div class="form-group">
@@ -367,7 +381,7 @@
                                 <div class="form-group">
                                     <h4 class="mt-3">Jumlah <small>(Minimal Satu)</small></h4>
                                     <div class="form-group">
-                                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah" min="1">
+                                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah" min="1" max="{{ $r->stok }}">
                                     </div>
                                 </div>
                                 <!-- <div class="form-group">
@@ -399,7 +413,7 @@
                                 </div> -->
                                 <div class="bg-gray py-2 px-3 mt-4">
                                     <h2 class="mb-0">
-                                        <input type="hidden" name="harga" value="{{$data->harga}}">
+                                        <!-- <input type="hidden" name="harga" value="{{$data->harga}}"> -->
                                         Rp: {{$data->harga}}
                                     </h2>
                                     <!-- <h4 class="mt-0">
@@ -442,6 +456,7 @@
                                     </a>
                                 </div> -->
                             </form>
+                            
                                 <form action="/cart" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="mt-4">
@@ -546,6 +561,21 @@
 
     @include('components.script')
     <script>
+        function funct(str){
+            if(window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    document.getElementById('poll').innerHTML = this.responseText;
+                }
+            }
+            xmlhttp.open("GET","helper.php?value="+str, true);
+            xmlhttp.send();
+        }
+
         $(document).ready(function () {
             $('.product-image-thumb').on('click', function () {
                 var $image_element = $(this).find('img')

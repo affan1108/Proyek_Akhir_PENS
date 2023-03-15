@@ -195,8 +195,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/dashboard')}}" class="nav-link bg-success-active">
+                        <li class="nav-item">
+                            <a href="{{url('/dashboard')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -206,11 +206,11 @@
                         @if(auth()->user()->name=="admin")
                         <li class="nav-header"><strong>USER</strong></li>
                         @endif
-                        <li class="nav-item">
-                            <a href="{{url('/pesanansaya')}}" class="nav-link">
+                        <li class="nav-item bg-success">
+                            <a href="{{url('/pesanansaya')}}" class="nav-link bg-success-active">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
-                                    @if(App\Models\Payment::all()->count() > 0)
+                                    @if(App\Models\Payment::all()->count() == 0)
                                         Pesanan Saya
                                     @else
                                         Pesanan Saya
@@ -283,6 +283,14 @@
                                         ?>
                                         </span>
                                     @endif
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
                                 </p>
                             </a>
                         </li>
@@ -360,7 +368,7 @@
                                 @foreach ($data as $row)
                                 <tr>
                                     @if($row->diterima == '0' && $row->user_id == Auth::user()->id)
-                                    <td>{{ $row->invoice->keranjang->nama }}</td>
+                                    <td>{{ $row->invoice->keranjang->produk->nama }}</td>
                                     <td>{{ $row->invoice->keranjang->jumlah }}</td>
                                     <td>{{ $row->invoice->total }}</td>
                                     <td>

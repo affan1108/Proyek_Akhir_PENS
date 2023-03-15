@@ -17,7 +17,7 @@ class CreateHijabsTable extends Migration
             $table->id();
             $table->string('nama')->nullable();
             $table->string('foto');
-            $table->string('warna')->nullable();
+            // $table->string('warna')->nullable();
             // $table->foreignId('warna_id')->constrained('warnas')->onUpdate('cascade')->onDelete('restrict');
             // $table->string('ukuran');
             $table->string('harga');

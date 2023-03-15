@@ -203,12 +203,24 @@
                                 </p>
                             </a>
                         </li>
-                        @if(auth()->user()->name!="admin")
+                        @if(auth()->user()->name=="admin")
+                        <li class="nav-header"><strong>USER</strong></li>
+                        @endif
                         <li class="nav-item">
                             <a href="{{url('/pesanansaya')}}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
-                                    Pesanan Saya
+                                    @if(App\Models\Payment::all()->count() == 0)
+                                        Pesanan Saya
+                                    @else
+                                        Pesanan Saya
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('diterima', '0')->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -224,13 +236,22 @@
                             <a href="{{url('/penilaianpesanan')}}" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
-                                    Penilaian Pesanan
+                                    @if(App\Models\Payment::where('diterima', '0')->count())
+                                        Penilaian Pesanan
+                                    @else
+                                        Penilaian Pesanan
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('rating', null)->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
-                        @endif
                         @if(auth()->user()->name=="admin")
-                        <!-- <li class="nav-header"><strong>ADMIN</strong></li> -->
+                        <li class="nav-header"><strong>ADMIN</strong></li>
                         <li class="nav-item">
                             <a href="{{url('/daftarpesanan')}}" class="nav-link">
                                 <i class="nav-icon fas fa-clipboard"></i>
@@ -240,7 +261,7 @@
                             </a>
                         </li>
                         <li class="nav-item bg-success">
-                            <a href="{{url('/daftarproduk')}}" class="nav-link  bg-success-active">
+                            <a href="{{url('/daftarproduk')}}" class="nav-link bg-success-active">
                                 <i class="nav-icon fas fa-database"></i>
                                 <p>
                                     Daftar Produk
@@ -251,7 +272,25 @@
                             <a href="{{url('/daftarpenilaian')}}" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
-                                    Daftar Penilaian
+                                    @if(App\Models\Payment::where('diterima', '0')->count())
+                                        Daftar Penilaian 
+                                    @else
+                                        Daftar Penilaian
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::whereNotNull('rating')->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
                                 </p>
                             </a>
                         </li>

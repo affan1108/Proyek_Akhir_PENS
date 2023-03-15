@@ -11,21 +11,21 @@ class KeranjangController extends Controller
 {
     public function keranjang(Request $request) {
         $data = $request->validate([
-            'user' => 'required',
-            'nama' => 'required',
-            'warna' => 'required',
+            'user_id' => 'required',
+            'produk_id' => 'required',
+            'warna_id' => 'required',
             // 'ukuran' => 'required',
             'jumlah' => 'required',
-            'harga' => 'required',
+            // 'harga' => 'required',
             'hitung' => 'required',
         ]);
         $data = new Keranjang;
-        $data->user = $request->user;
-        $data->nama = $request->nama;
-        $data->warna = $request->warna;
+        $data->user_id = $request->user_id;
+        $data->produk_id = $request->produk_id;
+        $data->warna_id = $request->warna_id;
         // $data->ukuran = $request->ukuran;
         $data->jumlah = $request->jumlah;
-        $data->harga = $request->harga;
+        // $data->harga = $request->harga;
         $data->hitung = $request->hitung;
         $data->save();
         return redirect()->route('home', compact('data'));

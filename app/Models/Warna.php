@@ -10,16 +10,17 @@ class Warna extends Model
     use HasFactory;
 
     protected $table = "warnas";
+    protected $guarded = []; 
     protected $fillable = [
-        'nama',
+        'produk_id',
         'warna',
         'stok',
         'ukuran',
     ];
 
-    public function hijab()
+    public function produk()
     {
-        return $this->belongsTo(Warna::class);
+        return $this->belongsTo(Hijab::class);
     }
 
     

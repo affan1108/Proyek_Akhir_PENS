@@ -366,14 +366,14 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{$data->keranjang->jumlah}}</td>
-                                                            <td>{{$data->keranjang->nama}}</td>
+                                                            <td>{{$data->keranjang->produk->nama}}</td>
                                                             <td>
-                                                                {{$data->keranjang->warna}}
+                                                                {{$data->keranjang->warna->warna}}
                                                             </td>
                                                             <!-- <td>{{$data->ukuran}}</td> -->
                                                             <!-- <td>Rp. {{$data->harga}}</td> -->
                                                             <td>
-                                                                {{$data->keranjang->harga}}
+                                                                {{$data->keranjang->produk->harga}}
                                                             </td>
                                                             <td>
                                                                 @if($data->diskon == null)
@@ -428,7 +428,7 @@
                                                         <?php
                                                             if(isset($data->keranjang->hitung)){
                                                                 $jmlh = $data->keranjang->jumlah;
-                                                                $hrg = $data->keranjang->harga;
+                                                                $hrg = $data->keranjang->produk->harga;
                                                                 $subtotal = $jmlh*$hrg;
                                                                 echo "$subtotal";
                                                             }
@@ -458,7 +458,7 @@
                                                         <?php
                                                             if(isset($data->keranjang->hitung)){
                                                                 $jmlh = $data->keranjang->jumlah;
-                                                                $hrg = $data->keranjang->harga;
+                                                                $hrg = $data->keranjang->produk->harga;
                                                                 $ongkir = $data->ongkir->ongkir;
                                                                 if($data->diskon != null){
                                                                     $vouch = $data->diskon;

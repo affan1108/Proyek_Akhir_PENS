@@ -15,13 +15,15 @@ class CreateKeranjangsTable extends Migration
     {
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
             // $table->string('user');
-            $table->string('nama');
-            $table->string('warna');
+            // $table->string('nama');
+            // $table->string('warna');
             // $table->string('ukuran');
             $table->string('jumlah');
-            $table->string('harga');
+            // $table->string('harga');
             $table->string('hitung');
             // $table->string('_method')->nullable();
             // $table->foreignId('voucher')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');

@@ -29,12 +29,12 @@ class DetailController extends Controller
             'deskripsi' => 'required',
             'foto' => 'required',
             // 'ukuran' => 'required',
-            'warna' => 'required',
+            // 'warna' => 'required',
         ]);
         $data = new Hijab;
         // $awal = $data->foto;
         $data->nama = $request->nama;
-        $data->warna = json_encode($request->warna);
+        // $data->warna = json_encode($request->warna);
         // $data->ukuran = json_encode($request->ukuran);
         $data->harga = $request->harga;
         $data->deskripsi = $request->deskripsi;

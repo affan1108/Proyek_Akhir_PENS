@@ -429,28 +429,6 @@
                                                         <input type="text" class="form-control" id="exampleInputHarga"
                                                             placeholder="Masukkan Harga" name="harga">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label>Warna</label>
-                                                        <div class="select2-green">
-                                                            <select class="select2 js-example-basic form-control"
-                                                                multiple="multiple" data-placeholder="Pilih Ukuran"
-                                                                style="width: 100%;" name="warna[]" id="warna"
-                                                                data-dropdown-css-class="select2-green">
-                                                                @foreach (\App\Models\Warna::all() as $r)
-                                                                <option value="{{ $r->warna}} - {{$r->ukuran}}"
-                                                                    {{ $r->id==@$dt->warna? 'selected' : '' }}>
-                                                                    {{ $r->nama }}, {{$r->warna}}, {{$r->stok}}, {{$r->ukuran}}</option>
-                                                                <!-- <input type="hidden" name="stok" value="{{$r->stok}}">     -->
-                                                                @endforeach
-                                                                <!-- <option value="m">Merah</option>
-                                                                <option value="j">Jingga</option>
-                                                                <option value="k">Kuning</option>
-                                                                <option value="h">Hijau</option>
-                                                                <option value="b">Biru</option>
-                                                                <option value="p">Putih</option> -->
-                                                            </select>
-                                                        </div>
-                                                    </div>
                                                     <!-- <div class="form-group">
                                                         <label>Ukuran</label>
                                                         <div class="select2-green">

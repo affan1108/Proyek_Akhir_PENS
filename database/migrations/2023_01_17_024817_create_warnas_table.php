@@ -15,7 +15,8 @@ class CreateWarnasTable extends Migration
     {
         Schema::create('warnas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('cascade')->onDelete('restrict');
+            // $table->string('nama');
             $table->string('warna');
             $table->string('stok');
             $table->string('ukuran');

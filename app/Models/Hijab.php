@@ -27,7 +27,7 @@ class Hijab extends Model
 
     public function warna()
     {
-        return $this->hasMany(Warna::class, 'warna');
+        return $this->hasMany(Warna::class);
     }
 
     public function ukuran()
