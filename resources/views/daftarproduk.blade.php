@@ -388,7 +388,7 @@
                                                             Foto
                                                         </th>
                                                         <th style="width: 10%">
-                                                            Warna
+                                                            Harga
                                                         </th>
                                                         <!-- <th style="width: 10%">
                                                             Ukuran
@@ -417,6 +417,7 @@
                                                             <h5><img src="{{asset('assets/'.$row->foto)}}" alt="Foto Produk" style="width: 50px;"></h5>
                                                         </td>
                                                         <td>
+                                                            {{$row->harga}}
                                                         </td>
                                                         <td class="project-actions">
                                                             <a class="btn btn-primary btn-sm" href="/view/{{$row->id}}">
@@ -542,12 +543,12 @@
 
 
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
-        </div>
-    </footer>
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
+            </div>
+        </footer>
     </div>
     <!-- ./wrapper -->
 

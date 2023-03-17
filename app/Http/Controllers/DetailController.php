@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hijab;
 use App\Models\Courier;
+use App\Models\Warna;
 use App\Models\Province;
 use App\Http\Controllers\Controller;
 
@@ -20,6 +21,12 @@ class DetailController extends Controller
     public function view($id) {
         $data = Hijab::find($id);
         return view('view', compact('data'));
+    }
+
+    public function getCities($id)
+    {
+        $city = Warna::where('id', $id)->pluck('stok');
+        return json_encode($city);
     }
 
     public function insert(Request $request) {

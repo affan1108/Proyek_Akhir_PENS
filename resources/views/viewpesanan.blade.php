@@ -171,8 +171,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/dashboard')}}" class="nav-link bg-success-active">
+                        <li class="nav-item">
+                            <a href="{{url('/dashboard')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -182,11 +182,21 @@
                         @if(auth()->user()->name=="admin")
                         <li class="nav-header"><strong>USER</strong></li>
                         @endif
-                        <li class="nav-item">
-                            <a href="{{url('/pesanansaya')}}" class="nav-link">
+                        <li class="nav-item  bg-success">
+                            <a href="{{url('/pesanansaya')}}" class="nav-link bg-success-active">
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
-                                    Pesanan Saya
+                                    @if(App\Models\Payment::all()->count() == 0)
+                                        Pesanan Saya
+                                    @else
+                                        Pesanan Saya
+                                        <span class="badge badge-success right">
+                                        <?php
+                                            $notif = App\Models\Payment::where('diterima', '0')->count();
+                                            echo $notif;
+                                        ?>
+                                        </span>
+                                    @endif
                                 </p>
                             </a>
                         </li>
@@ -213,6 +223,12 @@
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
                                     Daftar Pesanan
+                                    <span class="badge badge-success right">
+                                    <?php
+                                        $notif = App\Models\Payment::where('diterima', '0')->count();
+                                        echo $notif;
+                                    ?>
+                                    </span>
                                 </p>
                             </a>
                         </li>
@@ -229,6 +245,14 @@
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
                                     Daftar Penilaian
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/home')}}" class="nav-link">
+                                <i class="nav-icon fas fa-truck"></i>
+                                <p>
+                                    Cek Ongkir
                                 </p>
                             </a>
                         </li>
@@ -366,14 +390,14 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{$data->invoice->keranjang->jumlah}}</td>
-                                                            <td>{{$data->invoice->keranjang->nama}}</td>
+                                                            <td>{{$data->invoice->keranjang->produk->nama}}</td>
                                                             <td>
-                                                                {{$data->invoice->keranjang->warna}}
+                                                                {{$data->invoice->keranjang->warna->warna}}
                                                             </td>
                                                             <!-- <td>{{$data->ukuran}}</td> -->
                                                             <!-- <td>Rp. {{$data->harga}}</td> -->
                                                             <td>
-                                                                {{$data->invoice->keranjang->harga}}
+                                                                {{$data->invoice->keranjang->produk->harga}}
                                                             </td>
                                                             <td>
                                                                 @if($data->invoice->diskon == null)
@@ -428,7 +452,7 @@
                                                         <?php
                                                             if(isset($data->invoice->keranjang->hitung)){
                                                                 $jmlh = $data->invoice->keranjang->jumlah;
-                                                                $hrg = $data->invoice->keranjang->harga;
+                                                                $hrg = $data->invoice->keranjang->produk->harga;
                                                                 $subtotal = $jmlh*$hrg;
                                                                 echo "$subtotal";
                                                             }
@@ -513,12 +537,12 @@
         </form> -->
 
         <!-- /.content-wrapper -->
-        <footer class="main-footer no-print">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
         </footer>
 
         <!-- Control Sidebar -->

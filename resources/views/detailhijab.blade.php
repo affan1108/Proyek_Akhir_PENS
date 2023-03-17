@@ -7,6 +7,7 @@
     <title>Ameliia Collection | Detail</title>
 
     @include('components.css')
+    
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -220,6 +221,12 @@
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
                                     Daftar Pesanan
+                                    <span class="badge badge-success right">
+                                    <?php
+                                        $notif = App\Models\Payment::where('diterima', '0')->count();
+                                        echo $notif;
+                                    ?>
+                                    </span>
                                 </p>
                             </a>
                         </li>
@@ -349,17 +356,17 @@
                                         style="width: 100%;" id="warna" name="warna_id">
                                         @foreach (App\Models\Warna::all() as $r)
                                             @if($data->id == $r->produk_id)
-                                            <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
+                                                <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
                                             @endif
                                         @endforeach
                                     </select>
-                                    <!-- <input type="text" id="stok" name="stok"> -->
+                                    
                                     <!-- <div id="poll">
                                         <span>jumlah stok {{$r->stok}}</span>
                                     </div> -->
-                                    <!-- <span id="stok" >jumlah stok {{$r->stok}}</span> -->
+                                    <span id="stok"></span>
                                 </div>
-                                
+                                <!-- <input type="text" id="stok" name="stok"> -->
                                 <!-- <div class="form-group">
                                     <h4 class="mt-3">Pilihan Ukuran <small>(Pilih salah satu)</small></h4>
                                     <div class="form-group">
@@ -381,7 +388,7 @@
                                 <div class="form-group">
                                     <h4 class="mt-3">Jumlah <small>(Minimal Satu)</small></h4>
                                     <div class="form-group">
-                                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah" min="1" max="{{ $r->stok }}">
+                                        <input type="number" class="form-control" id="stok" name="jumlah" placeholder="Masukkan Jumlah" min="1" max="{{$r->stok}}">
                                     </div>
                                 </div>
                                 <!-- <div class="form-group">
@@ -544,11 +551,11 @@
         <!-- /.content-wrapper -->
 
         <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
         </footer>
 
         <!-- Control Sidebar -->
@@ -560,21 +567,48 @@
     <!-- ./wrapper -->
 
     @include('components.script')
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script> -->
     <script>
-        function funct(str){
-            if(window.XMLHttpRequest){
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function(){
-                if(this.readyState == 4 && this.status == 200){
-                    document.getElementById('poll').innerHTML = this.responseText;
+        $(document).ready(function () {
+            $('select[name="warna_id"]').on('change', function () {
+                let stokId = $(this).val();
+
+                if (stokId) {
+                    $.ajax({
+                        url: '/hijab/' + stokId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // <input type="text" id="stok" name="stok">
+                            $('#stok').empty();
+                            $.each(data, function (key, value) {
+                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#stok').empty();
                 }
-            }
-            xmlhttp.open("GET","helper.php?value="+str, true);
-            xmlhttp.send();
-        }
+            });
+        });
+        // $('#warna').change(function(e) {
+        //     e.preventDefault();
+        //     kirim();
+        // });
+
+        // function kirim(warna){
+        //     var id = $('#warna').val();
+        //     $.ajax({
+        //         url : 'data.php',
+        //         type : 'POST',
+        //         data : {id:warna},
+        //         datatype : 'json',
+        //         success: function(data){
+        //             $('#sstok').val(data.stok);
+        //         }
+        //     })
+        // }
 
         $(document).ready(function () {
             $('.product-image-thumb').on('click', function () {

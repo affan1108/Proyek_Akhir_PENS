@@ -257,6 +257,12 @@
                                 <i class="nav-icon fas fa-clipboard"></i>
                                 <p>
                                     Daftar Pesanan
+                                    <span class="badge badge-success right">
+                                    <?php
+                                        $notif = App\Models\Payment::where('diterima', '0')->count();
+                                        echo $notif;
+                                    ?>
+                                    </span>
                                 </p>
                             </a>
                         </li>
@@ -272,7 +278,7 @@
                             <a href="{{url('/daftarpenilaian')}}" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>
-                                    @if(App\Models\Payment::where('diterima', '0')->count())
+                                    @if(App\Models\Payment::where('rating', 'null'))
                                         Daftar Penilaian 
                                     @else
                                         Daftar Penilaian
@@ -361,8 +367,10 @@
                                             <div class="col-7">
                                                 <h2 class="lead"><b>{{$row->invoice->keranjang->nama}}</b></h2>
                                                 <p class="text-muted text-sm">
-                                                    <b>Ukuran & Warna: </b>{{$row->invoice->keranjang->warna}}
-                                                    <br>
+                                                <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
+                                                        <br>
+                                                        <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
+                                                        <br>
                                                     <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
                                                     <br>
                                                     <b>Harga: </b>{{$row->invoice->total}}
@@ -485,12 +493,12 @@
         </section>
     </div>
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
-        </div>
-    </footer>
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
+            </div>
+        </footer>
     </div>
     <!-- ./wrapper -->
 

@@ -109,6 +109,7 @@ Route::post('/penilaian/{id}', [App\Http\Controllers\PaymentController::class, '
 
 Route::get('home', [HomeController::class, 'index'])->name('home');
 Route::get('/province/{id}/cities', [HomeController::class, 'getCities']);
+Route::get('/hijab/{id}', [App\Http\Controllers\DetailController::class, 'getCities']);
 Route::post('home', [HomeController::class, 'submit'])->name('sumbit');
 
 Route::post('/bill', [App\Http\Controllers\PaymentController::class, 'payment_post']);

@@ -143,7 +143,7 @@
                     </div>
                 </li>
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="badge badge-warning navbar-badge">15</span>
@@ -168,7 +168,7 @@
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
-                </li>
+                </li> -->
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -199,8 +199,8 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/dashboard')}}" class="nav-link bg-success-active">
+                        <li class="nav-item">
+                            <a href="{{url('/dashboard')}}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -244,8 +244,8 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{url('/daftarproduk')}}" class="nav-link">
+                        <li class="nav-item bg-success">
+                            <a href="{{url('/daftarproduk')}}" class="nav-link bg-success-active">
                                 <i class="nav-icon fas fa-database"></i>
                                 <p>
                                     Daftar Produk
@@ -391,7 +391,7 @@
                         <div class="col-md-12">
                             <div class="card card-default">
                                 <div class="card-header">
-                                    <h3 class="card-title">bs-stepper</h3>
+                                    <!-- <h3 class="card-title">bs-stepper</h3> -->
                                 </div>
                                 <div class="card-body p-0">
                                     <form action="/insert" method="POST" enctype="multipart/form-data">
@@ -488,12 +488,12 @@
 
 
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
-        </div>
-    </footer>
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
+            </div>
+        </footer>
     </div>
     <!-- ./wrapper -->
 

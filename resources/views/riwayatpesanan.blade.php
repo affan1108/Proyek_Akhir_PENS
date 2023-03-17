@@ -363,7 +363,9 @@
                                                 <div class="col-7">
                                                     <h2 class="lead"><b>{{$row->invoice->keranjang->nama}}</b></h2>
                                                     <p class="text-muted text-sm">
-                                                        <b>Ukuran & Warna: </b>{{$row->invoice->keranjang->warna}}
+                                                        <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
+                                                        <br>
+                                                        <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
                                                         <br>
                                                         <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
                                                         <br>
@@ -425,10 +427,10 @@
 
 
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.2.0
+                <b>Version</b> 1.0
             </div>
         </footer>
     </div>

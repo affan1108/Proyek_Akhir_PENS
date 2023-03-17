@@ -525,12 +525,12 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <footer class="main-footer no-print">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 3.2.0
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
         </footer>
 
         <!-- Control Sidebar -->
