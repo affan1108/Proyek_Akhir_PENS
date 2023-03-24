@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Keranjang;
+use App\Models\Warna;
 use App\Http\Requests\Keranjang\UpdateKeranjangRequest;
 
 class KeranjangController extends Controller
@@ -15,7 +16,7 @@ class KeranjangController extends Controller
             'produk_id' => 'required',
             'warna_id' => 'required',
             // 'ukuran' => 'required',
-            'jumlah' => 'required',
+            // 'jumlah' => 'required',
             // 'harga' => 'required',
             'hitung' => 'required',
         ]);
@@ -27,9 +28,31 @@ class KeranjangController extends Controller
         $data->jumlah = $request->jumlah;
         // $data->harga = $request->harga;
         $data->hitung = $request->hitung;
+
+        $qty = Warna::find($request->warna_id)->pluck('stok');
+
+        // if( $request->jumlah <= $qty){
+        //     $data['jumlah']=$request->jumlah;
+        //     $data['warna_id']=$request->warna_id;
+        //     dd($request);
+        //     $data->save();
+        //     return redirect()->route('home');
+            
+        // } 
+        // return redirect()->route('dashboard');
+
+        if( $request->jumlah >= $qty){
+            // $data['jumlah']=$request->jumlah;
+            // $data['warna_id']=$request->warna_id;
+            // dd($request);
+            return redirect()->route('dashboard');    
+            
+            
+        }
         $data->save();
-        return redirect()->route('home', compact('data'));
-    }
+        return redirect()->route('home');
+    
+}
 
     // public function update(Request $request, $id){
     //     $data = Keranjang::findOrFail($id);

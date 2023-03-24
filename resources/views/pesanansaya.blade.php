@@ -28,431 +28,379 @@
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <link rel="shortcut icon" href="assets/images/logo2.png">
+    <link href="temp/css/styles.css" rel="stylesheet" />
+    <!--====== Default CSS ======-->
+    <link rel="stylesheet" href="estore/assets/css/default.css">
+
+    <!--====== Style CSS ======-->
+    <link rel="stylesheet" href="estore/assets/css/style.css">
+
+    <!--====== Line Icons CSS ======-->
+    <link rel="stylesheet" href="estore/assets/css/LineIcons.css">
+
+    <!--====== Material Design Icons CSS ======-->
+    <link rel="stylesheet" href="estore/assets/css/materialdesignicons.min.css">
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition layout-top-nav">
     <div class="wrapper">
 
-        <!-- Preloader -->
-        <!-- <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="assets/images/logo.png" alt="AdminLTELogo" height="60" width="60">
-            <h3>Ameliia Collection</h3>
-        </div> -->
-
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{url('/dashboard')}}" class="nav-link">Home</a>
-                </li>
-            </ul>
+        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+            <div class="container">
+                <a href="/dashboard" class="navbar-brand">
+                    <img src="{{asset('assets/images/logo.png')}}" alt="AdminLTE Logo"
+                        class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-light">Ameliia Collection</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#!">Catalog</a></li>
+                        <li class="nav-item dropdown">
+                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" class="nav-link dropdown-toggle">Pages</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/pesanansaya">Pesanan Saya</a></li>
+                                <li><a class="dropdown-item" href="/penilaianpesanan">Penilaian Pesanan</a></li>
+                                <li><a class="dropdown-item" href="/riwayatpesanan">Riwayat Pesanan</a></li>
+                                <!-- <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li> -->
+                            </ul>
+                        </li>
+                        @if(Auth::user()->name == 'admin')
+                        <li class="nav-item dropdown">
+                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false" class="nav-link dropdown-toggle">Master Data</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/daftarpesanan">Daftar Pesanan</a></li>
+                                <li><a class="dropdown-item" href="/daftarproduk">Daftar Produk</a></li>
+                                <li><a class="dropdown-item" href="/daftarpenilaian">Daftar Penilaian</a></li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li class="dropdown-submenu dropdown-hover">
+                                    <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false"
+                                        class="dropdown-item dropdown-toggle">Table</a>
+                                    <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                        <li>
+                                            <a tabindex="-1" href="#" class="dropdown-item">Table Warna</a>
+                                        </li>
 
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fas fa-search"></i>
-                    </a>
-                    <div class="navbar-search-block">
-                        <form class="form-inline">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                    aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </li>
+                                        <!-- Level three dropdown-->
+                                        <!-- <li class="dropdown-submenu">
+                                        <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false"
+                                            class="dropdown-item dropdown-toggle">level 2</a>
+                                        <ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
+                                            <li><a href="#" class="dropdown-item">3rd level</a></li>
+                                            <li><a href="#" class="dropdown-item">3rd level</a></li>
+                                        </ul>
+                                    </li> -->
+                                        <!-- End Level three -->
 
-                <!-- Messages Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge badge-danger navbar-badge">3</span>
+                                        <li><a href="#" class="dropdown-item">Table User</a></li>
+                                        <!-- <li><a href="#" class="dropdown-item">level 2</a></li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                    </ul>
+                    <!-- <a href="/register">
+                    <button class="btn btn-primary mr-3">
+                        Sign Up
+                    </button>
+                </a> -->
+                    <a href="/profile">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-user"></i>
+                            {{Auth::user()->name}}
+                        </button>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <!-- Message Start -->
-                            <div class="media">
-                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i
-                                                class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                            <!-- Message End -->
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
-                </li>
-                <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </nav>
         <!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="#" class="brand-link bg-success">
-                <img src="assets/images/logo2.png" alt="Logo Ameliia Collection"
-                    class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="d-block"> Ameliia Collection</span>
-            </a>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="assets/images/user.png" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
-                    </div>
-                </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="{{url('/dashboard')}}" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
-                        @if(auth()->user()->name=="admin")
-                        <li class="nav-header"><strong>USER</strong></li>
-                        @endif
-                        <li class="nav-item bg-success">
-                            <a href="{{url('/pesanansaya')}}" class="nav-link bg-success-active">
-                                <i class="nav-icon fas fa-clipboard"></i>
-                                <p>
-                                    @if(App\Models\Payment::all()->count() == 0)
-                                        Pesanan Saya
-                                    @else
-                                        Pesanan Saya
-                                        <span class="badge badge-success right">
-                                        <?php
-                                            $notif = App\Models\Payment::where('diterima', '0')->count();
-                                            echo $notif;
-                                        ?>
-                                        </span>
-                                    @endif
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{url('/riwayatpesanan')}}" class="nav-link">
-                                <i class="nav-icon fas fa-history"></i>
-                                <p>
-                                    Riwayat Pesanan
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{url('/penilaianpesanan')}}" class="nav-link">
-                                <i class="nav-icon fas fa-star"></i>
-                                <p>
-                                    @if(App\Models\Payment::where('diterima', '0')->count())
-                                        Penilaian Pesanan
-                                    @else
-                                        Penilaian Pesanan
-                                        <span class="badge badge-success right">
-                                        <?php
-                                            $notif = App\Models\Payment::where('rating', null)->count();
-                                            echo $notif;
-                                        ?>
-                                        </span>
-                                    @endif
-                                </p>
-                            </a>
-                        </li>
-                        @if(auth()->user()->name=="admin")
-                        <li class="nav-header"><strong>ADMIN</strong></li>
-                        <li class="nav-item">
-                            <a href="{{url('/daftarpesanan')}}" class="nav-link">
-                                <i class="nav-icon fas fa-clipboard"></i>
-                                <p>
-                                    Daftar Pesanan
-                                    <span class="badge badge-success right">
-                                    <?php
-                                        $notif = App\Models\Payment::where('diterima', '0')->count();
-                                        echo $notif;
-                                    ?>
-                                    </span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{url('/daftarproduk')}}" class="nav-link">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>
-                                    Daftar Produk
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{url('/daftarpenilaian')}}" class="nav-link">
-                                <i class="nav-icon fas fa-star"></i>
-                                <p>
-                                    @if(App\Models\Payment::where('diterima', '0')->count())
-                                        Daftar Penilaian 
-                                    @else
-                                        Daftar Penilaian
-                                        <span class="badge badge-success right">
-                                        <?php
-                                            $notif = App\Models\Payment::whereNotNull('rating')->count();
-                                            echo $notif;
-                                        ?>
-                                        </span>
-                                    @endif
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{url('/home')}}" class="nav-link">
-                                <i class="nav-icon fas fa-truck"></i>
-                                <p>
-                                    Cek Ongkir
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
-                                <p>
-                                    Tables
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/warna" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tabel Warna</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/ukuran" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tabel Ukuran</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/ekspedisi" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Tabel Ekspedisi</p>
-                                    </a>
-                                </li>
-                                @endif
-                            </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
-
-        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Header (Page header) -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
             <div class="content-header">
-                <div class="container-fluid">
+                <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Pesanan Saya</h1>
+                            <h1 class="m-0"><small>Pesanan Saya</small></h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
                                 <li class="breadcrumb-item active">Pesanan Saya</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
-            <!-- /.content-header -->
+        
+        <!-- /.content-header -->
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="container">
-                    <div class="shadow card">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nama Produk</th>
-                                    <th scope="col">Qty</th>
-                                    <th scope="col">Biaya Total</th>
-                                    <!-- <th scope="col">ETD (Estimates Days)</th> -->
-                                    <!-- <th scope="col"></th> -->
-                                </tr>
-                            </thead>
+        <!-- Main content -->
+        <div class="content">
+            <div class="container">
+                <div class="shadow card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nama Produk</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Biaya Total</th>
+                                <!-- <th scope="col">ETD (Estimates Days)</th> -->
+                                <!-- <th scope="col"></th> -->
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                @foreach ($data as $row)
-                                <tr>
-                                    @if($row->diterima == '0' && $row->user_id == Auth::user()->id)
-                                    <td>{{ $row->invoice->keranjang->produk->nama }}</td>
-                                    <td>{{ $row->invoice->keranjang->jumlah }}</td>
-                                    <td>{{ $row->invoice->total }}</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm" href="/viewpesanan/{{$row->id}}">
-                                            Lihat Pesanan
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <!-- @if($row->status == 'pending')
+                        <tbody>
+                            @foreach ($data as $row)
+                            <tr>
+                                @if($row->diterima == '0' && $row->user_id == Auth::user()->id)
+                                <td>{{ $row->invoice->keranjang->produk->nama }}</td>
+                                <td>{{ $row->invoice->keranjang->jumlah }}</td>
+                                <td>{{ $row->invoice->total }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="/viewpesanan/{{$row->id}}">
+                                        Lihat Pesanan
+                                    </a>
+                                </td>
+                                <td>
+                                    <!-- @if($row->status == 'pending')
                                             <button class="btn btn-primary float-right mr-2" disabled>Pesanan Diterima</button>
                                             @elseif($row->status == 'capture' || $row->status == 'settlement') -->
-                                        <!-- <a class="btn btn-primary btn-sm float-right mr-2" href="/pesananditerima/{{$row->id}}">
+                                    <!-- <a class="btn btn-primary btn-sm float-right mr-2" href="/pesananditerima/{{$row->id}}">
                                                 Pesanan Diterima
                                             </a> -->
-                                        <!-- <button type="submit" class="btn btn-primary float-right mr-2">Pesanan Diterima</button> -->
-                                        <!-- @endif -->
-                                    </td>
-                                    @endif
-                                </tr>
+                                    <!-- <button type="submit" class="btn btn-primary float-right mr-2">Pesanan Diterima</button> -->
+                                    <!-- @endif -->
+                                </td>
+                                @endif
+                            </tr>
 
-                                @endforeach
+                            @endforeach
 
-                            </tbody>
+                        </tbody>
 
-                        </table>
+                    </table>
 
-                        <!-- <a href="{{ route('invoice') }}"><button class="btn btn-danger float-right" style="margin-right: 5px;">
+                    <!-- <a href="{{ route('invoice') }}"><button class="btn btn-danger float-right" style="margin-right: 5px;">
                         👈 Kembali
                     </button></a> -->
-                    </div>
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
         </div>
-        <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2023 <a href="#">Ameliia Collection</a>.</strong>
-            All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 1.0
-            </div>
-        </footer>
+        <!-- /.content -->
+        </div>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
+        <!-- Main Footer -->
+        <section class="footer-style-3 pt-100 pb-100">
+            <div class="container">
+                <div class="footer-top">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-7 col-sm-10">
+                            <div class="footer-logo text-center">
+                                <a href="index.html">
+                                    <img src="assets/images/logo.png" alt="" height="100" width="100">
+                                </a>
+                            </div>
+                            <h5 class="heading-5 text-center mt-30">Follow Us</h5>
+                            <ul class="footer-follow text-center">
+                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li> -->
+                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-twitter-filled"></i></a></li> -->
+                                <li><a href="javascript:void(0)"><i class="fab fa-tiktok"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-instagram-original"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-whatsapp"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-widget-wrapper text-center pt-20">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">LAYANAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Katalog</a></li>
+                                    <li><a href="javascript:void(0)">Voucher</a></li>
+                                    <li><a href="javascript:void(0)">Bantuan</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Apps and Games</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Oculus for Business</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">TENTANG KAMI</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Profil</a></li>
+                                    <li><a href="javascript:void(0)">Kebijakan</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Downloads</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Tools</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Developer Blog</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Developer Forums</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">PENGIRIMAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">JNE</a></li>
+                                    <li><a href="javascript:void(0)">POS Indonesia</a></li>
+                                    <li><a href="javascript:void(0)">TIKI</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Connect</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">PEMBAYARAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Kartu Debit</a></li>
+                                    <li><a href="javascript:void(0)">Kartu Kredit</a></li>
+                                    <li><a href="javascript:void(0)">Alfamaret / Indomaret</a></li>
+                                    <li><a href="javascript:void(0)">Transfer Bank</a></li>
+                                    <!-- <li><a href="javascript:void(0)"><img src="assets/mandiri.png" alt="" height="25" width="50"></a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-copyright text-center">
+                    <p class="m-0 text-center text-black">Copyright &copy; Ameliia Collection 2023</p>
+                </div>
+        </section>
+        <!-- ./wrapper -->
     </div>
-    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.min.js"></script>
     <script>
-        $.widget.bridge('uibutton', $.ui.button)
+        $(document).ready(function () {
+            $('select[name="warna_id"]').on('change', function () {
+                let stokId = $(this).val();
+
+                if (stokId) {
+                    $.ajax({
+                        url: '/hijab/' + stokId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // <input type="text" id="stok" name="stok">
+                            $('#stok').empty();
+                            $.each(data, function (key, value) {
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#stok').empty();
+                }
+            });
+        });
+        // $('#warna').change(function(e) {
+        //     e.preventDefault();
+        //     kirim();
+        // });
+
+        // function kirim(warna){
+        //     var id = $('#warna').val();
+        //     $.ajax({
+        //         url : 'data.php',
+        //         type : 'POST',
+        //         data : {id:warna},
+        //         datatype : 'json',
+        //         success: function(data){
+        //             $('#sstok').val(data.stok);
+        //         }
+        //     })
+        // }
+
+        $(document).ready(function () {
+            $('.product-image-thumb').on('click', function () {
+                var $image_element = $(this).find('img')
+                $('.product-image').prop('src', $image_element.attr('src'))
+                $('.product-image-thumb.active').removeClass('active')
+                $(this).addClass('active')
+            })
+        })
+
+        $('#some_department').change(function (e) {
+            // $('#some_user').empty().trigger('change');  
+            var val = $(this).val();
+            var url = "{{ route('dokumen.get_user') }}";
+            if (val != null) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        kirim: val
+                    },
+                    success: function (response) {
+                        var dataItems = "";
+                        // var responsecount = response.length;
+                        for (var i = 0; i < response.length; i++) {
+                            var pars = response[i];
+                            dataItems += "<option value='" + pars.id + "'>" + pars.detail +
+                                "</option>";
+
+
+                        }
+                        $('#some_user').empty().trigger('change');
+                        $('#some_user').append(dataItems);
+                        $('#some_user').attr('required', true);
+                        // console.log(dataItems); 
+                    }
+
+                });
+            }
+
+        });
 
     </script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.js"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="dist/js/pages/dashboard.js"></script>
 </body>
+
 
 </html>
