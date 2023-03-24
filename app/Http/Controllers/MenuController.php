@@ -99,6 +99,17 @@ class MenuController extends Controller
         return view('bill', compact('rows'));
     }
 
+    public function catalog(Request $request) {
+
+        if($request->has('search')){
+            // dd($request);
+            $data = Hijab::where('nama','LIKE','%'.$request->search.'%')->paginate(100);
+        } else {
+            $data = Hijab::all();
+        }
+        return view('catalog', compact('data'));
+    }
+
     public function view($id)
     {
         $data = Keranjang::findOrFail($id);

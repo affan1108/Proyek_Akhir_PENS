@@ -15,7 +15,6 @@ class Hijab extends Model
     protected $fillable = [
         'nama',
         'foto',
-        'warna',
         // 'ukuran',
         'harga',
         'deskripsi',

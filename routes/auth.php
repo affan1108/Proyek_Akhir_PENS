@@ -72,9 +72,11 @@ Route::get('/daftarproduk', [App\Http\Controllers\MenuController::class, 'daftar
 Route::get('/daftarpesanan', [App\Http\Controllers\MenuController::class, 'daftarpesanan'])->name('daftarpesanan');
 Route::get('/daftarpenilaian', [App\Http\Controllers\MenuController::class, 'daftarpenilaian'])->name('daftarpenilaian');
 Route::get('/addproduk', [App\Http\Controllers\MenuController::class, 'addproduk'])->name('addproduk');
+Route::get('/catalog', [App\Http\Controllers\MenuController::class, 'catalog'])->name('catalog');
 Route::get('/edit/{id}', [App\Http\Controllers\MenuController::class, 'edit'])->name('edit');
 Route::get('/view/{id}', [App\Http\Controllers\DetailController::class, 'view'])->name('view');
 Route::post('/update/{id}', [App\Http\Controllers\DetailController::class, 'update'])->name('update');
+Route::get('/voucher', [App\Http\Controllers\VoucherController::class, 'voucher'])->name('voucher');
 Route::post('/pilihvoucher/{id}', [App\Http\Controllers\InvoiceController::class, 'pilihvoucher'])->name('pilihvoucher');
 Route::get('/deleteproduk/{id}', [App\Http\Controllers\DetailController::class, 'delete'])->name('delete');
 Route::put('/updateprofile', [App\Http\Controllers\ProfileController::class, 'updateprofile'])->name('updateprofile');

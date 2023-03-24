@@ -26,6 +26,6 @@ Route::get('/dashboard', function () {
     $data = Hijab::all();
     $carts = Keranjang::all();
     return view('dashboard', compact('data', 'carts'));
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';

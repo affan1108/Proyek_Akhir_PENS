@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Keranjang;
 use App\Models\Warna;
 use App\Http\Requests\Keranjang\UpdateKeranjangRequest;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class KeranjangController extends Controller
 {
@@ -29,7 +31,15 @@ class KeranjangController extends Controller
         // $data->harga = $request->harga;
         $data->hitung = $request->hitung;
 
-        $qty = Warna::find($request->warna_id)->pluck('stok');
+        $qty = Warna::where('id', $request->warna_id)->sum('stok');
+        if( $request->jumlah >= $qty){
+            return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok');
+            // $data['jumlah']=$request->jumlah;
+            // $data['warna_id']=$request->warna_id;
+            // dd($request);    
+        }
+        $data->save();
+            return redirect('home');
 
         // if( $request->jumlah <= $qty){
         //     $data['jumlah']=$request->jumlah;
@@ -41,17 +51,7 @@ class KeranjangController extends Controller
         // } 
         // return redirect()->route('dashboard');
 
-        if( $request->jumlah >= $qty){
-            // $data['jumlah']=$request->jumlah;
-            // $data['warna_id']=$request->warna_id;
-            // dd($request);
-            return redirect()->route('dashboard');    
-            
-            
-        }
-        $data->save();
-        return redirect()->route('home');
-    
+         
 }
 
     // public function update(Request $request, $id){

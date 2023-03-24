@@ -63,7 +63,7 @@ class PaymentController extends Controller
     {
         $data = Payment::findOrFail($id);
         $data->rating = $request->rating;
-        // $data->foto = $request->foto;
+        $data->foto = $request->foto;
         $data->deskripsi = $request->deskripsi;
         if($request->hasFile('foto')){
             $data['foto']=$request->file('foto')->getClientOriginalName();

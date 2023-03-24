@@ -172,7 +172,7 @@
                                         <div class="card-body pt-0">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="lead"><b>{{$row->invoice->keranjang->nama}}</b></h2>
+                                                    <h2 class="lead"><b>{{$row->invoice->keranjang->produk->nama}}</b></h2>
                                                     <p class="text-muted text-sm">
                                                         <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
                                                         <br>
@@ -193,7 +193,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="col-5 text-center">
-                                                    <img src="assets/images/logo.png" alt="user-avatar"
+                                                    <img src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}" alt="user-avatar"
                                                         class="img-circle img-fluid">
                                                 </div>
                                             </div>

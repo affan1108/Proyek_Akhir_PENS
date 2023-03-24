@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Invoice</title>
+    <title>Ameliia Collection</title>
 
     @include('components.css')
     <link href="{{asset('temp/css/styles.css')}}" rel="stylesheet" />
@@ -43,7 +43,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="/catalog">Catalog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">Catalog</a></li>
                         <li class="nav-item dropdown">
                             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" class="nav-link dropdown-toggle">Pages</a>
@@ -97,7 +97,6 @@
                             </ul>
                         </li>
                         @endif
-                        <!-- SEARCH FORM -->
                         <form class="form-inline ml-0 ml-md-3" action="/catalog" method="GET">
                             <div class="input-group input-group-sm">
                                 <input class="form-control form-control-navbar" type="search" placeholder="Search"
@@ -114,7 +113,7 @@
                     <button class="btn btn-primary mr-3">
                         Sign Up
                     </button>
-                    </a> -->
+                </a> -->
                     <a href="/profile">
                         <button class="btn btn-outline-primary">
                             <i class="fas fa-user"></i>
@@ -126,111 +125,92 @@
         </nav>
         <!-- /.navbar -->
 
-        <!-- Content Wrapper. Contains page content -->
+
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Voucher</h1>
-                        </div>
+                            <h1 class="m-0"><small>Katalog</small></h1>
+                        </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Home</a></li>
-                                <!-- <li class="breadcrumb-item"><a href="{{url('/hijab')}}">Hijab</a></li> -->
-                                <!-- <li class="breadcrumb-item"><a href="{{url('/detailhijab')}}">Detail Hijab</a></li> -->
-                                <li class="breadcrumb-item active">Voucher</li>
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
+                                <li class="breadcrumb-item active">Katalog</li>
                             </ol>
-                        </div>
-                    </div>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
+            <!-- /.content-header -->
 
+            <!-- Main content -->
             <div class="content">
                 <div class="container">
-                    <form action="/pilihvoucher" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('POST')
-                        <div class="row">
-                            @foreach ($rows as $row)
-                            <div class="col-md-3 col-sm-6 col-12">
-                                <div class="info-box bg-info">
-                                    <span class="info-box-icon elevation-1">X1</span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Potongan Ongkir</span>
-                                        <span class="info-box-number">Rp. {{$row->harga}}</span>
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: 100%"></div>
+                    <section >
+                        <div class="container px-4 px-lg-5 mt-5">
+                            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                                @foreach($data as $row)
+                                <div class="col mb-5">
+                                    <div class="card h-100">
+                                        <!-- Product image-->
+                                        <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..." />
+                                        <!-- Product details-->
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder">{{$row->nama}}</h5>
+                                                <!-- Product price-->
+                                                Rp. {{$row->harga}}
+                                            </div>
                                         </div>
-                                        <span class="progress-description">
-
-                                            <input type="hidden" name="voucher_id" value="{{ $row->id }}">
-                                        </span>
-                                        <a href="/pilihvoucher/ {{$row->id}}">
-                                        <button type="submit" class="btn btn-primary btn-xs">
-                                            Gunakan
-                                        </button>
-                                        </a>
+                                        <!-- Product actions-->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center"><a class="btn btn-outline-primary mt-auto"
+                                                    href="/detailhijab/{{$row->id}}">Detail</a></div>
+                                        </div>
                                     </div>
-
+                                </div>
+                                @endforeach
+                                <!-- <div class="col mb-5">
+                        <div class="card h-100">
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                 
+                                    <h5 class="fw-bolder">Special Item</h5>
+                                  
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                              
+                                    <span class="text-muted text-decoration-line-through">$20.00</span>
+                                    $18.00
                                 </div>
                             </div>
-                            @endforeach
-
-                            <!-- <div class="col-12 col-sm-6 col-md-3">
-                            <div class="info-box mb-3">
-                                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">New Members</span>
-                                    <span class="info-box-number">2,000</span>
-                                </div>
-
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
                             </div>
-
-                        </div> -->
-
                         </div>
-                    </form>
-                </div>
+                    </div> -->
+                            </div>
+                        </div>
+                    </section>
+                </div><!-- /.container-fluid -->
             </div>
-
-            <!-- <section class="content">
-                <div class="container-fluid">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Harga</th>
-                            <th>Kurir</th>
-                            <th scope="col">Nama Layanan</th>
-                            <th scope="col">Biaya</th>
-                            <th scope="col">ETD (Estimates Days)</th>
-                            <th scope="col">Biaya</th>
-                        </tr>
-                    </thead>
-                    <form action="/pilihvoucher" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('POST')
-                    <tbody>
-                        @foreach ($rows as $row)
-                        <tr>
-                            <td>
-                                {{$row->harga}}
-                                <input type="hidden" name="voucher_id" value="{{ $row->id }}">
-                            </td>
-                            <td>
-                                <button type="submit" class="btn btn-primary">Pilih</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    </form>
-                </table>
-                </div>
-            </section> -->
             <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
         <section class="footer-style-3 pt-100 pb-100">
             <div class="container">
                 <div class="footer-top">
@@ -315,15 +295,11 @@
                     <p class="m-0 text-center text-black">Copyright &copy; Ameliia Collection 2023</p>
                 </div>
         </section>
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
-    @include('components.script')
+
+    <!-- REQUIRED SCRIPTS -->
+
     <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
@@ -333,7 +309,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
-
 </body>
+
 
 </html>

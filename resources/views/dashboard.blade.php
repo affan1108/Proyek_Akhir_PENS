@@ -43,7 +43,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Catalog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/catalog">Catalog</a></li>
                         <li class="nav-item dropdown">
                             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" class="nav-link dropdown-toggle">Pages</a>
@@ -97,12 +97,24 @@
                             </ul>
                         </li>
                         @endif
+                        <!-- SEARCH FORM -->
+                        <form class="form-inline ml-0 ml-md-3" action="/catalog" method="GET">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                                    aria-label="Search" name="search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </ul>
                     <!-- <a href="/register">
                     <button class="btn btn-primary mr-3">
                         Sign Up
                     </button>
-                </a> -->
+                    </a> -->
                     <a href="/profile">
                         <button class="btn btn-outline-primary">
                             <i class="fas fa-user"></i>
@@ -146,14 +158,13 @@
                     <span class="sr-only">Next</span>
                 </a>
             </div>
-    </div>
-    </header>
+        </header>
 
-    <!--====== Content Card Style 4 Part Start ======-->
-    <section class="content-card-style-4 pt-70 pb-100">
-        <div class="container">
-            <div class="row justify-content-center">
-                <!-- <div class="col-lg-4 col-md-7 col-sm-8">
+        <!--====== Content Card Style 4 Part Start ======-->
+        <section class="content-card-style-4 pt-70 pb-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <!-- <div class="col-lg-4 col-md-7 col-sm-8">
                     <div class="single-content mt-15 text-center">
                         <div class="content-icon">
                             <i class="mdi mdi-truck-fast"></i>
@@ -165,62 +176,62 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="col-lg-4 col-md-7 col-sm-8">
-                    <div class="single-content mt-15 text-center">
-                        <div class="content-icon">
-                            <i class="mdi mdi-message-text"></i>
-                        </div>
-                        <div class="content-content">
-                            <h4 class="title"><a href="javascript:void(0)">Pusat Bantuan</a></h4>
-                            <p>Ada Pertanyaan? Kami siap membantu anda</p>
-                            <a href="/login" class="more">Hubungi Kami</a>
+                    <div class="col-lg-4 col-md-7 col-sm-8">
+                        <div class="single-content mt-15 text-center">
+                            <div class="content-icon">
+                                <i class="mdi mdi-message-text"></i>
+                            </div>
+                            <div class="content-content">
+                                <h4 class="title"><a href="javascript:void(0)">Pusat Bantuan</a></h4>
+                                <p>Ada Pertanyaan? Kami siap membantu anda</p>
+                                <a href="/login" class="more">Hubungi Kami</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-7 col-sm-8">
-                    <div class="single-content mt-15 text-center">
-                        <div class="content-icon">
-                            <i class="mdi mdi-ticket-percent"></i>
-                        </div>
-                        <div class="content-content">
-                            <h4 class="title"><a href="javascript:void(0)">Klaim Voucher</a></h4>
-                            <p>Dapatkan potongan harga hingga gratis ongkir</p>
-                            <a href="/login" class="more">learn more</a>
+                    <div class="col-lg-4 col-md-7 col-sm-8">
+                        <div class="single-content mt-15 text-center">
+                            <div class="content-icon">
+                                <i class="mdi mdi-ticket-percent"></i>
+                            </div>
+                            <div class="content-content">
+                                <h4 class="title"><a href="javascript:void(0)">Klaim Voucher</a></h4>
+                                <p>Dapatkan potongan harga hingga gratis ongkir</p>
+                                <a href="/voucher" class="more">learn more</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!--====== Content Card Style 4 Part Ends ======-->
+        </section>
+        <!--====== Content Card Style 4 Part Ends ======-->
 
-    <!-- Section-->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                @foreach($data as $row)
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..." />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">{{$row->nama}}</h5>
-                                <!-- Product price-->
-                                Rp. {{$row->harga}}
+        <!-- Section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    @foreach($data as $row)
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{$row->nama}}</h5>
+                                    <!-- Product price-->
+                                    Rp. {{$row->harga}}
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-primary mt-auto"
+                                        href="/detailhijab/{{$row->id}}">Detail</a></div>
                             </div>
                         </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-primary mt-auto"
-                                    href="/detailhijab/{{$row->id}}">Detail</a></div>
-                        </div>
                     </div>
-                </div>
-                @endforeach
-                <!-- <div class="col mb-5">
+                    @endforeach
+                    <!-- <div class="col mb-5">
                         <div class="card h-100">
                             <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
                             
@@ -248,95 +259,95 @@
                             </div>
                         </div>
                     </div> -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Footer -->
-    <section class="footer-style-3 pt-100 pb-100">
-        <div class="container">
-            <div class="footer-top">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5 col-md-7 col-sm-10">
-                        <div class="footer-logo text-center">
-                            <a href="index.html">
-                                <img src="{{asset('assets/images/logo.png')}}" alt="" height="100" width="100">
-                            </a>
-                        </div>
-                        <h5 class="heading-5 text-center mt-30">Follow Us</h5>
-                        <ul class="footer-follow text-center">
-                            <!-- <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li> -->
-                            <!-- <li><a href="javascript:void(0)"><i class="lni lni-twitter-filled"></i></a></li> -->
-                            <li><a href="javascript:void(0)"><i class="fab fa-tiktok"></i></a></li>
-                            <li><a href="javascript:void(0)"><i class="lni lni-instagram-original"></i></a></li>
-                            <li><a href="javascript:void(0)"><i class="lni lni-whatsapp"></i></a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="footer-widget-wrapper text-center pt-20">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <div class="footer-widget">
-                            <h5 class="footer-title">LAYANAN</h5>
-
-                            <ul class="footer-link">
-                                <li><a href="javascript:void(0)">Katalog</a></li>
-                                <li><a href="javascript:void(0)">Voucher</a></li>
-                                <li><a href="javascript:void(0)">Bantuan</a></li>
-                                <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->
-                                <!-- <li><a href="javascript:void(0)">Apps and Games</a></li> -->
-                                <!-- <li><a href="javascript:void(0)">Oculus for Business</a></li> -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <div class="footer-widget">
-                            <h5 class="footer-title">TENTANG KAMI</h5>
-
-                            <ul class="footer-link">
-                                <li><a href="javascript:void(0)">Profil</a></li>
-                                <li><a href="javascript:void(0)">Kebijakan</a></li>
-                                <!-- <li><a href="javascript:void(0)">Downloads</a></li> -->
-                                <!-- <li><a href="javascript:void(0)">Tools</a></li> -->
-                                <!-- <li><a href="javascript:void(0)">Developer Blog</a></li> -->
-                                <!-- <li><a href="javascript:void(0)">Developer Forums</a></li> -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <div class="footer-widget">
-                            <h5 class="footer-title">PENGIRIMAN</h5>
-
-                            <ul class="footer-link">
-                                <li><a href="javascript:void(0)">JNE</a></li>
-                                <li><a href="javascript:void(0)">POS Indonesia</a></li>
-                                <li><a href="javascript:void(0)">TIKI</a></li>
-                                <!-- <li><a href="javascript:void(0)">Connect</a></li> -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <div class="footer-widget">
-                            <h5 class="footer-title">PEMBAYARAN</h5>
-
-                            <ul class="footer-link">
-                                <li><a href="javascript:void(0)">Kartu Debit</a></li>
-                                <li><a href="javascript:void(0)">Kartu Kredit</a></li>
-                                <li><a href="javascript:void(0)">Alfamaret / Indomaret</a></li>
-                                <li><a href="javascript:void(0)">Transfer Bank</a></li>
-                                <!-- <li><a href="javascript:void(0)"><img src="assets/mandiri.png" alt="" height="25" width="50"></a></li> -->
+        <!-- Main Footer -->
+        <section class="footer-style-3 pt-100 pb-100">
+            <div class="container">
+                <div class="footer-top">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5 col-md-7 col-sm-10">
+                            <div class="footer-logo text-center">
+                                <a href="index.html">
+                                    <img src="{{asset('assets/images/logo.png')}}" alt="" height="100" width="100">
+                                </a>
+                            </div>
+                            <h5 class="heading-5 text-center mt-30">Follow Us</h5>
+                            <ul class="footer-follow text-center">
+                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li> -->
+                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-twitter-filled"></i></a></li> -->
+                                <li><a href="javascript:void(0)"><i class="fab fa-tiktok"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-instagram-original"></i></a></li>
+                                <li><a href="javascript:void(0)"><i class="lni lni-whatsapp"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="footer-copyright text-center">
-                <p class="m-0 text-center text-black">Copyright &copy; Ameliia Collection 2023</p>
-            </div>
-    </section>
+                <div class="footer-widget-wrapper text-center pt-20">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">LAYANAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Katalog</a></li>
+                                    <li><a href="javascript:void(0)">Voucher</a></li>
+                                    <li><a href="javascript:void(0)">Bantuan</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Apps and Games</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Oculus for Business</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">TENTANG KAMI</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Profil</a></li>
+                                    <li><a href="javascript:void(0)">Kebijakan</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Downloads</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Tools</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Developer Blog</a></li> -->
+                                    <!-- <li><a href="javascript:void(0)">Developer Forums</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">PENGIRIMAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">JNE</a></li>
+                                    <li><a href="javascript:void(0)">POS Indonesia</a></li>
+                                    <li><a href="javascript:void(0)">TIKI</a></li>
+                                    <!-- <li><a href="javascript:void(0)">Connect</a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="footer-widget">
+                                <h5 class="footer-title">PEMBAYARAN</h5>
+
+                                <ul class="footer-link">
+                                    <li><a href="javascript:void(0)">Kartu Debit</a></li>
+                                    <li><a href="javascript:void(0)">Kartu Kredit</a></li>
+                                    <li><a href="javascript:void(0)">Alfamaret / Indomaret</a></li>
+                                    <li><a href="javascript:void(0)">Transfer Bank</a></li>
+                                    <!-- <li><a href="javascript:void(0)"><img src="assets/mandiri.png" alt="" height="25" width="50"></a></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-copyright text-center">
+                    <p class="m-0 text-center text-black">Copyright &copy; Ameliia Collection 2023</p>
+                </div>
+        </section>
     </div>
     <!-- ./wrapper -->
 

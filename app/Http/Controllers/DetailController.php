@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Hijab;
 use App\Models\Courier;
 use App\Models\Warna;
+use App\Models\Payment;
 use App\Models\Province;
 use App\Http\Controllers\Controller;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class DetailController extends Controller
 {
     public function hijab($id) {
         $data = Hijab::find($id);
+        // $rows = Payment::all();
         $couriers   = Courier::pluck('title', 'code');
         $provinces  = Province::pluck('title', 'province_id');
         return view("detailhijab", compact('data','couriers', 'provinces'));
@@ -107,19 +111,25 @@ class DetailController extends Controller
         $data = Hijab::findOrFail($id);
         $awal = $data->foto;
             $data->nama = $request->nama;
-            $data->warna = $request->warna;
+            // $data->warna = $request->warna;
             // $data->ukuran = $request->ukuran;
             $data->harga = $request->harga;
             $data->deskripsi = $request->deskripsi;
         
         
         $request->foto->move(public_path().'/assets', $awal);
-        $data->update();
-        return redirect()->route('daftarproduk')->with('toast_success', 'Data Berhasil Di update');
+        if($data){
+            $data->update();
+            return redirect('daftarproduk')->with('toast_success', 'Data Berhasil Di update');
+        }
+        return redirect()->back();
     }
 
     public function delete($id){
-        $data = Hijab::find($id);
+        $data = Hijab::with('warna')->findOrFail($id);
+        if($data->warna()->count() > 0){
+            return back()->with('toast_error', 'Jenis Dokumen ini memiliki data Dokumen.');
+        }
         $data->delete();
         return redirect()->route('daftarproduk');
     }
