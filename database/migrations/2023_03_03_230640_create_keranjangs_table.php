@@ -22,7 +22,7 @@ class CreateKeranjangsTable extends Migration
             // $table->string('nama');
             // $table->string('warna');
             // $table->string('ukuran');
-            $table->string('jumlah');
+            $table->integer('jumlah');
             // $table->string('harga');
             $table->string('hitung');
             // $table->string('_method')->nullable();

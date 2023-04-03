@@ -20,6 +20,8 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('keranjang_id')->constrained('keranjangs')->onUpdate('restrict')->onDelete('cascade');
             $table->foreignId('ongkir_id')->constrained('ongkirs')->onUpdate('restrict')->onDelete('cascade');
             $table->foreignId('voucher_id')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
+            $table->integer('jumlah');
             $table->string('total');
             $table->string('diskon');
             $table->enum('status', ['Belum dibayar', 'Sudah dibayar']);

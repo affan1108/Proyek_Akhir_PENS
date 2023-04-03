@@ -49,90 +49,7 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
-            <div class="container">
-                <a href="/dashboard" class="navbar-brand">
-                    <img src="{{asset('assets/images/logo.png')}}" alt="AdminLTE Logo"
-                        class="brand-image img-circle elevation-3" style="opacity: .8">
-                    <span class="brand-text font-weight-light">Ameliia Collection</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span
-                        class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/dashboard">Home</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="/catalog">Catalog</a></li>
-                        <li class="nav-item dropdown">
-                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" class="nav-link dropdown-toggle">Pages</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/pesanansaya">Pesanan Saya</a></li>
-                                <li><a class="dropdown-item" href="/penilaianpesanan">Penilaian Pesanan</a></li>
-                                <li><a class="dropdown-item" href="/riwayatpesanan">Riwayat Pesanan</a></li>
-                                <!-- <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li> -->
-                            </ul>
-                        </li>
-                        @if(Auth::user()->name == 'admin')
-                        <li class="nav-item dropdown">
-                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" class="nav-link dropdown-toggle">Master Data</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/daftarpesanan">Daftar Pesanan</a></li>
-                                <li><a class="dropdown-item" href="/daftarproduk">Daftar Produk</a></li>
-                                <li><a class="dropdown-item" href="/daftarpenilaian">Daftar Penilaian</a></li>
-                                <li>
-                                    <hr class="dropdown-divider" />
-                                </li>
-                                <li class="dropdown-submenu dropdown-hover">
-                                    <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false"
-                                        class="dropdown-item dropdown-toggle">Table</a>
-                                    <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-                                        <!-- <li>
-                                        <a tabindex="-1" href="#" class="dropdown-item">Table Warna</a>
-                                    </li> -->
-
-                                        <!-- Level three dropdown-->
-                                        <!-- <li class="dropdown-submenu">
-                                        <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false"
-                                            class="dropdown-item dropdown-toggle">level 2</a>
-                                        <ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-                                            <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                            <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                        </ul>
-                                    </li> -->
-                                        <!-- End Level three -->
-
-                                        <li><a href="/warna" class="dropdown-item">Table Warna</a></li>
-                                        <li><a href="#" class="dropdown-item">Tabel User</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        @endif
-                    </ul>
-                    <!-- <a href="/register">
-                    <button class="btn btn-primary mr-3">
-                        Sign Up
-                    </button>
-                </a> -->
-                    <a href="/profile">
-                        <button class="btn btn-outline-primary">
-                            <i class="fas fa-user"></i>
-                            {{Auth::user()->name}}
-                        </button>
-                    </a>
-                </div>
-            </div>
-        </nav>
+        @include('components.nav-bar')
         <!-- /.navbar -->
 
         <!-- Content Wrapper. Contains page content -->
@@ -159,135 +76,114 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
-                <div class="container-fluid">
+                    <div class="container-fluid">
                         <div class="row">
-                        @foreach($data as $row)
-                        @if($row->rating != null)
-                            <div class="col-12 d-flex align-items-stretch flex-column">
-                                <div class="card bg-light d-flex flex-fill">
-                                    <div class="card-header text-muted border-bottom-0">
-                                        {{$row->user->name}}
-                                    </div>
-                                    <div class="card-body pt-0 mt-3">
-                                        <div class="row">
-                                            <div class="col-7">
-                                                <div class="form-group">
-                                                    <label>Nilai Produk</label>
-                                                    <div class="row col-10">
-                                                        <div class="custom-control custom-radio col-5">
-                                                            <label for="customRadio1">
-                                                                <i class="nav-icon fas fa-star"></i>
-                                                                <i class="nav-icon fas fa-star"></i>
-                                                                <i class="nav-icon fas fa-star"></i>
-                                                                <i class="nav-icon fas fa-star"></i>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- <div class="form-group">
-                                                    <label>Nilai Produk</label>
-                                                    <select class="form-control select2bs4" style="width: 100%;">
-                                                        <option selected="selected">1</option>
-                                                        <option>2</option>
-                                                        <option>3</option>
-                                                        <option>4</option>
-                                                        <option>5</option>
-                                                    </select>
-                                                </div> -->
-                                                <div class="form-group">
-                                                    <div class="col-6 mt-2 product-image-thumbs">
-                                                        <div class="product-image-thumb active"><img
-                                                                src="assets/images/logo.png" alt="Product Image"></div>
-                                                        <div class="product-image-thumb"><img
-                                                                src="assets/images/logo.png" alt="Product Image"></div>
-                                                        <div class="product-image-thumb"><img
-                                                                src="assets/images/logo.png" alt="Product Image"></div>
-                                                        <div class="product-image-thumb"><img
-                                                                src="assets/images/logo.png" alt="Product Image"></div>
-                                                        <div class="product-image-thumb"><img
-                                                                src="assets/images/logo.png" alt="Product Image"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <textarea class="form-control" rows="3"
-                                                        placeholder="Deskripsi" disabled style="resize:none;">{{$row->deskripsi}}</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-5">
-                                                <div class="bg-light d-flex flex-fill">
-                                                    <!-- <div class="text-muted border-bottom-0">
-                                                        (Nama Produk)
-                                                    </div> -->
-                                                    <div class="pt-0">
-                                                        <div class="row">
-                                                            <div class="col-7">
-                                                                <h2 class="lead"><b>{{$row->invoice->keranjang->produk->nama}}</b></h2>
-                                                                <p class="text-muted text-sm">
-                                                                    <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
-                                                                    <br>
-                                                                    <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
-                                                                    <br>
-                                                                    <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
-                                                                    <br>
-                                                                    <b>Harga: </b>{{$row->invoice->total}}
-                                                                </p>
-                                                                <ul class="ml-4 mb-0 fa-ul text-muted">
-                                                                    <li class="small"><span class="fa-li"><i
-                                                                                class="fas fa-lg fa-building"></i></span>
-                                                                        Alamat:
-                                                                        {{$row->user->alamat}}</li>
-                                                                    <li class="small"><span class="fa-li"><i
-                                                                                class="fas fa-lg fa-phone"></i></span>
-                                                                        Nomor Telepon: {{$row->user->nomer}}</li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="col-5 text-center">
-                                                                <img src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}" alt="user-avatar"
-                                                                    class="img-circle img-fluid">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- <div class="card-footer">
-                                                        <div class="text-right">
-                                                            <a href="#" class="btn btn-sm btn-danger">
-                                                                Beli Lagi
-                                                            </a>
-                                                        </div>
-                                                    </div> -->
-                                                </div>
-                                                <!-- <div class="col-3 text-center">
-                                                    <img src="assets/images/logo.png" alt="user-avatar"
-                                                        class="img-circle img-fluid">
-                                                </div> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="card-footer">
-                                        <div class="text-right">
-                                            <a href="#" class="btn btn-sm bg-teal">
-                                                    <i class="fas fa-comments"></i>
-                                                </a>
-                                            <a href="#" class="btn btn-sm btn-danger">
-                                                Nilai
-                                            </a>
-                                        </div>
+                            <div class="col-12">
+                                <div class="card">
+                                    <!-- <div class="card-header">
+                                        <h3 class="card-title">Expandable Table</h3>
                                     </div> -->
+                                    <!-- ./card-header -->
+                                    <div class="card-body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Qty</th>
+                                                    <th>Nama Pembeli</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Warna - Ukuran</th>
+                                                    <th>Harga</th>
+                                                    <th>Alamat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($data as $row)
+                                                @if($row->rating != null)
+                                                <tr data-widget="expandable-table" aria-expanded="false">
+                                                    <td>{{$row->invoice->keranjang->jumlah}}</td>
+                                                    <td>{{$row->user->name}}</td>
+                                                    <td>{{$row->invoice->keranjang->produk->nama}}</td>
+                                                    <td>{{$row->invoice->keranjang->warna->warna}} -
+                                                        {{$row->invoice->keranjang->warna->ukuran}}</td>
+                                                    <td>{{$row->invoice->total}}</td>
+                                                    <td>{{$row->user->alamat}}</td>
+                                                </tr>
+                                                <tr class="expandable-body">
+                                                    <td colspan="6">
+                                                        <div class="col-7">
+                                                            <div class="form-group">
+                                                                <label>Nilai Produk</label>
+                                                                <div class="row col-10">
+                                                                    <div class="custom-control custom-radio col-5">
+                                                                        @if($row->rating == '1')
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        @elseif($row->rating == '2')
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        @elseif($row->rating == '3')
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        @elseif($row->rating == '4')
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        @elseif($row->rating == '5')
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        <i class="nav-icon fas fa-star"
+                                                                            style="color: yellow"></i>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-6 mt-2 product-image-thumbs">
+                                                                    <div class="product-image-thumb active"><img
+                                                                            src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}"
+                                                                            alt="Product Image"></div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" rows="3"
+                                                                    placeholder="Deskripsi" disabled
+                                                                    style="resize:none;">{{$row->deskripsi}}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
                                 </div>
+                                <!-- /.card -->
                             </div>
-                        @endif
-                        @endforeach
                         </div>
-                        <div class="card-footer">
+                        <div>
                             <nav aria-label="Contacts Page Navigation">
                                 <ul class="pagination justify-content-center m-0">
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">8</a></li>
+                                    {{$data->links()}}
                                 </ul>
                             </nav>
                         </div>
@@ -299,97 +195,8 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-
         <!-- Main Footer -->
-        <section class="footer-style-3 pt-100 pb-100">
-            <div class="container">
-                <div class="footer-top">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 col-md-7 col-sm-10">
-                            <div class="footer-logo text-center">
-                                <a href="index.html">
-                                    <img src="{{asset('assets/images/logo.png')}}" alt="" height="100" width="100">
-                                </a>
-                            </div>
-                            <h5 class="heading-5 text-center mt-30">Follow Us</h5>
-                            <ul class="footer-follow text-center">
-                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a></li> -->
-                                <!-- <li><a href="javascript:void(0)"><i class="lni lni-twitter-filled"></i></a></li> -->
-                                <li><a href="javascript:void(0)"><i class="fab fa-tiktok"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-instagram-original"></i></a></li>
-                                <li><a href="javascript:void(0)"><i class="lni lni-whatsapp"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-widget-wrapper text-center pt-20">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="footer-widget">
-                                <h5 class="footer-title">LAYANAN</h5>
-
-                                <ul class="footer-link">
-                                    <li><a href="javascript:void(0)">Katalog</a></li>
-                                    <li><a href="javascript:void(0)">Voucher</a></li>
-                                    <li><a href="javascript:void(0)">Bantuan</a></li>
-                                    <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->
-                                    <!-- <li><a href="javascript:void(0)">Apps and Games</a></li> -->
-                                    <!-- <li><a href="javascript:void(0)">Oculus for Business</a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="footer-widget">
-                                <h5 class="footer-title">TENTANG KAMI</h5>
-
-                                <ul class="footer-link">
-                                    <li><a href="javascript:void(0)">Profil</a></li>
-                                    <li><a href="javascript:void(0)">Kebijakan</a></li>
-                                    <!-- <li><a href="javascript:void(0)">Downloads</a></li> -->
-                                    <!-- <li><a href="javascript:void(0)">Tools</a></li> -->
-                                    <!-- <li><a href="javascript:void(0)">Developer Blog</a></li> -->
-                                    <!-- <li><a href="javascript:void(0)">Developer Forums</a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="footer-widget">
-                                <h5 class="footer-title">PENGIRIMAN</h5>
-
-                                <ul class="footer-link">
-                                    <li><a href="javascript:void(0)">JNE</a></li>
-                                    <li><a href="javascript:void(0)">POS Indonesia</a></li>
-                                    <li><a href="javascript:void(0)">TIKI</a></li>
-                                    <!-- <li><a href="javascript:void(0)">Connect</a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <div class="footer-widget">
-                                <h5 class="footer-title">PEMBAYARAN</h5>
-
-                                <ul class="footer-link">
-                                    <li><a href="javascript:void(0)">Kartu Debit</a></li>
-                                    <li><a href="javascript:void(0)">Kartu Kredit</a></li>
-                                    <li><a href="javascript:void(0)">Alfamaret / Indomaret</a></li>
-                                    <li><a href="javascript:void(0)">Transfer Bank</a></li>
-                                    <!-- <li><a href="javascript:void(0)"><img src="assets/mandiri.png" alt="" height="25" width="50"></a></li> -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-copyright text-center">
-                    <p class="m-0 text-center text-black">Copyright &copy; Ameliia Collection 2023</p>
-                </div>
-        </section>
+        @include('components.footer')
     </div>
     <!-- ./wrapper -->
 
@@ -418,7 +225,8 @@
                             // <input type="text" id="stok" name="stok">
                             $('#stok').empty();
                             $.each(data, function (key, value) {
-                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
                             });
                         }
                     });

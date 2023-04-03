@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarnasTable extends Migration
+class CreateKasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateWarnasTable extends Migration
      */
     public function up()
     {
-        Schema::create('warnas', function (Blueprint $table) {
+        Schema::create('kas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('cascade')->onDelete('restrict');
-            // $table->string('nama');
-            $table->string('warna');
-            $table->integer('stok');
-            $table->string('ukuran');
+            $table->string('nama');
+            $table->integer('harga');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateWarnasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warnas');
+        Schema::dropIfExists('kas');
     }
 }

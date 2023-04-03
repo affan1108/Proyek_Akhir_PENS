@@ -19,4 +19,15 @@ class UserController extends Controller
 
         return \Redirect::route('users.edit', [$user->id])->with('message', 'User has been updated!');
     }
+
+    public function user(){
+        $data = User::all();
+        return view('tables.user', compact('data'));
+    }
+
+    public function deleteuser($id){
+        $data = User::find($id);
+        $data->delete();
+        return redirect()->route('tables.user');
+    }
 }

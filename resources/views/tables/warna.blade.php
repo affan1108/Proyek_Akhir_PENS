@@ -28,99 +28,28 @@
     <!-- summernote -->
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <link rel="shortcut icon" href="assets/images/logo2.png">
+    <link href="{{asset('temp/css/styles.css')}}" rel="stylesheet" />
+    <!--====== Default CSS ======-->
+    <link rel="stylesheet" href="{{asset('estore/assets/css/default.css')}}">
+
+    <!--====== Style CSS ======-->
+    <link rel="stylesheet" href="{{asset('estore/assets/css/style.css')}}">
+
+    <!--====== Line Icons CSS ======-->
+    <link rel="stylesheet" href="{{asset('estore/assets/css/LineIcons.css')}}">
+
+    <!--====== Material Design Icons CSS ======-->
+    <link rel="stylesheet" href="{{asset('estore/assets/css/materialdesignicons.min.css')}}">
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
 <body class="hold-transition layout-top-nav">
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-md navbar-dark navbar-primary">
-            <div class="container">
-                <a href="#" class="navbar-brand">
-                    <!-- <img src="{{asset('assets/images/logo.png')}}" alt="AdminLTE Logo"
-                        class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-                    <span class="brand-text font-weight-light">Ameliia Collection</span>
-                </a>
-
-                <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
-                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-                    <!-- Left navbar links -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a href="index3.html" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Contact</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" class="nav-link dropdown-toggle">Pages</a>
-                            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                                <li><a href="/pesanansaya" class="dropdown-item">Pesanan Saya</a></li>
-                                <li><a href="/penilaianpesanan" class="dropdown-item">Penilaian Pesanan</a></li>
-                                <li><a href="/riwayatpesanan" class="dropdown-item">Riwayat Pesanan</a></li>
-
-                                <!-- <li class="dropdown-divider"></li> -->
-
-                                <!-- Level two dropdown-->
-                                <!-- <li class="dropdown-submenu dropdown-hover">
-                                    <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false"
-                                        class="dropdown-item dropdown-toggle">Hover for action</a>
-                                    <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-                                        <li>
-                                            <a tabindex="-1" href="#" class="dropdown-item">level 2</a>
-                                        </li>
-                                        <li class="dropdown-submenu">
-                                            <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false"
-                                                class="dropdown-item dropdown-toggle">level 2</a>
-                                            <ul aria-labelledby="dropdownSubMenu3"
-                                                class="dropdown-menu border-0 shadow">
-                                                <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                                <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                            </ul>
-                                        </li>
-
-                                        <li><a href="#" class="dropdown-item">level 2</a></li>
-                                        <li><a href="#" class="dropdown-item">level 2</a></li>
-                                    </ul>
-                                </li> -->
-                                <!-- End Level two -->
-                            </ul>
-                        </li>
-                    </ul>
-
-                    <!-- SEARCH FORM -->
-                    <form class="form-inline ml-0 ml-md-3">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Right navbar links -->
-                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-                    <a href="">
-                        <button class="btn btn-outline-light">
-                            <i class="fas fa-user"></i>
-                             {{Auth::user()->name}}
-                        </button>
-                    </a>
-                </ul>
-            </div>
-        </nav>
+        @include('components.nav-bar')
         <!-- /.navbar -->
 
         <!-- Content Wrapper. Contains page content -->
@@ -130,13 +59,13 @@
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0"><small>Detail Hijab</small></h1>
+                            <h1 class="m-0"><small>Tabel Warna</small></h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
                                 <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
-                                <li class="breadcrumb-item active">Detail Hijab</li>
+                                <li class="breadcrumb-item active">Tabel Warna</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -147,15 +76,15 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
-                <div class="row">
+                    <div class="row">
                         <div class="col-12">
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title">Tabel Warna</h3>
+                                    <h3 class="card-title mt-2">Tabel Warna</h3>
                                     <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-minus"></i>
-                                        </button>
+                                        </button> -->
                                         <!-- <button type="button" class="btn btn-tool" data-card-widget="remove">
                                             <i class="fas fa-times"></i>
                                         </button> -->
@@ -175,7 +104,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 1%">
-                                                            #
+                                                            No
                                                         </th>
                                                         <th style="width: 20%">
                                                             Nama
@@ -195,10 +124,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($data as $row)
+                                                    @php
+                                                    $no = 1;
+                                                    @endphp
+                                                    @foreach($data as $index => $row)
                                                     <tr>
                                                         <td>
-                                                            #
+                                                            {{$index + $data->firstItem()}}
                                                         </td>
                                                         <td>
                                                             {{$row->produk->nama}}
@@ -233,7 +165,16 @@
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
+
                                             </table>
+                                            <div class="card-footer">
+                                                <nav aria-label="Contacts Page Navigation">
+                                                    <ul class="pagination justify-content-center m-0">
+                                                        {{$data->links()}}
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -293,29 +234,22 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-
         <!-- Main Footer -->
-        <footer class="py-5 bg-dark">
-            <div class="container">
-                <p class="m-0 text-center text-white">Copyright &copy; Ameliia Collection 2023</p>
-            </div>
-        </footer>
+        @include('components.footer')
     </div>
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- AdminLTE App -->
-    <script src="../../dist/js/adminlte.min.js"></script>
+    <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
     <script>
         $(document).ready(function () {
             $('select[name="warna_id"]').on('change', function () {
@@ -330,7 +264,8 @@
                             // <input type="text" id="stok" name="stok">
                             $('#stok').empty();
                             $.each(data, function (key, value) {
-                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
                             });
                         }
                     });

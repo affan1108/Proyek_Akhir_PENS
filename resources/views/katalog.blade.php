@@ -28,7 +28,7 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('components.navbar')
+        @include('components.nav-bar')
         <!-- /.navbar -->
 
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ameliia Collection | Daftar Produk</title>
+    <title>Ameliia Collection</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -59,13 +59,13 @@
                 <div class="container">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0"><small>Add Produk</small></h1>
+                            <h1 class="m-0"><small>Tabel Payment</small></h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
                                 <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
-                                <li class="breadcrumb-item active">Add Produk</li>
+                                <li class="breadcrumb-item active">Tabel Payment</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -76,11 +76,11 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
-                <div class="row">
+                    <div class="row">
                         <div class="col-12">
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title mt-2">Hijab</h3>
+                                    <h3 class="card-title mt-2">Tabel Payment</h3>
                                     <div class="card-tools">
                                         <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                             <i class="fas fa-minus"></i>
@@ -92,176 +92,143 @@
                                 </div>
 
                                 <div class="card-body p-0">
-                                    <div class="card-header">
-                                        <a class="btn btn-success btn-sm" href="/addproduk">
-                                            <i class="fas fa-plus">
-                                            </i>
+                                    <!-- <div class="card-header">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#add">
                                             Add
-                                        </a>
-                                    </div>
-                                    @if(count($data))
+                                        </button>
+                                    </div> -->
                                     <div class="tab-content">
                                         <div class="active tab-pane" id="hijab">
                                             <table class="table table-striped projects">
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 1%">
-                                                            #
+                                                            No
                                                         </th>
                                                         <th style="width: 20%">
-                                                            Nama
+                                                            Nama Pembeli
                                                         </th>
                                                         <th style="width: 30%">
-                                                            Foto
+                                                            Nama Barang
                                                         </th>
                                                         <th style="width: 10%">
                                                             Harga
                                                         </th>
-                                                        <!-- <th style="width: 10%">
-                                                            Ukuran
-                                                        </th> -->
-                                                        <th style="width: 30%">
-                                                            Aksi
+                                                        <th style="width: 20%">
+                                                            Status
                                                         </th>
+                                                        <!-- <th style="width: 30%">
+                                                            Aksi
+                                                        </th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($data as $row)
+                                                    @php
+                                                    $no = 1;
+                                                    @endphp
+                                                    @foreach($data as $index => $row)
                                                     <tr>
                                                         <td>
-                                                            #
+                                                            {{$index + $data->firstItem()}}
                                                         </td>
                                                         <td>
-                                                            <a>
-                                                                {{$row->nama}}
-                                                            </a>
-                                                            <!-- <br />
-                                                            <small>
-                                                                Created 01.01.2019
-                                                            </small> -->
+                                                            {{$row->user->name}}
                                                         </td>
                                                         <td>
-                                                            <h5><img src="{{asset('assets/'.$row->foto)}}" alt="Foto Produk" style="width: 50px;"></h5>
+                                                            {{$row->invoice->keranjang->produk->nama}}
                                                         </td>
                                                         <td>
-                                                            {{$row->harga}}
+                                                            {{ number_format($row['gross_amount'], 0, '.', '.') }}
+                                                        </td>
+                                                        <td>
+                                                            @if($row->status == 'capture' || $row->status == 'settlement')
+                                                                Sudah Dibayar
+                                                            @else
+                                                                Belum Dibayar
+                                                            @endif
                                                         </td>
                                                         <td class="project-actions">
-                                                            <a class="btn btn-primary btn-sm" href="/view/{{$row->id}}">
-                                                                <i class="fas fa-eye">
-                                                                </i>
-                                                            </a>
-                                                            <a class="btn btn-info btn-sm" href="/edit/{{$row->id}}">
-                                                                <i class="fas fa-pencil-alt">
-                                                                </i>
-                                                            </a>
-                                                            <a class="btn btn-danger btn-sm"
-                                                                href="/deleteproduk/{{$row->id}}">
-                                                                <i class="fas fa-trash">
-                                                                </i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="tab-pane" id="gamis">
-                                            <table class="table table-striped projects">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 1%">
-                                                            #
-                                                        </th>
-                                                        <th style="width: 20%">
-                                                            Kategori
-                                                        </th>
-                                                        <th style="width: 30%">
-                                                            Jumlah Produk
-                                                        </th>
-                                                        <th>
-                                                            Rating
-                                                        </th>
-                                                        <th style="width: 30%" class="text-center">
-                                                            Aksi
-                                                        </th>
-                                                        <!-- <th style="width: 20%">
-                                                        </th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            #
-                                                        </td>
-                                                        <td>
-                                                            <a>
-                                                                Gamis
-                                                            </a>
-                                                            <!-- <br />
-                                                            <small>
-                                                                Created 01.01.2019
-                                                            </small> -->
-                                                        </td>
-                                                        <td>
-                                                            <h5>100</h5>
-                                                        </td>
-                                                        <td>
-                                                            <h5>4.9</h5>
-                                                        </td>
-                                                        <td class="project-actions text-right">
-                                                            <a class="btn btn-primary btn-sm"
-                                                                href="/editproduk/{{$row->id}}">
+                                                            <!-- <a class="btn btn-primary btn-sm" href="/view/{{$row->id}}">
                                                                 <i class="fas fa-folder">
                                                                 </i>
                                                                 View
-                                                            </a>
-                                                            <!-- <a class="btn btn-info btn-sm" href="{{url('/editproduk')}}">
+                                                            </a> -->
+                                                            <!-- <a class="btn btn-info btn-sm" href="/edit/{{$row->id}}">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>
                                                                 Edit
                                                             </a> -->
-                                                            <a class="btn btn-danger btn-sm" href="#">
+                                                            <a class="btn btn-danger btn-sm"
+                                                                href="/deletepayment/{{$row->id}}">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 Delete
                                                             </a>
                                                         </td>
                                                     </tr>
+                                                    @endforeach
                                                 </tbody>
+
                                             </table>
+                                            <div class="card-footer">
+                                                <nav aria-label="Contacts Page Navigation">
+                                                    <ul class="pagination justify-content-center m-0">
+                                                        {{$data->links()}}
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    @else
-                                    <h2 class="text-center">Data Kosong. Silahkan Isi Data Terlebih Dahulu</h2>
-                                    @endif
                                 </div>
                             </div>
                             <!-- Modal -->
-                            <!-- <div class="modal fade" id="exampleModal" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Tambah Kategori</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                            <!-- <div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addLabel">Tambah Warna</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="/addwarna" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <label for="nama">Nama Produk</label>
+
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="produk_id">
+                                                    @foreach (App\Models\Hijab::all() as $u)
+                                                    <option value="{{ $u->id }}">{{ $u->nama }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="modal-body">
-                                                <label for="alamat">
-                                                    Kategori</label>
-                                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Alamat</strong>
-                                                <input type="text" class="form-control" id="kategori" name="kategori"
-                                                    placeholder="Masukkan Nama Kategori">
+                                                <label for="warna">Warna</label>
+                                                <input type="text" class="form-control" id="warna" name="warna"
+                                                    placeholder="Warna">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="stok">Stok</label>
+                                                <input type="text" class="form-control" id="stok" name="stok"
+                                                    placeholder="Jumlah Stok">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="ukuran">Ukuran</label>
+                                                <input type="text" class="form-control" id="ukuran" name="ukuran"
+                                                    placeholder="Ukuran">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
-                                </div> -->
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                     <!-- /.row -->
@@ -271,12 +238,17 @@
         </div>
         <!-- /.content-wrapper -->
 
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
         <!-- Main Footer -->
         @include('components.footer')
     </div>
     <!-- ./wrapper -->
 
-    @include('sweetalert::alert')
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
@@ -302,7 +274,8 @@
                             // <input type="text" id="stok" name="stok">
                             $('#stok').empty();
                             $.each(data, function (key, value) {
-                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
                             });
                         }
                     });
@@ -374,6 +347,5 @@
 
     </script>
 </body>
-
 
 </html>

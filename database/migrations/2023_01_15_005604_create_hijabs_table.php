@@ -21,7 +21,7 @@ class CreateHijabsTable extends Migration
             // $table->foreignId('warna_id')->constrained('warnas')->onUpdate('cascade')->onDelete('restrict');
             // $table->string('ukuran');
             $table->string('harga');
-            $table->string('deskripsi');
+            $table->text('deskripsi');
             $table->timestamps();
         });
     }

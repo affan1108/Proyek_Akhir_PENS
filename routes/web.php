@@ -16,16 +16,22 @@ use App\Models\Keranjang;
 */
 
 Route::get('/', function () {
-    $data = Hijab::all();
+    $data = Hijab::paginate(4);
     $carts = Keranjang::all();
     return view('home', compact('data', 'carts'));
     // return view('home');
 });
 
 Route::get('/dashboard', function () {
-    $data = Hijab::all();
+    $data = Hijab::paginate(4);
     $carts = Keranjang::all();
     return view('dashboard', compact('data', 'carts'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified']);
 
+// Route::get('/detailhijab/{id}', function ($id) {
+//     $data = Hijab::find($id);
+//     return view('detailhijab', compact('data'));
+// });
+
+Route::get('/bantuan', [App\Http\Controllers\MenuController::class, 'bantuan'])->name('bantuan');
 require __DIR__.'/auth.php';

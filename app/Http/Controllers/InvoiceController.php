@@ -84,7 +84,7 @@ class InvoiceController extends Controller
                 'phone' => Auth::user()->nomer,
             ),
         );
-        // dd($params);
+        // dd($data);
         $snapToken = \Midtrans\Snap::getSnapToken($params);
         return view('bill', compact('data', 'snapToken'));
     }

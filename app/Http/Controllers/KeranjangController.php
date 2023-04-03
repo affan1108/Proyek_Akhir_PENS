@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Keranjang;
 use App\Models\Warna;
+use App\Models\Ongkir;
 use App\Http\Requests\Keranjang\UpdateKeranjangRequest;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -13,43 +14,56 @@ use RealRashid\SweetAlert\Facades\Alert;
 class KeranjangController extends Controller
 {
     public function keranjang(Request $request) {
+        // $data = $request->validate([
+        //     'user_id' => 'required',
+        //     'produk_id' => 'required',
+        //     'warna_id' => 'required',
+        //     'hitung' => 'required',
+        // ]);
+        // $data = new Keranjang;
+        // $data->user_id = $request->user_id;
+        // $data->produk_id = $request->produk_id;
+        // $data->warna_id = $request->warna_id;
+        // $data->jumlah = $request->jumlah;
+        // $data->hitung = $request->hitung;
+
+        // $qty = Warna::where('id', $request->warna_id)->sum('stok');
+        // if( $request->jumlah > $qty){
+        //     return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok');  
+        // }
+        // $data->save();
+        //     return redirect('home');
+
         $data = $request->validate([
             'user_id' => 'required',
             'produk_id' => 'required',
             'warna_id' => 'required',
-            // 'ukuran' => 'required',
-            // 'jumlah' => 'required',
-            // 'harga' => 'required',
             'hitung' => 'required',
         ]);
         $data = new Keranjang;
         $data->user_id = $request->user_id;
         $data->produk_id = $request->produk_id;
         $data->warna_id = $request->warna_id;
-        // $data->ukuran = $request->ukuran;
         $data->jumlah = $request->jumlah;
-        // $data->harga = $request->harga;
         $data->hitung = $request->hitung;
 
-        $qty = Warna::where('id', $request->warna_id)->sum('stok');
-        if( $request->jumlah >= $qty){
-            return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok');
-            // $data['jumlah']=$request->jumlah;
-            // $data['warna_id']=$request->warna_id;
-            // dd($request);    
-        }
-        $data->save();
-            return redirect('home');
+        $cpty = Warna::where('id', $request->warna_id)->sum('stok');
+        // $color = [
+        //     'id' => $request->warna_id,
+        //     'stok' => round($cpty - ($request->jumlah), PHP_ROUND_HALF_UP),
+        // ];
+        // $color->stok .= round($cpty - ($request->jumlah), PHP_ROUND_HALF_UP);
 
-        // if( $request->jumlah <= $qty){
-        //     $data['jumlah']=$request->jumlah;
-        //     $data['warna_id']=$request->warna_id;
-        //     dd($request);
-        //     $data->save();
-        //     return redirect()->route('home');
-            
-        // } 
-        // return redirect()->route('dashboard');
+        
+        // $qty = Warna::where('id', $request->warna_id)->sum('stok');
+        if( $request->jumlah > $cpty){
+            return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok');  
+        } else {
+            $data->save();
+            // Warna::where('id', $request->warna_id)->update($color);
+            return redirect('home');
+        }
+        
 
          
 }
@@ -67,26 +81,12 @@ class KeranjangController extends Controller
     //     return redirect()->route('invoice')->with('toast_success', 'Data Berhasil Di update');
     // }
 
-    public function updatekeranjang(UpdateKeranjangRequest $request){
-        // J_dokumen::with('dokumens')->findOrFail($id)
-        $data = Keranjang::all();
+    public function updatekeranjang(Request $request, $id){
+        $data = Keranjang::findOrFail($id);
+        $ongkir = Ongkir::all()->last();
+        $data->update();
 
-        // $data->update([
-        //     'layanan' => $request->layanan,
-        //     'kota' => $request->kota,
-        //     'kurir' => $request->kurir,
-        //     'ongkir' => $request->ongkir,
-        // ]);
-
-        // $request->validate([
-        //     'layanan' => 'required',
-        //     'kota' => 'required',
-        //     'kurir' => 'required',
-        //     'ongkir' => 'required',
-        // ]);
-        // $data = Keranjang::with('user')->update($request->except('_token'));
-
-        return view('invoice', compact('data'))->with('toast_success', 'Data Berhasil Di Update');
+        return view('invoice', compact('data','ongkir'))->with('toast_success', 'Data Berhasil Di Update');
     }
 
     public function editpesanan($id) {

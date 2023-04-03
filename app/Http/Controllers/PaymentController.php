@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\Warna;
 
 class PaymentController extends Controller
 {
@@ -37,12 +38,14 @@ class PaymentController extends Controller
     }
 
     public function payment_post(Request $request){
-        $json = json_decode($request->get('json','user_id','invoice_id'));
+        $json = json_decode($request->get('json','user_id','invoice_id', 'warna_id', 'jumlah'));
         // return $json;
         $order = new Payment;
         $order->status = $json->transaction_status;
         $order->user_id = $request->user_id;
         $order->invoice_id = $request->invoice_id;
+        $order->warna_id = $request->warna_id;
+        $order->jumlah = $request->jumlah;
         $order->diterima = isset($request->diterima) ? $request->diterima : null;
         // $order->number = $request->get('number');
         $order->transaction_id = $json->transaction_id;
@@ -51,7 +54,20 @@ class PaymentController extends Controller
         $order->payment_type = $json->payment_type;
         $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
         $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
-        return $order->save() ? redirect(('pesanansaya'))->with('alert-success', 'Order berhasil dibuat') : redirect(('pesanansaya'))->with('alert-failed', 'Terjadi kesalahan');
+
+        $cpty = Warna::where('id', $request->warna_id)->sum('stok');
+        $color = [
+            'id' => $request->warna_id,
+            'stok' => round($cpty - ($request->jumlah), PHP_ROUND_HALF_UP),
+        ];
+
+        // dd($order, $color);
+        Warna::where('id', $request->warna_id)->update($color);
+        $order->save();
+
+        return redirect(('pesanansaya'));
+
+        // return $order->save() ? redirect(('pesanansaya'))->with('alert-success', 'Order berhasil dibuat') : redirect(('pesanansaya'))->with('alert-failed', 'Terjadi kesalahan');
     }
 
     public function nilai($id){
@@ -71,5 +87,11 @@ class PaymentController extends Controller
         
         $data->update();
         return redirect()->route('riwayatpesanan')->with('toast_success', 'Data Berhasil Di update');
+    }
+
+    public function deletepayment($id){
+        $data = Payment::find($id);
+        $data->delete();
+        return redirect()->route('tables.payment');
     }
 }

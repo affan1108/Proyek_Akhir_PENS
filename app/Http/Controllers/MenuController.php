@@ -13,6 +13,7 @@ use App\Models\Ongkir;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Riwayat;
+use App\Models\Kas;
 
 class MenuController extends Controller
 {
@@ -24,8 +25,12 @@ class MenuController extends Controller
     }
 
     public function pesanansaya() {
-        $data = Payment::all();
+        $data = Payment::orderBy('status', 'ASC')->where('diterima', '0')->paginate(10);
         return view("pesanansaya", compact('data'));
+    }
+
+    public function bantuan() {
+        return view("bantuan");
     }
 
     public function viewpesanan($id)
@@ -40,11 +45,11 @@ class MenuController extends Controller
         $data->diterima = $request->diterima;
         
         $data->update();
-        return redirect()->route('penilaianpesanan')->with('toast_success', 'Data Berhasil Di update');
+        return redirect()->route('penilaianpesanan');
     }
 
     public function riwayatpesanan() {
-        $data = Payment::all();
+        $data = Payment::orderBy('rating', 'DESC')->where([['diterima', '=', '1'],['rating', '!=', 'null']])->paginate(6);
         // return view("pesanansaya", compact('data'));
         return view("riwayatpesanan", compact('data'));
     }
@@ -60,12 +65,12 @@ class MenuController extends Controller
     }
 
     public function daftarpesanan() {
-        $data = Payment::all();
+        $data = Payment::orderBy('status', 'ASC')->where('diterima', '0')->paginate(6);
         return view("daftarpesanan", compact('data'));
     }
 
     public function daftarpenilaian() {
-        $data = Payment::all();
+        $data = Payment::paginate(10);
         return view("daftarpenilaian", compact('data'));
     }
 
@@ -79,9 +84,21 @@ class MenuController extends Controller
     }
 
     public function warna() {
-        $data = Warna::all();
+        $data = Warna::paginate(5);
         $ukur = Ukuran::all();
         return view('tables.warna', compact('data','ukur'));
+    }
+
+    public function payment() {
+        $data = Payment::paginate(5);
+        // $ukur = Ukuran::all();
+        return view('tables.payment', compact('data'));
+    }
+
+    public function report() {
+        $data = Payment::all();
+        $kas = Kas::all();
+        return view('report', compact('data','kas'));
     }
 
     public function ukuran() {
@@ -108,6 +125,17 @@ class MenuController extends Controller
             $data = Hijab::all();
         }
         return view('catalog', compact('data'));
+    }
+
+    public function katalog(Request $request) {
+
+        if($request->has('search')){
+            // dd($request);
+            $data = Hijab::where('nama','LIKE','%'.$request->search.'%')->paginate(100);
+        } else {
+            $data = Hijab::all();
+        }
+        return view('katalog', compact('data'));
     }
 
     public function view($id)
