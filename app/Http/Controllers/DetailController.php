@@ -10,7 +10,9 @@ use App\Models\Payment;
 use App\Models\Province;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Session;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class DetailController extends Controller
 {
@@ -59,8 +61,9 @@ class DetailController extends Controller
             // $data->foto = $request->file('foto')->getClientOriginalName();
             // $data->save();
         }
+        Session::flash('status', 'Data Berhasil Ditambahkan');
         $data->save();
-        return redirect()->route('dashboard');
+        return redirect('daftarproduk');
         // $data->update();
         // return redirect()->route('daftarproduk')->with('toast_success', 'Data Berhasil Di update');
         // $data = $request->all();
@@ -109,28 +112,43 @@ class DetailController extends Controller
 
     public function update(Request $request, $id){
         $data = Hijab::findOrFail($id);
-        $awal = $data->foto;
+        // $awal = $data->foto;
             $data->nama = $request->nama;
             // $data->warna = $request->warna;
             // $data->ukuran = $request->ukuran;
             $data->harga = $request->harga;
             $data->deskripsi = $request->deskripsi;
+
+        if($request->hasfile('foto')){
+            $destination = 'assets/'.$data->foto;
+            
+            if($path = Storage::putFile('assets/', $request->file('foto'))){
+                File::delete($destination);
+            }
+            $file = $request->file('foto');
+            $extention = $file->getClientOriginalName();
+            $filename = $extention;
+            $file->move('assets/',$filename);
+            $data->foto = $filename;
+        }
         
         
-        $request->foto->move(public_path().'/assets', $awal);
+        // $request->foto->move(public_path().'/assets', $awal);
         if($data){
             $data->update();
-            return redirect('daftarproduk')->with('toast_success', 'Data Berhasil Di update');
+            Session::flash('status', 'Data Berhasil Di update');
+            return redirect('daftarproduk');
         }
         return redirect()->back();
     }
 
     public function delete($id){
-        $data = Hijab::with('warna')->findOrFail($id);
+        $data = Hijab::with("warna")->findOrFail($id);
         if($data->warna()->count() > 0){
-            return back()->with('toast_error', 'Jenis Dokumen ini memiliki data Dokumen.');
+            return back()->with('error', 'Jenis dokumen ini memiliki data di tabel lain.');
         }
         $data->delete();
+        Session::flash('status', 'Data Berhasil Di dihapus');
         return redirect()->route('daftarproduk');
     }
 

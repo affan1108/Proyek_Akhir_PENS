@@ -12,13 +12,12 @@ class Warna extends Model
     protected $table = "warnas";
     protected $guarded = []; 
     protected $fillable = [
-        'produk_id',
         'warna',
         'stok',
         'ukuran',
     ];
 
-    public function produk()
+    public function hijab()
     {
         return $this->belongsTo(Hijab::class);
     }

@@ -80,7 +80,6 @@
                         <div class="card-header bg-secondary">
                             <h3 class="card-title mt-2">Edit Produk</h3>
                         </div>
-
                         <div class="card-body">
                             <form action="/update/{{ $data->id }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -111,7 +110,7 @@
                                         <div class="form-group">
                                             <label>Foto Produk</label>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="foto"
+                                                <input type="file" class="custom-file-input" value="{{ old('foto', $data->foto) }}" name="foto"
                                                     id="exampleInputFile">
                                                 <label class="custom-file-label"
                                                     for="exampleInputFile">{{$data->foto}}</label>

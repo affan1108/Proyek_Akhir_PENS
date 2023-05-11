@@ -28,7 +28,7 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('components.nav-bar')
+        @include('components.navbar-dashboard')
         <!-- /.navbar -->
 
         <!-- Header-->
@@ -100,8 +100,8 @@
                             </div>
                             <div class="content-content">
                                 <h4 class="title"><a href="javascript:void(0)">Katalog</a></h4>
-                                <p>List produk kami. Segera pesan sebelum kehabisan</p>
-                                <a href="/catalog" class="more">selengkapnya</a>
+                                <p>Segera pesan sebelum kehabisan</p>
+                                <a href="/katalog" class="more">selengkapnya</a>
                             </div>
                         </div>
                     </div>
@@ -176,11 +176,11 @@
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
-    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('/template/plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
-    <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('/template/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- AdminLTE App -->
-    <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+    <script src="{{asset('/template/dist/js/adminlte.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>

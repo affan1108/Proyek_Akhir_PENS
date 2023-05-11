@@ -29,7 +29,7 @@
                         <h5 class="footer-title">LAYANAN</h5>
 
                         <ul class="footer-link">
-                            <li><a href="/katalog">Katalog</a></li>
+                            <li><a href="/dashboard/katalog">Katalog</a></li>
                             <!-- <li><a href="/petunjuk">Petunjuk Penggunaan</a></li> -->
                             <li><a href="/bantuan">Bantuan</a></li>
                             <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->

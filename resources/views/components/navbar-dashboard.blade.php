@@ -13,9 +13,9 @@
                 <li class="nav-item"><a class="nav-link {{'dashboard' == request()->path() ? 'active' : '' }}"
                         aria-current="page" href="/dashboard">Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link {{'dashboard/katalog' == request()->path() ? 'active' : '' }}"
+                <li class="nav-item"><a class="nav-link {{'/dashboard/katalog' == request()->path() ? 'active' : '' }}"
                         href="/dashboard/katalog">Katalog</a></li>
-                <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="dropdown-toggle {{'dashboard/pesanansaya'  == request()->path() || 'dashboard/penilaianpesanan'  == request()->path() || 'dashboard/riwayatpesanan'  == request()->path()? 'nav-link active' : 'nav-link' }}">
                         Pages
@@ -129,6 +129,18 @@
                     </ul>
                 </li>
                 @endif
+                <!-- SEARCH FORM -->
+                <form class="form-inline ml-0 ml-md-3" action="/dashboard/katalog" method="GET">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                            aria-label="Search" name="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </ul>
             <!-- Right navbar links -->
             <!-- <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
@@ -231,17 +243,14 @@
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="nav-link">
-                        <button
-                            class="btn {{'dashboard/profile' == request()->path() || 'keranjang' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
+                        <button class="btn {{ '/dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
                             <i class="fas fa-user"></i>
                             {{Auth::user()->name}}
                         </button>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
-                                href="/dashboard/profile">Akun Saya</a></li>
-                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
-                                href="/keranjang">Keranjang
+                        <li><a class="dropdown-item {{ '/dashboard/profile' == request()->path() ? 'active' : '' }}" href="/dashboard/profile">Akun Saya</a></li>
+                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}" href="/keranjang">Keranjang
                                 <span class="float-right">
                                     @php
                                     $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->count();
@@ -249,8 +258,7 @@
                                     {{$data}}
                                 </span>
                             </a></li> -->
-                        <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
-                                href="{{ route('logout') }}"
+                        <li><a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                                         document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

@@ -46,141 +46,6 @@
         @include('components.nav-bar')
         <!-- /.navbar -->
 
-        <!-- <section class="product-details-wrapper pt-50 pb-100">
-        <div class="container">
-            <div class="product-details-style-1">
-                <div class="row flex-lg-row-reverse align-items-center">
-                    <div class="col-lg-6">
-                        <div class="product-details-image mt-50">
-                            <div class="product-image">
-                                <div class="product-image-active-1">
-                                    <div class="single-image">
-                                        <img src="{{asset('assets/'.$data->foto)}}" class="product-image"
-                                            alt="Product Image">
-                                    </div>
-                                    <div class="single-image">
-                                        <img src="assets/images/product-details-1/product-2.jpg" alt="">
-                                    </div>
-                                    <div class="single-image">
-                                        <img src="assets/images/product-details-1/product-3.jpg" alt="">
-                                    </div>
-                                    <div class="single-image">
-                                        <img src="assets/images/product-details-1/product-4.jpg" alt="">
-                                    </div>
-                                    <div class="single-image">
-                                        <img src="assets/images/product-details-1/product-5.jpg" alt="">
-                                    </div>
-                                    <div class="single-image">
-                                        <img src="assets/images/product-details-1/product-3.jpg" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-thumb-image">
-                                <div class="product-thumb-image-active-1">
-                                    <div class="single-thumb">
-                                        <img src="{{asset('assets/'.$data->foto)}}" class="product-image"
-                                            alt="Product Image">
-                                    </div>
-                                    <div class="single-thumb">
-                                        <img src="assets/images/product-details-1/thunb-2.jpg" alt="">
-                                    </div>
-                                    <div class="single-thumb">
-                                        <img src="assets/images/product-details-1/thunb-3.jpg" alt="">
-                                    </div>
-                                    <div class="single-thumb">
-                                        <img src="assets/images/product-details-1/thunb-4.jpg" alt="">
-                                    </div>
-                                    <div class="single-thumb">
-                                        <img src="assets/images/product-details-1/thunb-5.jpg" alt="">
-                                    </div>
-                                    <div class="single-thumb">
-                                        <img src="assets/images/product-details-1/thunb-3.jpg" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="product-details-content mt-45">
-                            <p class="sub-title">All-In-One VR</p>
-                            <h2 class="title">{{$data->nama}}</h2>
-
-                            <div class="product-items flex-wrap">
-                                <h6 class="item-title">Select Your Oculus: </h6>
-                                <div class="items-wrapper">
-                                    <div class="single-item active">
-                                        <div class="items-image">
-                                            <img src="assets/images/product-details-1/product-items-1.jpg"
-                                                alt="product">
-                                        </div>
-                                        <p class="text">Oculus Go</p>
-                                    </div>
-                                    <div class="single-item">
-                                        <div class="items-image">
-                                            <img src="assets/images/product-details-1/product-items-2.jpg"
-                                                alt="product">
-                                        </div>
-                                        <p class="text">Oculus Quest</p>
-                                    </div>
-                                    <div class="single-item">
-                                        <div class="items-image">
-                                            <img src="assets/images/product-details-1/product-items-3.jpg"
-                                                alt="product">
-                                        </div>
-                                        <p class="text">Oculus Rift S</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="product-select-wrapper flex-wrap">
-                                <div class="select-item">
-                                    <h6 class="select-title">Select Color: </h6>
-                                    <select class="form-control select2bs4 js-example-basic form-control"
-                                        style="width: 100%;" id="warna" name="warna_id">
-                                        @foreach (App\Models\Warna::all() as $r)
-                                        @if($data->id == $r->produk_id)
-                                        <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="product-select-wrapper flex-wrap">
-                                <div class="select-item">
-                                    <h6 class="select-title">Select Quantity: </h6>
-
-                                    <div class="select-quantity">
-                                        <button type="button" id="sub" class="sub"><i
-                                                class="mdi mdi-minus"></i></button>
-                                        <input type="text" value="1" />
-                                        <button type="button" id="add" class="add"><i class="mdi mdi-plus"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="product-price">
-                                <h6 class="price-title">Price: </h6>
-                                <p class="sale-price">$ 149 USD</p>
-                                <p class="regular-price">$ 179 USD</p>
-                            </div>
-
-                            <div class="product-btn">
-                                <a href="javascript:void(0)" class="main-btn primary-btn">
-                                    <img src="assets/images/icon-svg/cart-4.svg" alt="">
-                                    Add to cart
-                                </a>
-                                <a href="javascript:void(0)" class="main-btn secondary-1-btn">
-                                    <img src="assets/images/icon-svg/cart-8.svg" alt="">
-                                    Buy Now
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container">
@@ -232,6 +97,7 @@
                             </div>
                             <div class="form-group">
                                 <input type="hidden" name="produk_id" value="{{$data->id}}">
+                                <input type="hidden" name="keranjang" value="0">
                                 <h3>{{$data->nama}}</h3>
                                 <!-- <p>{{$data->deskripsi}}</p> -->
                             </div>
@@ -243,8 +109,7 @@
                                     style="width: 100%;" id="warna" name="warna_id">
                                     <option selected disabled>--Pilih Warna--</option>
                                     @foreach (App\Models\Warna::all() as $r)
-                                    @if($data->id == $r->produk_id)
-
+                                    @if($data->id == $r->hijab_id)
                                     <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
                                     @endif
                                     @endforeach
@@ -300,54 +165,27 @@
                                     </h4> -->
                             </div>
                             <hr>
-
-                            <div class="mt-4">
-                                <!-- <button type="button" class="btn btn-success float-right"><i
-                                            class="far fa-credit-card"></i> Submit
-                                        Payment
-                                    </button> -->
-                                <a href="/invoice">
-                                    <button type="submit" class="btn btn-success float-right"
-                                        style="margin-right: 5px;"><input type="hidden" name="hitung" value="Hitung">
-                                        Order Now
-                                    </button>
-                                </a>
-                                <!-- <div class="btn btn-primary btn-lg btn-flat">
-                                        <i class="fas fa-cart-plus fa-lg mr-2"></i>
-                                        Add to Cart
-                                    </div>
-                                    <a href="{{ url('/invoice') }}">
-                                        <button type="submit" class="btn btn-danger"><input type="hidden" name="hitung" value="Hitung">order now</button>
-                                    </a> -->
-                            </div>
-
-                            <!-- <div class="mt-4 product-share">
-                                    <a href="#" class="text-gray">
-                                        <i class="fab fa-facebook-square fa-2x"></i>
-                                    </a>
-                                    <a href="#" class="text-gray">
-                                        <i class="fab fa-twitter-square fa-2x"></i>
-                                    </a>
-                                    <a href="#" class="text-gray">
-                                        <i class="fas fa-envelope-square fa-2x"></i>
-                                    </a>
-                                    <a href="#" class="text-gray">
-                                        <i class="fas fa-rss-square fa-2x"></i>
-                                    </a>
-                                </div> -->
+                            <!-- <button type="submit" class="btn btn-primary float-left mr-2 ml-200 mt-5"><i
+                                    class="fas fa-cart-plus mr-2"></i>Tambah ke keranjang
+                            </button> -->
+                            <a href="{{ route('home') }}">
+                            <button type="submit" class="btn btn-success float-right"><input
+                                    type="hidden" name="hitung" value="Hitung">
+                                Order Now
+                            </button>
+                            </a>
+                            
                         </form>
-
-                        <form action="/cart" method="POST" enctype="multipart/form-data">
+                        <!-- <form action="/cart" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="mt-4">
-                                <!-- <button type="submit" class="btn btn-primary float-right mr-2"><i
-                                                class="fas fa-cart-plus mr-1"></i>Tambah ke keranjang
-                                        </button> -->
-                                <!-- <a class="btn btn-primary btn-sm" href="/home">
-                                                                <i class="fas fa-truck"></i>
-                                                            </a> -->
+                            <div class="form-group">
+                                <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
                             </div>
-                        </form>
+                            <div class="form-group">
+                                <input type="hidden" name="produk_id" value="{{$data->id}}">
+                            </div>
+                            
+                        </form> -->
                     </div>
 
 
@@ -797,8 +635,7 @@
                                 // <input type="text" id="stok" name="stok">
                                 $('#stok').empty();
                                 $.each(data, function (key, value) {
-                                    $('#stok').append('<span>Jumlah Stok ' + value +
-                                        '</span>');
+                                    $('#stok').append('<span>Jumlah Stok ' + value + '</span>');
                                 });
                             }
                         });

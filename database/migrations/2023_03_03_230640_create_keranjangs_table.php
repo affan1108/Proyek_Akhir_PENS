@@ -16,9 +16,9 @@ class CreateKeranjangsTable extends Migration
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
-            // $table->string('user');
+            $table->boolean('keranjang')->nullable();
             // $table->string('nama');
             // $table->string('warna');
             // $table->string('ukuran');
@@ -27,7 +27,7 @@ class CreateKeranjangsTable extends Migration
             $table->string('hitung');
             // $table->string('_method')->nullable();
             // $table->foreignId('voucher')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('voucher_id')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('invoice_id')->constrained('invoices')->onUpdate('restrict')->onDelete('restrict');
             // $table->string('voucher')->nullable();
             $table->string('kota')->nullable();
             $table->string('kurir')->nullable();

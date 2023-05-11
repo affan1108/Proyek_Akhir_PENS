@@ -28,7 +28,7 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        @include('components.navbar')
+        @include('components.navbar-home')
         <!-- /.navbar -->
 
         <!-- Header-->
@@ -77,7 +77,7 @@
                             <div class="content-content">
                                 <h4 class="title"><a href="javascript:void(0)">Pusat Bantuan</a></h4>
                                 <p>Ada Pertanyaan? Kami siap membantu anda</p>
-                                <a href="/login" class="more">Hubungi Kami</a>
+                                <a href="/bantuan" class="more">Hubungi Kami</a>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="content-content">
                                 <h4 class="title"><a href="javascript:void(0)">Katalog</a></h4>
-                                <p>List produk kami. Segera pesan sebelum kehabisan</p>
+                                <p>Segera pesan sebelum kehabisan</p>
                                 <a href="/catalog" class="more">selengkapnya</a>
                             </div>
                         </div>

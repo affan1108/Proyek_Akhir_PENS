@@ -6,13 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ameliia Collection | User Profile</title>
 
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-
-    <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
-    <link rel="shortcut icon" href="assets/images/logo2.png">
+    @include('components.css')
     <link href="{{asset('temp/css/styles.css')}}" rel="stylesheet" />
     <!--====== Default CSS ======-->
     <link rel="stylesheet" href="{{asset('estore/assets/css/default.css')}}">
@@ -67,7 +61,7 @@
                             <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle" src="assets/images/user.png"
+                                        <img class="profile-user-img img-fluid img-circle" src="{{asset('assets/images/user.png')}}"
                                             alt="User profile picture">
                                     </div>
                                     <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>

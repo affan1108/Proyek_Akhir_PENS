@@ -1,0 +1,14 @@
+<h2>
+    <i class="fas fa-solid fa-sun-bright"></i>
+    <i class="fas fa-reguler fa-sunset"></i>
+</h2>
+<span class="mt-2 mr-3">
+    <form action="{{ route('create-update') }}" method="POST" class="d-flex">
+        @csrf
+        <input type="radio" name="theme" id="theme" value="{{ $theme == 'dark' ? 'light' : 'dark' }}"
+            class="btn-check" onchange="this.form.submit()">
+        <label for="theme" class="btn btn-secondary">
+            <i class="{{ $theme == 'light' ? 'fas fa-moon' : 'fas fa-sun text-warning' }}"></i>
+        </label>
+    </form>
+</span>

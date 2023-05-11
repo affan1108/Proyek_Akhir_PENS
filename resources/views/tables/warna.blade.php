@@ -6,28 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ameliia Collection</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-    <!-- summernote -->
-    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
-    <link rel="shortcut icon" href="assets/images/logo2.png">
+    @include('components.css')
     <link href="{{asset('temp/css/styles.css')}}" rel="stylesheet" />
     <!--====== Default CSS ======-->
     <link rel="stylesheet" href="{{asset('estore/assets/css/default.css')}}">
@@ -76,6 +55,17 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
+                @if ($message = Session::get('status'))
+                    <div class="alert alert-success">
+                        <button class="close" type="button" data-dismiss="alert">x</button>
+                        {{ $message }}
+                    </div>
+                    @elseif (session()->has('error'))
+                    <div class="alert alert-danger">
+                        <button class="close" type="button" data-dismiss="alert">x</button>
+                        {{ session()->get('error') }}
+                    </div>
+                    @endif
                     <div class="row">
                         <div class="col-12">
                             <div class="card card-success">
@@ -133,7 +123,7 @@
                                                             {{$index + $data->firstItem()}}
                                                         </td>
                                                         <td>
-                                                            {{$row->produk->nama}}
+                                                            {{$row->hijab->nama}}
                                                         </td>
                                                         <td>
                                                             {{$row->warna}}
@@ -150,11 +140,13 @@
                                                                 </i>
                                                                 View
                                                             </a> -->
-                                                            <!-- <a class="btn btn-info btn-sm" href="/edit/{{$row->id}}">
+                                                            <a class="btn btn-info btn-sm" href="#"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editwarna{{$row->id}}">
                                                                 <i class="fas fa-pencil-alt">
                                                                 </i>
                                                                 Edit
-                                                            </a> -->
+                                                            </a>
                                                             <a class="btn btn-danger btn-sm"
                                                                 href="/deletewarna/{{$row->id}}">
                                                                 <i class="fas fa-trash">
@@ -163,6 +155,62 @@
                                                             </a>
                                                         </td>
                                                     </tr>
+                                                    <div class="modal fade" id="editwarna{{$row->id}}" tabindex="-1"
+                                                        aria-labelledby="addLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="addLabel">Edit Data</h5>
+                                                                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button> -->
+                                                                </div>
+                                                                <form action="/updatewarna/{{$row->id}}" method="POST"
+                                                                    enctype="multipart/form-data">
+                                                                    @method('POST')
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        <label for="nama">Nama Produk</label>
+                                                                        <select class="form-control select2bs4"
+                                                                            style="width: 100%;" name="hijab_id">
+                                                                            <option value="{{ $row->hijab_id }}" selected disabled>
+                                                                                {{$row->hijab->nama}}</option>
+                                                                            @foreach (App\Models\Hijab::all() as $u)
+                                                                            <option value="{{ $u->id }}" {{ old('hijab_id', $row->hijab_id) == $u->id ? 'selected' : null}}>{{ $u->nama }}
+                                                                            </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <label for="warna">Warna</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="warna" name="warna" placeholder="Warna"
+                                                                            value="{{ $row->warna }}">
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <label for="stok">Stok</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="stok" name="stok"
+                                                                            placeholder="Jumlah Stok"
+                                                                            value="{{ $row->stok }}">
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <label for="ukuran">Ukuran</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="ukuran" name="ukuran"
+                                                                            placeholder="Ukuran"
+                                                                            value="{{ $row->ukuran }}">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Save
+                                                                            changes</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     @endforeach
                                                 </tbody>
 
@@ -179,6 +227,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <!-- Modal -->
                             <div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel"
                                 aria-hidden="true">
@@ -195,7 +244,7 @@
                                                 <label for="nama">Nama Produk</label>
 
                                                 <select class="form-control select2bs4" style="width: 100%;"
-                                                    name="produk_id">
+                                                    name="hijab_id">
                                                     @foreach (App\Models\Hijab::all() as $u)
                                                     <option value="{{ $u->id }}">{{ $u->nama }}</option>
                                                     @endforeach

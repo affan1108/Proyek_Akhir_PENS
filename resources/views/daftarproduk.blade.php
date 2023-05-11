@@ -6,28 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ameliia Collection | Daftar Produk</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-    <!-- summernote -->
-    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
-    <link rel="shortcut icon" href="assets/images/logo2.png">
+    @include('components.css')
     <link href="{{asset('temp/css/styles.css')}}" rel="stylesheet" />
     <!--====== Default CSS ======-->
     <link rel="stylesheet" href="{{asset('estore/assets/css/default.css')}}">
@@ -76,7 +55,18 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
-                <div class="row">
+                    @if (session()->has('status'))
+                    <div class="alert alert-success">
+                        <button class="close" type="button" data-dismiss="alert">x</button>
+                        {{ session()->get('status') }}
+                    </div>
+                    @elseif (session()->has('error'))
+                    <div class="alert alert-danger">
+                        <button class="close" type="button" data-dismiss="alert">x</button>
+                        {{ session()->get('error') }}
+                    </div>
+                    @endif
+                    <div class="row">
                         <div class="col-12">
                             <div class="card card-success">
                                 <div class="card-header">
@@ -90,7 +80,6 @@
                                         </button> -->
                                     </div>
                                 </div>
-
                                 <div class="card-body p-0">
                                     <div class="card-header">
                                         <a class="btn btn-success btn-sm" href="/addproduk">
@@ -141,7 +130,8 @@
                                                             </small> -->
                                                         </td>
                                                         <td>
-                                                            <h5><img src="{{asset('assets/'.$row->foto)}}" alt="Foto Produk" style="width: 50px;"></h5>
+                                                            <h5><img src="{{asset('assets/'.$row->foto)}}"
+                                                                    alt="Foto Produk" style="width: 50px;"></h5>
                                                         </td>
                                                         <td>
                                                             {{$row->harga}}
@@ -302,7 +292,8 @@
                             // <input type="text" id="stok" name="stok">
                             $('#stok').empty();
                             $.each(data, function (key, value) {
-                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
                             });
                         }
                     });
@@ -336,6 +327,12 @@
                 $('.product-image-thumb.active').removeClass('active')
                 $(this).addClass('active')
             })
+        })
+
+        $("document").ready(function() {
+            setTimeout(() => {
+                $("div.alert").remove();
+            }, 3000);
         })
 
         $('#some_department').change(function (e) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Session;
 
 class UserController extends Controller
 {
@@ -17,6 +18,7 @@ class UserController extends Controller
 
         $user->save();
 
+        Session::flash('status', 'Data Berhasil Di update');
         return \Redirect::route('users.edit', [$user->id])->with('message', 'User has been updated!');
     }
 
@@ -26,8 +28,12 @@ class UserController extends Controller
     }
 
     public function deleteuser($id){
-        $data = User::find($id);
+        $data = User::with("invoice")->find($id);
+        if($data->invoice()->count() > 0){
+            return back()->with('error', 'Jenis dokumen ini memiliki data di tabel lain.');
+        }
         $data->delete();
-        return redirect()->route('tables.user');
+        Session::flash('status', 'Data Berhasil Dihapus');
+        return redirect('tables.user');
     }
 }

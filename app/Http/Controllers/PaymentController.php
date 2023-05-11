@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Warna;
+use Session;
 
 class PaymentController extends Controller
 {
@@ -70,9 +71,36 @@ class PaymentController extends Controller
         // return $order->save() ? redirect(('pesanansaya'))->with('alert-success', 'Order berhasil dibuat') : redirect(('pesanansaya'))->with('alert-failed', 'Terjadi kesalahan');
     }
 
+    public function batal(Request $request, $id){
+        // dd($request);
+        $order = Payment::find($id);
+        $order->warna_id = $request->warna_id;
+        $order->jumlah = $request->jumlah;
+        $cpty = Warna::where('id', $request->warna_id)->sum('stok');
+        $color = [
+            'id' => $request->warna_id,
+            'stok' => round($cpty + ($request->jumlah), PHP_ROUND_HALF_UP),
+        ];
+
+        // dd($order, $color);
+        Warna::where('id', $request->warna_id)->update($color);
+        $order->delete();
+
+        Session::flash('status', 'Pesanan Berhasil Dibatalkan');
+        return redirect('pesanansaya');
+    }
+
     public function nilai($id){
         $data = Payment::find($id);
         return view('nilaipesanan',compact('data'));
+    }
+
+    public function updateresi(Request $request, $id){
+        $data = Payment::find($id);
+        $data->resi = $request->resi;
+        $data->update();
+        // dd($data);
+        return redirect()->route('daftarpesanan')->with('success', 'Data Berhasil Di update');
     }
 
     public function penilaian(Request $request, $id)
@@ -84,14 +112,18 @@ class PaymentController extends Controller
         if($request->hasFile('foto')){
             $data['foto']=$request->file('foto')->getClientOriginalName();
         }
-        
         $data->update();
-        return redirect()->route('riwayatpesanan')->with('toast_success', 'Data Berhasil Di update');
+        return redirect()->route('riwayatpesanan')->with('success', 'Data Berhasil Di update');
     }
 
     public function deletepayment($id){
-        $data = Payment::find($id);
+        $data = Payment::with("user")->find($id);
+        
+        if($data->user()->count() > 0){
+            return back()->with('error', 'Jenis dokumen ini memiliki data di tabel lain.');
+        }
         $data->delete();
+        Session::flash('status', 'Data Berhasil Dihapus');
         return redirect()->route('tables.payment');
     }
 }

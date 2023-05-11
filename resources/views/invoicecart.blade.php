@@ -126,14 +126,14 @@
                             <!-- /.row -->
 
                             <!-- Table row -->
-                            <form action="insertinvoice" method="POST" enctype="multipart/form-data">
+                            <form action="insertinvoicecart" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-12 table-responsive">
                                         <table class="table table-striped">
                                             <thead>
-                                            <tr>
-                                                    <!-- <th></th> -->
+                                                <tr>
+                                                    <th></th>
                                                     <th></th>
                                                     <th>Qty</th>
                                                     <th>Products</th>
@@ -148,16 +148,17 @@
                                             $total = 0;
                                             $jumlah = 0;
                                             @endphp
-                                            @if ($data->user->id == Auth::user()->id && $data->keranjang != 1)
+                                            @foreach($rows as $data)
+                                            @if ($data->user->id == Auth::user()->id && $data->keranjang == 1)
                                             <tbody>
                                                 <tr>
-                                                    <!-- <td>
+                                                    <td>
                                                         <div class="icheck-primary ml-4 mt-2">
                                                             <input type="checkbox" value="{{$data->id}}"
                                                                 name="checkbox[]" id="{{$data->id}}" checked>
                                                             <label for="{{$data->id}}"></label>
                                                         </div>
-                                                    </td> -->
+                                                    </td>
                                                     <td><img src="{{asset('assets/'.$data->produk->foto)}}"
                                                             alt="Foto Produk" width="50"></td>
                                                     <td>
@@ -218,123 +219,76 @@
                                             $jumlah += $data->jumlah;
                                             @endphp
                                             @endif
-
-                                        </table>
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <!-- <th>Layanan</th> -->
-                                                    <th>Bill</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Subtotal</th>
-                                                    <th>Ongkir</th>
-                                                    <th><b>Total</b></th>
-                                                </tr>
-                                            </thead>
-
-                                            @if ($data->user->id == Auth::user()->id)
-                                            <tbody>
-                                                <tr>
-                                                    <td>#</td>
-                                                    <td>
-                                                        {{$jumlah}} produk
-                                                    </td>
-                                                    <td>
-                                                        Rp. {{number_format($total, 0, '.' ,'.')}}
-                                                    </td>
-                                                    <td>
-                                                        Rp. {{number_format($ongkir->ongkir, 0, '.', '.')}}
-                                                    </td>
-                                                    <td>
-                                                        <b>
-                                                            Rp. {{number_format($total + $ongkir->ongkir, 0, '.', '.')}}
-                                                        </b>
-                                                    </td>
-                                                    <!-- <td>
-                                                        <a class="btn btn-primary btn-sm"
-                                                            href="/deleteongkir/{{$ongkir->id}}">
-                                                            Ganti Ekspedisi
-                                                        </a>
-                                                    </td> -->
-                                                </tr>
-                                            </tbody>
-                                            @endif
+                                            @endforeach
                                         </table>
                                     </div>
-                                    <!-- /.col -->
+                                    <div class="col-12">
+                                        <p class="lead mb-2">Billing :</p>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th style="width:50%">Subtotal:</th>
+                                                    <td>Rp. {{number_format($total, 0, '.' ,'.')}}</td>
+                                                </tr>
+                                                <!-- <tr>
+                                                    <th>Tax (9.3%)</th>
+                                                    <td>$10.34</td>
+                                                </tr> -->
+                                                <tr>
+                                                    <th>Ongkir:</th>
+                                                    <td>Rp. {{number_format($ongkir->ongkir, 0, '.', '.')}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total:</th>
+                                                    <td>Rp. {{number_format($total + $ongkir->ongkir, 0, '.', '.')}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <a href="/dashboard">
+                                                <button class="btn btn-danger float-left" style="margin-right: 5px;">
+                                                    Batal
+                                                </button>
+                                            </a>
+                                            @if(Auth::user()->alamat == null && Auth::user()->nomer == null &&
+                                            Auth::user()->lainnya == null)
+                                            <button type="submit" class="btn btn-success float-right mr-2" disabled><i
+                                                    class="fas fa-shopping-cart"></i>
+                                                <input type="hidden" name="hitung" value="hitung">
+                                                Buat Pesanan
+                                            </button>
+                                            @else
+                                            <button type="submit" class="btn btn-success float-right mr-2"><i
+                                                    class="far fa-credit-card"></i>
+                                                <input type="hidden" name="hitung" value="hitung">
+                                                Buat Pesanan
+                                            </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <input type="hidden" name="id" value="1"> -->
+                                        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                                        <input type="hidden" name="ongkir_id" value="{{$ongkir->id}}">
+                                        <input type="hidden" name="keranjang_id" value="{{$data->id}}">
+                                        <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                        <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                        <input type="hidden" name="total" value="{{$total + $ongkir->ongkir}}">
+                                        
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
-                                    <input type="hidden" name="ongkir_id" value="{{$ongkir->id}}">
-                                    <input type="hidden" name="keranjang_id" value="{{$data->id}}">
-                                    <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
-                                    <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
-                                    <input type="hidden" name="total" value="{{$total + $ongkir->ongkir}}">
-                                </div>
-                                @if(Auth::user()->alamat == null && Auth::user()->nomer == null &&
-                                Auth::user()->lainnya == null)
-                                <button type="submit" class="btn btn-success float-right mr-2" disabled><i
-                                        class="fas fa-shopping-cart"></i>
-                                    <input type="hidden" name="hitung" value="hitung">
-                                    Buat Pesanan
-                                </button>
-                                @else
-                                <button type="submit" class="btn btn-success float-right mr-2"><i
-                                        class="fas fa-shopping-cart"></i>
-                                    <input type="hidden" name="hitung" value="hitung">
-                                    Buat Pesanan
-                                </button>
-                                @endif
                             </form>
                             <!-- /.row -->
 
-                            <div class="row">
-                                <!-- accepted payments column -->
-                                <div class="col-6">
-                                    <!-- <p class="lead">Pilih Ekspedisi :</p>
-                                        <div class="form-group"> -->
-                                    <!-- <label class="control-label">Permission *</label> -->
-                                    <!-- <div class="select2-green">
-                                                <select class="form-control select2bs4" style="width: 100%;" name="nama">
-                                                    @foreach (\App\Models\Ekspedisi::all() as $r)
-                                                        <option value="{{ $r->nama }}">{{ $r->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                    <!-- </div> -->
-                                </div>
-                                <!-- /.col -->
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
-
-
-
                             <!-- this row will not appear when printing -->
-                            <div class="row no-print">
+                            <!-- <div class="row no-print">
                                 <div class="col-12">
-                                    <!-- @if(Auth::user()->alamat == null && Auth::user()->nomer == null &&
-                                    Auth::user()->lainnya == null)
-                                    <button type="submit" class="btn btn-success float-right mr-2" disabled><i
-                                            class="fas fa-shopping-cart"></i>
-                                        <input type="hidden" name="hitung" value="hitung">
-                                        Buat Pesanan
-                                    </button>
-                                    @else
-                                    <button type="submit" class="btn btn-success float-right mr-2"><i
-                                            class="fas fa-shopping-cart"></i>
-                                        <input type="hidden" name="hitung" value="hitung">
-                                        Buat Pesanan
-                                    </button>
-                                    @endif -->
                                     <a href="/dashboard">
                                         <button class="btn btn-danger float-right" style="margin-right: 5px;">
                                             Batal
                                         </button>
                                     </a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- /.invoice -->
@@ -344,6 +298,16 @@
             </div><!-- /.container-fluid -->
         </div>
         <!-- /.content -->
+
+        <form action="/insertinvoicecart" id="submit_form" method="POST">
+        @csrf
+            <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+            <input type="hidden" name="invoice_id" value="{{$data->id}}">
+            <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+            <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+            <input type="hidden" name="diterima" value="0">
+            <input type="hidden" name="json" id="json_callback">
+        </form>
 
         <!-- Main Footer -->
         @include('components.footer')
@@ -364,8 +328,41 @@
 
         <!--====== Main js ======-->
         <script src="{{asset('estore/assets/js/main.js')}}"></script>
+
+        <script type="text/javascript">
+        // For example trigger on button clicked, or any time you need
+        var payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', function () {
+            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+            window.snap.pay('', {
+                onSuccess: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("payment success!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onPending: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("wating your payment!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onError: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("payment failed!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onClose: function () {
+                    /* You may add your own implementation here */
+                    alert('you closed the popup without finishing the payment');
+                }
+            })
+        });
+
+        function send_response_to_form(result) {
+            document.getElementById('json_callback').value = JSON.stringify(result);
+            // document.getElementById('user').value = JSON.stringify(result);
+            // document.getElementById('invoice').value = JSON.stringify(result);
+            $('#submit_form').submit();
+        }
+
+    </script>
 </body>
-
-
-
-</html>

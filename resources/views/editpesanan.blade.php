@@ -205,7 +205,8 @@
 
                     <div class="col-12 col-sm-6">
                         <div class="col-12">
-                            <img src="{{asset('assets/'.$data->produk->foto)}}" class="product-image" alt="Product Image">
+                            <img src="{{asset('assets/'.$data->produk->foto)}}" class="product-image"
+                                alt="Product Image">
                         </div>
                         <!-- <div class="col-12 product-image-thumbs">
                                     <div class="product-image-thumb active"><img src="{{asset('assets/'.$data->foto)}}"
@@ -236,11 +237,14 @@
                             <!-- <h4>Available Colors</h4> -->
                             <div class="form-group">
                                 <h4 class="mt-3">Pilihan Warna <small>(Pilih salah satu)</small></h4>
-                                <select class="form-control select2bs4 js-example-basic form-control"
-                                    style="width: 100%;" id="warna" name="warna_id">
-                                    @foreach (App\Models\Warna::all() as $r)
-                                    @if($data->id == $r->produk_id)
-                                    <option value="{{ $r->id }}">{{ $data->warna->warna }} - {{ $data->warna->ukuran }}</option>
+                                <select class="form-control select2bs4" style="width: 100%;" name="warna_id">
+                                    <option selected disabled>
+                                        {{$data->warna->warna}} - {{$data->warna->ukuran}}</option>
+                                    @foreach (App\Models\Warna::all() as $u)
+                                    @if($u->hijab_id == $data->produk_id)
+                                    <option value="{{ $u->id }}" {{ old('hijab_id', $u->hijab_id) == $u->id ? 'selected' : null}}>
+                                        {{ $u->warna }} - {{$u->ukuran}}
+                                    </option>
                                     @endif
                                     @endforeach
                                 </select>
@@ -278,7 +282,7 @@
                                         <button type="button" id="sub" class="sub">
                                             <i class="mdi mdi-minus"></i>
                                         </button>
-                                        <input type="text" id="stok" name="jumlah" value="{{$data->jumlah}}">
+                                        <input type="text" id="stok" name="jumlah" value="{{ old('jumlah', $data->jumlah)}}">
                                         <button type="button" id="add" class="add">
                                             <i class="mdi mdi-plus"></i>
                                         </button>
@@ -301,10 +305,9 @@
                                             class="far fa-credit-card"></i> Submit
                                         Payment
                                     </button> -->
-                                    <button type="submit" class="btn btn-success float-right"
-                                        style="margin-right: 5px;">
-                                        Edit Pesanan
-                                    </button>
+                                <button type="submit" class="btn btn-success float-right" style="margin-right: 5px;">
+                                    Edit Pesanan
+                                </button>
                                 <!-- <div class="btn btn-primary btn-lg btn-flat">
                                         <i class="fas fa-cart-plus fa-lg mr-2"></i>
                                         Add to Cart
@@ -671,7 +674,8 @@
 
                                                             <p>
                                                                 <i class="mdi mdi-star"></i>
-                                                                <span class="rating"><strong>{{$row->rating}}</strong> of 5</span>
+                                                                <span class="rating"><strong>{{$row->rating}}</strong>
+                                                                    of 5</span>
                                                                 <span class="date">{{$row->updated_at}}</span>
                                                             </p>
                                                         </div>
@@ -680,7 +684,8 @@
                                                         <p>{{$row->deskripsi}}</p>
                                                         <div class="comment-image flex-wrap">
                                                             <div class="image">
-                                                                <img src="{{asset('assets/'.$row->foto)}}" alt="" width="50">
+                                                                <img src="{{asset('assets/'.$row->foto)}}" alt=""
+                                                                    width="50">
                                                             </div>
                                                         </div>
                                                         <!-- <ul class="comment-meta">
@@ -732,14 +737,14 @@
         <!-- REQUIRED SCRIPTS -->
 
         <!-- jQuery -->
-    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+        <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+        <!-- Bootstrap 4 -->
+        <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <!-- AdminLTE App -->
+        <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
         <script>
             $(document).ready(function () {
                 $('select[name="warna_id"]').on('change', function () {

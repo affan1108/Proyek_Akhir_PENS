@@ -33,5 +33,7 @@ Route::get('/dashboard', function () {
 //     return view('detailhijab', compact('data'));
 // });
 
-Route::get('/bantuan', [App\Http\Controllers\MenuController::class, 'bantuan'])->name('bantuan');
+Route::post('/cookie/create/update',[App\Http\Controllers\ThemeController::class, 'createAndUpdate'])->name('create-update');
+
+
 require __DIR__.'/auth.php';

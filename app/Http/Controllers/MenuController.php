@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Hijab;
 use App\Models\Warna;
@@ -59,6 +60,11 @@ class MenuController extends Controller
         return view("penilaianpesanan", compact('data'));
     }
 
+    public function print($id) {
+        $data = Payment::find($id);
+        return view('print',compact('data'));
+    }
+
     public function daftarproduk() {
         $data = Hijab::all();
         return view("daftarproduk", compact('data'));
@@ -90,15 +96,52 @@ class MenuController extends Controller
     }
 
     public function payment() {
-        $data = Payment::paginate(5);
+        $data = Payment::orderBy('status', 'ASC')->paginate(5);
         // $ukur = Ukuran::all();
         return view('tables.payment', compact('data'));
     }
 
     public function report() {
+        $order = Payment::select(
+            DB::raw("(COUNT(*)) as count"),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $labels = [];
+        $val = [];
+
+        for($i=1; $i<=12; $i++){
+            $month = date('F',mktime(0,0,0,$i,1));
+            $count = 0;
+
+            foreach($order as $pesan){
+                if($pesan->month == $i){
+                    $count = $pesan->count;
+                    break;
+                }
+            }
+
+            array_push($labels,$month);
+            array_push($val,$count);
+        }
+
+        $datasets = [
+            [
+                'label' => 'Jumlah Order Masuk',
+                'data' => $val,
+            ]
+        ];
+
+        // dd($data);
         $data = Payment::all();
         $kas = Kas::all();
-        return view('report', compact('data','kas'));
+        $user = User::all();
+        $produk = Hijab::all();
+        return view('report', compact('data','kas','user','produk','datasets','labels'));
     }
 
     public function ukuran() {
@@ -116,6 +159,16 @@ class MenuController extends Controller
         return view('bill', compact('rows'));
     }
 
+    public function bill_cart($id) {
+        $rows = Invoice::find($id);
+        return view('billcart', compact('rows'));
+    }
+
+    public function show() {
+        $rows = Keranjang::all();
+        return view('keranjangbill', compact('rows'));
+    }
+
     public function catalog(Request $request) {
 
         if($request->has('search')){
@@ -129,13 +182,14 @@ class MenuController extends Controller
 
     public function katalog(Request $request) {
 
+        $theme = $request->cookie('theme');
         if($request->has('search')){
             // dd($request);
             $data = Hijab::where('nama','LIKE','%'.$request->search.'%')->paginate(100);
         } else {
             $data = Hijab::all();
         }
-        return view('katalog', compact('data'));
+        return view('katalog', compact('data','theme'));
     }
 
     public function view($id)

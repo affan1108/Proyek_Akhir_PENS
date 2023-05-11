@@ -28,6 +28,7 @@ class CreatePaymentsTable extends Migration
             $table->string('payment_type');
             $table->string('payment_code')->nullable();
             $table->string('pdf_url')->nullable();
+            $table->string('resi')->nullable();
             $table->boolean('diterima')->nullable();
             $table->string('rating')->nullable();
             $table->string('foto')->nullable();

@@ -21,7 +21,7 @@
                         Pilih Ekspedisi
                     </h5>
                     <div class="card-body">
-                        <form action="{{ route('submit') }}" method="POST">
+                        <form action="{{ route('sumbit') }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-lg-5">
