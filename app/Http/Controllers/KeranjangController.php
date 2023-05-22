@@ -16,7 +16,7 @@ use Auth;
 class KeranjangController extends Controller
 {
     public function index(){
-        $data = Keranjang::orderBy('created_at', 'DESC')->get();
+        $data = Keranjang::where('payment', null)->orderBy('created_at', 'DESC')->get();
         return view('keranjang', compact('data'));
     }
 
@@ -69,7 +69,7 @@ class KeranjangController extends Controller
         } else {
             $data->save();
             // Warna::where('id', $request->warna_id)->update($color);
-            return redirect('home');
+            return redirect()->back()->with('toast_success', 'Berhasil Menambahkan Ke Keranjang');;
         }
     }
 
@@ -90,16 +90,19 @@ class KeranjangController extends Controller
         // dd($request);
         // $cpty = Keranjang::where('id', $request->warna_id)->sum('stok');
 
-        foreach($request->checkbox as $key=>$name) {
-            $insert = [
-                // 'produk_id' => $request->checkbox[$key],
-                'keranjang' => 1,
-            ];
+        if($request->checkbox != null){
+            foreach($request->checkbox as $key=>$name) {
+                $insert = [
+                    // 'produk_id' => $request->checkbox[$key],
+                    'keranjang' => 1,
+                ];
 
-            DB::table('keranjangs')->where('id', $request->checkbox[$key])->update($insert);
+                DB::table('keranjangs')->where('id', $request->checkbox[$key])->update($insert);
+            }
+            return redirect('ongkir');
         }
-
-        return redirect('ongkir');
+        else
+            return redirect()->back()->with('toast_info', 'Pilih Produk Terlebih Dahulu');  
     }
 
     public function deleteAndUpdate(Request $request, $id){

@@ -194,6 +194,7 @@
 
         <!-- Main Footer -->
         @include('components.footer')
+        @include('sweetalert::alert')
     </div>
     <!-- ./wrapper -->
 

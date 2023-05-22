@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Warna;
+use App\Models\Keranjang;
+use App\Models\Invoice;
 use Session;
+use DB;
 
 class PaymentController extends Controller
 {
@@ -41,6 +44,7 @@ class PaymentController extends Controller
     public function payment_post(Request $request){
         $json = json_decode($request->get('json','user_id','invoice_id', 'warna_id', 'jumlah'));
         // return $json;
+        // dd($request);
         $order = new Payment;
         $order->status = $json->transaction_status;
         $order->user_id = $request->user_id;
@@ -55,16 +59,37 @@ class PaymentController extends Controller
         $order->payment_type = $json->payment_type;
         $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
         $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
-
-        $cpty = Warna::where('id', $request->warna_id)->sum('stok');
-        $color = [
-            'id' => $request->warna_id,
-            'stok' => round($cpty - ($request->jumlah), PHP_ROUND_HALF_UP),
-        ];
-
-        // dd($order, $color);
-        Warna::where('id', $request->warna_id)->update($color);
         $order->save();
+
+        // $cpty = Warna::where('id', $order->invoice->keranjang->warna_id)->sum('stok');
+        // foreach($request->checkbox as $key=>$name) {
+        //     $insert = [
+        //         'payment_id' => $order->id,
+        //     ];
+
+        //     $min = [
+        //         'id' => $order->invoice->keranjang->warna_id,
+        //         'stok' => round($cpty - ($order->invoice->keranjang->jumlah), PHP_ROUND_HALF_UP),
+        //     ];
+        //     DB::table('warnas')->where('id', $request->checkbox[$key])->update($min);
+        //     DB::table('invoices')->where('id', $request->checkbox[$key])->update($insert);
+        // }
+
+        // dd($min);
+        $pay = Invoice::where('id', $order->invoice_id)->first();
+        $pay->payment_id = $order->id;
+        
+        
+        // $cpty = Warna::where('id', $order->invoice->keranjang->warna_id)->sum('stok');
+        // $min = [
+        //     'id' => $order->invoice->keranjang->warna_id,
+        //     'stok' => round($cpty - ($order->invoice->keranjang->jumlah), PHP_ROUND_HALF_UP),
+        // ];
+
+        // dd($order, $color, $insert);
+        // DB::table('warnas')->where('id', $order->invoice->keranjang->warna_id)->update($min);
+        $pay->update();
+        
 
         return redirect(('pesanansaya'));
 
@@ -73,7 +98,7 @@ class PaymentController extends Controller
 
     public function batal(Request $request, $id){
         // dd($request);
-        $order = Payment::find($id);
+        $order = Invoice::find($id);
         $order->warna_id = $request->warna_id;
         $order->jumlah = $request->jumlah;
         $cpty = Warna::where('id', $request->warna_id)->sum('stok');

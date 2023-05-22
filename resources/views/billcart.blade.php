@@ -32,151 +32,171 @@
 
         <!-- Navbar -->
         @include('components.nav-bar')
-    <!-- /.navbar -->
+        <!-- /.navbar -->
 
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0"><small>Bill</small></h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
-                        <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
-                        <li class="breadcrumb-item active">Bill</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0"><small>Bill</small></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
+                            <li class="breadcrumb-item active">Bill</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- <div class="callout callout-info">
+        <!-- Main content -->
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- <div class="callout callout-info">
                                 <h5><i class="fas fa-info"></i> Note:</h5>
                                 This page has been enhanced for printing. Click the print button at the bottom of the
                                 invoice to test.
                             </div> -->
 
 
-                    <!-- Main content -->
-                    @csrf
-                    <div class="invoice p-3 mb-3">
-                        <!-- title row -->
-                        <div class="row">
-                            <div class="col-12">
-                                <h4>
-                                    <img src="assets/images/logo.png" alt="user-avatar"
-                                        class="img-circle img-fluid col-1">Ameliia Collection
-                                    <!-- <small class="float-right">Date: 2/10/2014</small> -->
-                                </h4>
+                        <!-- Main content -->
+                        @csrf
+                        <div class="invoice p-3 mb-3">
+                            <!-- title row -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>
+                                        <img src="assets/images/logo.png" alt="user-avatar"
+                                            class="img-circle img-fluid col-1">Ameliia Collection
+                                        <!-- <small class="float-right">Date: 2/10/2014</small> -->
+                                    </h4>
+                                </div>
+                                <!-- /.col -->
                             </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- info row -->
-                        <div class="row invoice-info">
-                            <div class="col-sm-4 invoice-col">
-                                Asal
-                                <address>
-                                    <strong>Ameliia Collection</strong><br>
-                                    Jl. Gili Raja III/04 Perumnas Giling<br>
-                                    Kabupaten Sumenep<br>
-                                    Phone: **********<br>
-                                    <!-- Email: **********.com -->
-                                </address>
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
-                                Tujuan
-                                <address>
-                                    <strong>{{ Auth::user()->name }}</strong><br>
-                                    {{ Auth::user()->alamat }}<br>
-                                    {{ Auth::user()->lainnya }}<br>
-                                    Phone: {{ Auth::user()->nomer }}<br>
-                                    <!-- Email: {{ Auth::user()->email }} -->
-                                </address>
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-sm-4 invoice-col">
-                                
-                                <!-- <b>Order ID:</b> 4F3S8J<br> -->
-                                <!-- <b>Payment Due:</b> 2/22/2014<br> -->
-                                <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-sm-4 invoice-col">
+                                    Asal
+                                    <address>
+                                        <strong>Ameliia Collection</strong><br>
+                                        Jl. Gili Raja III/04 Perumnas Giling<br>
+                                        Kabupaten Sumenep<br>
+                                        Phone: **********<br>
+                                        <!-- Email: **********.com -->
+                                    </address>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col">
+                                    Tujuan
+                                    <address>
+                                        <strong>{{ Auth::user()->name }}</strong><br>
+                                        {{ Auth::user()->alamat }}<br>
+                                        {{ Auth::user()->lainnya }}<br>
+                                        Phone: {{ Auth::user()->nomer }}<br>
+                                        <!-- Email: {{ Auth::user()->email }} -->
+                                    </address>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col">
 
-                        <!-- Table row -->
-                        <div class="row">
-                            <div class="col-12 table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Qty</th>
-                                            <th>Products</th>
-                                            <th>Color</th>
-                                            <th>Harga</th>
-                                            <!-- <th>Voucher</th> -->
-                                            <th>Ekspedisi</th>
-                                        </tr>
-                                    </thead>
-                                    @foreach (App\Models\Keranjang::all() as $r)
-                                    @if($rows->id == $r->keranjang)
-                                    <tbody>
-                                        <tr>
-                                            <td>AC-00{{ Auth::user()->id }}</td>
-                                            <td>{{$r->jumlah}}</td>
-                                            <td>{{$r->produk->nama}}</td>
-                                            <td>
-                                                {{$r->warna->warna}}
-                                            </td>
-                                            <!-- <td>{{$data->ukuran}}</td> -->
-                                            <!-- <td>Rp. {{$data->harga}}</td> -->
-                                            <td>
-                                                {{$r->produk->harga}}
-                                            </td>
-                                            <!-- <td>
+                                    <!-- <b>Order ID:</b> 4F3S8J<br> -->
+                                    <!-- <b>Payment Due:</b> 2/22/2014<br> -->
+                                    <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+                            <!-- Table row -->
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>#</th>
+                                                <th>Qty</th>
+                                                <th>Products</th>
+                                                <th>Color</th>
+                                                <th>Harga</th>
+                                                <!-- <th>Voucher</th> -->
+                                                <th>Ekspedisi</th>
+                                            </tr>
+                                        </thead>
+                                        @php
+                                        $total = 0;
+                                        $jumlah = 0;
+                                        @endphp
+                                        @foreach (App\Models\Keranjang::all() as $r)
+                                        @if($data->id == $r->invoice_id)
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <form action="/bill" id="submit_form" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
+                                                        <input type="hidden" name="invoice_id" value="{{$data->id}}">
+                                                        <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                                        <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                                        <input type="hidden" name="diterima" value="0">
+                                                        <input type="hidden" name="json" id="json_callback">
+                                                    </form>
+                                                </td>
+                                                <td>AC-00{{ Auth::user()->id }}</td>
+                                                <td>{{$r->jumlah}}</td>
+                                                <td>{{$r->produk->nama}}</td>
+                                                <td>
+                                                    {{$r->warna->warna}}
+                                                </td>
+                                                <!-- <td>{{$data->ukuran}}</td> -->
+                                                <!-- <td>Rp. {{$data->harga}}</td> -->
+                                                <td>
+                                                    {{$r->produk->harga}}
+                                                </td>
+                                                <!-- <td>
                                                 @if($data->diskon == null)
                                                 Tidak Ada Voucher
                                                 @elseif($data->diskon != null)
                                                 Berhasil Mendapatkan Voucher
                                                 @endif
                                             </td> -->
-                                            <td>
-                                                {{$r->ongkir->kurir}}
-                                            </td>
-                                        </tr>
-                                        <!-- <tr>
+                                                <td>
+                                                {{$data->ongkir->kurir}}
+                                                </td>
+                                            </tr>
+                                            <!-- <tr>
                                                             <td>1</td>
                                                             <td>Hijab</td>
                                                             <td>Red</td>
                                                             <td>L</td>
                                                             <td>Rp. 9.000</td>
                                                         </tr> -->
-                                    </tbody>
-                                    @endif
-                                    @endforeach
-                                </table>
+                                        </tbody>
+                                        @php
+                                        $total += $r->produk->harga * $r->jumlah;
+                                        $jumlah += $r->jumlah;
+                                        @endphp
+                                        @endif
+                                        @endforeach
+                                    </table>
+                                </div>
+                                <!-- /.col -->
                             </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
+                            <!-- /.row -->
 
-                        <div class="row">
-                            <!-- accepted payments column -->
-                            <div class="col-6">
-                                <!-- <p class="lead">Pilih Ekspedisi :</p>
+                            <div class="row">
+                                <!-- accepted payments column -->
+                                <div class="col-6">
+                                    <!-- <p class="lead">Pilih Ekspedisi :</p>
                                             <div class="form-group"> -->
-                                <!-- <label class="control-label">Permission *</label> -->
-                                <!-- <div class="select2-green">
+                                    <!-- <label class="control-label">Permission *</label> -->
+                                    <!-- <div class="select2-green">
                                                     <select class="form-control select2bs4" style="width: 100%;" name="nama">
                                                         @foreach (\App\Models\Ekspedisi::all() as $r)
                                                             <option value="{{ $r->nama }}">{{ $r->nama }}</option>
@@ -184,13 +204,32 @@
                                                     </select>
                                                 </div> -->
 
-                                <!-- </div> -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-6">
-                                <p class="lead">Billing :</p>
-                                <div class="table-responsive">
-                                    <table class="table">
+                                    <!-- </div> -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-6">
+                                    <p class="lead">Billing :</p>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <th style="width:50%">Subtotal:</th>
+                                                <td>Rp. {{number_format($total, 0, '.' ,'.')}}</td>
+                                            </tr>
+                                            <!-- <tr>
+                                                    <th>Tax (9.3%)</th>
+                                                    <td>$10.34</td>
+                                                </tr> -->
+                                            <tr>
+                                                <th>Ongkir:</th>
+                                                <td>Rp. {{number_format($data->ongkir->ongkir, 0, '.', '.')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total:</th>
+                                                <td>Rp. {{number_format($total + $data->ongkir->ongkir, 0, '.', '.')}}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- <table class="table">
                                         <tr>
                                             <th style="width:50%">Subtotal:</th>
                                             <td>
@@ -211,15 +250,6 @@
                                             </td>
                                         </tr>
                                         <tr>
-
-                                            <!-- <th>Diskon:</th>
-                                            <td>
-                                                @if($data->diskon == null)
-                                                0
-                                                @elseif($data->diskon != null)
-                                                {{$data->diskon}}
-                                                @endif
-                                            </td> -->
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
@@ -240,53 +270,59 @@
                                                         ?>
                                             </td>
                                         </tr>
-                                    </table>
+                                    </table> -->
+                                    </div>
                                 </div>
+                                <!-- /.col -->
                             </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
+                            <!-- /.row -->
 
-                        <!-- this row will not appear when printing -->
-                        <div class="row no-print">
-                            <div class="col-12">
-                                <button id="pay-button" class="btn btn-success float-right mr-2"><i
-                                        class="far fa-credit-card"></i> Submit
-                                    Payment
-                                </button>
-                                <a href="/deletepesanan/{{$data->id}}">
-                                    <button type="submit" class="btn btn-danger float-right" style="margin-right: 5px;">
-                                        Batal
+                            <!-- this row will not appear when printing -->
+                            <div class="row no-print">
+                                <div class="col-12">
+                                    <button id="pay-button" class="btn btn-success float-right mr-2"><i
+                                            class="far fa-credit-card"></i> Submit
+                                        Payment
                                     </button>
-                                </a>
-                                <!-- <button type="button" class="btn btn-primary float-right"
+                                    <a href="/dashboard">
+                                        <button class="btn btn-primary float-right"
+                                            style="margin-right: 5px;">
+                                            Dashboard
+                                        </button>
+                                    </a>
+                                    <a href="/pesanansaya">
+                                        <button class="btn btn-danger float-right"
+                                            style="margin-right: 5px;">
+                                            Lihat Pesanan
+                                        </button>
+                                    </a>
+                                    <!-- <a href="/deletepesanan/{{$data->id}}">
+                                        <button type="submit" class="btn btn-danger float-right"
+                                            style="margin-right: 5px;">
+                                            Batal
+                                        </button>
+                                    </a> -->
+                                    <!-- <button type="button" class="btn btn-primary float-right"
                                                 style="margin-right: 5px;">
                                                 <i class="fas fa-download"></i> Generate PDF
                                             </button> -->
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- /.invoice -->
-                </div><!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
+                        <!-- /.invoice -->
+                    </div><!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
 
-    <form action="/bill" id="submit_form" method="POST">
-        @csrf
-        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
-        <input type="hidden" name="invoice_id" value="{{$data->id}}">
-        <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
-        <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
-        <input type="hidden" name="diterima" value="0">
-        <input type="hidden" name="json" id="json_callback">
-    </form>
+        
 
-    <!-- Main Footer -->
-    @include('components.footer')
+        <!-- Main Footer -->
+        @include('components.footer')
+        @include('sweetalert::alert')
     </div>
     <!-- ./wrapper -->
 

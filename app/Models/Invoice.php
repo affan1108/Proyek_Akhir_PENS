@@ -22,6 +22,11 @@ class Invoice extends Model
         return $this->belongsTo(Keranjang::class);
     }
 
+    public function cart()
+    {
+        return $this->hasMany(Keranjang::class);
+    }
+
     public function ongkir()
     {
         return $this->belongsTo(Ongkir::class);
@@ -30,5 +35,10 @@ class Invoice extends Model
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 }

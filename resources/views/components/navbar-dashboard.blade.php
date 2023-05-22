@@ -1,3 +1,8 @@
+<!--====== Line Icons CSS ======-->
+<link rel="stylesheet" href="{{asset('estore/assets/css/LineIcons.css')}}">
+
+<!--====== Material Design Icons CSS ======-->
+<link rel="stylesheet" href="{{asset('estore/assets/css/materialdesignicons.min.css')}}">
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-light">
     <div class="container">
         <a href="/dashboard" class="navbar-brand">
@@ -13,28 +18,26 @@
                 <li class="nav-item"><a class="nav-link {{'dashboard' == request()->path() ? 'active' : '' }}"
                         aria-current="page" href="/dashboard">Home</a>
                 </li>
+                @if(Auth::user()->name != 'admin')
                 <li class="nav-item"><a class="nav-link {{'/dashboard/katalog' == request()->path() ? 'active' : '' }}"
                         href="/dashboard/katalog">Katalog</a></li>
-                        <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        class="dropdown-toggle {{'dashboard/pesanansaya'  == request()->path() || 'dashboard/penilaianpesanan'  == request()->path() || 'dashboard/riwayatpesanan'  == request()->path()? 'nav-link active' : 'nav-link' }}">
+                        class="dropdown-toggle {{'/pesanansaya'  == request()->path() || 'dashboard/penilaianpesanan'  == request()->path() || 'dashboard/riwayatpesanan'  == request()->path()? 'nav-link active' : 'nav-link' }}">
                         Pages
                         <span>
                             @php
-                            $a = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima', 0)->count();
-                            $b = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
-                            1)->where('rating', null)->count();
+                            $a = App\Models\Invoice::all()->count();
                             @endphp
-                            ({{$a + $b}})
+                            ({{$a}})
                         </span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item {{'dashboard/pesanansaya' == request()->path() ? 'active' : '' }}"
-                                href="/dashboard/pesanansaya">Pesanan Saya
+                        <li><a class="dropdown-item {{'/pesanansaya' == request()->path() ? 'active' : '' }}"
+                                href="/pesanansaya">Pesanan Saya
                                 <span class="float-right">
                                     @php
-                                    $data = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
-                                    0)->where('rating', null)->count();
+                                    $data = App\Models\Invoice::all()->count();
                                     @endphp
                                     ({{$data}})
                                 </span>
@@ -46,7 +49,10 @@
                                     $data = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
                                     1)->where('rating', null)->count();
                                     @endphp
+                                    @if($data == 0)
+                                    @else
                                     ({{$data}})
+                                    @endif
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/riwayatpesanan' == request()->path() ? 'active' : '' }}"
@@ -58,7 +64,38 @@
                                 <li><a class="dropdown-item" href="#!">New Arrivals</a></li> -->
                     </ul>
                 </li>
-                @if(Auth::user()->name == 'admin')
+                <!-- SEARCH FORM -->
+                <form class="form-inline ml-0 ml-md-3" action="/dashboard/katalog" method="GET">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                            aria-label="Search" name="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                @php
+                $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                null)->count();
+                @endphp
+                <div class="col-3">
+                    <!-- navbar cart start -->
+                    <!-- <div class="navbar-cart">
+                        <a class="icon-btn primary-icon-text icon-text-btn" href="javascript:void(0)">
+                            <i class="lni lni-cart"></i>
+                            @if($data > 0)
+                            <span class="icon-text text-style-1">
+                                {{$data}}
+                            </span>
+                            @else
+                            @endif
+                        </a>
+                    </div> -->
+                    <!-- navbar cart Ends -->
+                </div>
+                @else
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="dropdown-toggle {{'dashboard/daftarpesanan'  == request()->path() || 'dashboard/daftarproduk'  == request()->path() || 'dashboard/daftarpenilaian'  == request()->path() || 'dashboard/report'  == request()->path() || 'dashboard/warna'  == request()->path() || 'dashboard/user'  == request()->path() || 'dashboard/payment'  == request()->path() ? 'nav-link active' : 'nav-link' }}">Master
@@ -67,7 +104,10 @@
                             @php
                             $data = App\Models\Payment::where('diterima', 0)->where('rating', null)->count();
                             @endphp
+                            @if($data == 0)
+                            @else
                             ({{$data}})
+                            @endif
                         </span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -77,7 +117,10 @@
                                     @php
                                     $data = App\Models\Payment::where('diterima', 0)->where('rating', null)->count();
                                     @endphp
+                                    @if($data == 0)
+                                    @else
                                     ({{$data}})
+                                    @endif
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/daftarproduk' == request()->path() ? 'active' : '' }}"
@@ -128,19 +171,37 @@
                                 href="/dashboard/report">Inventory</a></li>
                     </ul>
                 </li>
-                @endif
-                <!-- SEARCH FORM -->
-                <form class="form-inline ml-0 ml-md-3" action="/dashboard/katalog" method="GET">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                            aria-label="Search" name="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-navbar" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
+                <div class="col-3">
+                    <li class="nav-item dropdown">
+                        <a class="icon-btn primary-icon-text icon-text-btn" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="icon-text text-style-1">
+                                0
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">15 Notifications</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-users mr-2"></i> 8 friend requests
+                                <span class="float-right text-muted text-sm">12 hours</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-file mr-2"></i> 3 new reports
+                                <span class="float-right text-muted text-sm">2 days</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                         </div>
-                    </div>
-                </form>
+                    </li>
+                </div>
+                @endif
             </ul>
             <!-- Right navbar links -->
             <!-- <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
@@ -239,26 +300,54 @@
                 </button>
             </a> -->
 
+            <div class="navbar-nav mb-lg-0  float-right">
+            @php
+                $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                null)->count();
+                @endphp
+                <div class="col-3 mt-2">
+                    <!-- navbar cart start -->
+                    <div class="navbar-cart">
+                        <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
+                            <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
+                            <!-- <i class="lni lni-cart"></i> -->
+                            @if($data > 0)
+                            <span class="icon-text text-style-1">
+                                {{$data}}
+                            </span>
+                            @else
+                            @endif
+                        </a>
+                    </div>
+                    <!-- navbar cart Ends -->
+                </div>
             <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="nav-link">
-                        <button class="btn {{ '/dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
+                        <button
+                            class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
                             <i class="fas fa-user"></i>
                             {{Auth::user()->name}}
                         </button>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item {{ '/dashboard/profile' == request()->path() ? 'active' : '' }}" href="/dashboard/profile">Akun Saya</a></li>
-                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}" href="/keranjang">Keranjang
+                        <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
+                                href="/dashboard/profile">Akun Saya</a></li>
+                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
+                                href="/keranjang">Keranjang
                                 <span class="float-right">
                                     @php
-                                    $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->count();
+                                    $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment', null)->count();
                                     @endphp
-                                    {{$data}}
+                                    @if($data == 0)
+                                    @else
+                                    ({{$data}})
+                                    @endif
                                 </span>
                             </a></li> -->
-                        <li><a class="dropdown-item" href="{{ route('logout') }}"
+                        <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
+                                href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                                         document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -267,6 +356,7 @@
                     </ul>
                 </li>
             </ul>
+            </div>
         </div>
     </div>
 </nav>

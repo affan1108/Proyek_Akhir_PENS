@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('/home/{id}', [App\Http\Controllers\InvoiceController::class, 'editinvoice'])->name('home');
     Route::get('/invoice', [App\Http\Controllers\InvoiceController::class, 'invoice'])->name('invoice');
     Route::get('/invoicecart', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoicecart');
-    Route::get('/dashboard/pesanansaya', [App\Http\Controllers\MenuController::class, 'pesanansaya'])->name('pesanansaya');
+    Route::get('/pesanansaya', [App\Http\Controllers\MenuController::class, 'pesanansaya'])->name('pesanansaya');
     Route::get('/dashboard/riwayatpesanan', [App\Http\Controllers\MenuController::class, 'riwayatpesanan'])->name('riwayatpesanan');
     Route::get('/dashboard/penilaianpesanan', [App\Http\Controllers\MenuController::class, 'penilaianpesanan'])->name('penilaianpesanan');
     Route::get('/dashboard/profile', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
@@ -112,6 +112,9 @@ Route::middleware('auth')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('/province/{id}/cities', [HomeController::class, 'getCities']);
     Route::post('home', [HomeController::class, 'submit'])->name('submit');
+
+    // Route::get('hijab/{id}', [App\Http\Controllers\DetailController::class, 'index'])->name('hijab');
+    Route::get('/hijab/{id}', [App\Http\Controllers\DetailController::class, 'getCities']);
 
     Route::get('ongkir', [App\Http\Controllers\OngkirController::class, 'index'])->name('ongkir');
     Route::get('/province/{id}/cities', [App\Http\Controllers\OngkirController::class, 'getCities']);

@@ -18,8 +18,8 @@ class CreatePaymentsTable extends Migration
             $table->string('status');
             // $table->foreignId('voucher_id')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
             $table->foreignId('user_id')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('invoice_id')->constrained('invoices')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('invoice_id')->constrained('invoices')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('cascade')->onDelete('restrict');
             // $table->string('number');
             $table->integer('jumlah');
             $table->string('transaction_id');

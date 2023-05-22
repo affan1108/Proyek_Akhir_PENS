@@ -118,7 +118,7 @@
                                 <!-- <div id="poll">
                                         <span>jumlah stok {{$r->stok}}</span>
                                     </div> -->
-                                <span id="stok"></span>
+                                <span id="stok" class="ml-10"></span>
                             </div>
                             <!-- <input type="text" id="stok" name="stok"> -->
                             <!-- <div class="form-group">
@@ -165,16 +165,28 @@
                                     </h4> -->
                             </div>
                             <hr>
+                            <div class="mt-4">
+                            <button type="submit" class="btn btn-primary mr-2 float-right ml-200"><input type="hidden"
+                                        name="hitung" value="Hitung"><i
+                                    class="fas fa-cart-plus mr-2"></i>Tambah ke keranjang
+                            </button>
+                            <!-- <a href="/home">
+                                <button type="submit" class="btn btn-success float-right"><input type="hidden"
+                                        name="hitung" value="Hitung">
+                                    Order Now
+                                </button>
+                            </a> -->
+                            </div>
                             <!-- <button type="submit" class="btn btn-primary float-left mr-2 ml-200 mt-5"><i
                                     class="fas fa-cart-plus mr-2"></i>Tambah ke keranjang
-                            </button> -->
-                            <a href="{{ route('home') }}">
-                            <button type="submit" class="btn btn-success float-right"><input
-                                    type="hidden" name="hitung" value="Hitung">
-                                Order Now
                             </button>
-                            </a>
-                            
+                            <a href="{{ route('home') }}">
+                                <button type="submit" class="btn btn-success float-right"><input type="hidden"
+                                        name="hitung" value="Hitung">
+                                    Order Now
+                                </button>
+                            </a> -->
+
                         </form>
                         <!-- <form action="/cart" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -635,7 +647,7 @@
                                 // <input type="text" id="stok" name="stok">
                                 $('#stok').empty();
                                 $.each(data, function (key, value) {
-                                    $('#stok').append('<span>Jumlah Stok ' + value + '</span>');
+                                    $('#stok').append('<span>Sisa Stok ' + value + '</span>');
                                 });
                             }
                         });

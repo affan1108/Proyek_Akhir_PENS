@@ -15,6 +15,7 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Riwayat;
 use App\Models\Kas;
+use Auth;
 
 class MenuController extends Controller
 {
@@ -26,7 +27,7 @@ class MenuController extends Controller
     }
 
     public function pesanansaya() {
-        $data = Payment::orderBy('status', 'ASC')->where('diterima', '0')->paginate(10);
+        $data = Invoice::with('payment')->orderBy('created_at', 'DESC')->where('user_id', Auth::user()->id)->paginate(10);
         return view("pesanansaya", compact('data'));
     }
 
@@ -36,8 +37,35 @@ class MenuController extends Controller
 
     public function viewpesanan($id)
     {
-        $data = Payment::find($id);
-        return view('viewpesanan',compact('data'));
+        $data = Invoice::find($id);
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-bLySRwVU1rLQ2e80YHvoIIbF';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => $data->total,
+            ),
+            'customer_details' => array(
+                'first_name' => 'budi',
+                'last_name' => 'pratama',
+                'email' => 'budi.pra@example.com',
+                'phone' => '08111222333',
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        return view('viewpesanan', ['snapToken'=>$snapToken, 'data'=>$data]);
+
+        // $data = Payment::find($id);
+        // return view('viewpesanan',compact('data'));
     }
     
     public function pesananditerima(Request $request, $id)
@@ -71,7 +99,7 @@ class MenuController extends Controller
     }
 
     public function daftarpesanan() {
-        $data = Payment::orderBy('status', 'ASC')->where('diterima', '0')->paginate(6);
+        $data = Invoice::orderBy('id', 'ASC')->paginate(6);
         return view("daftarpesanan", compact('data'));
     }
 
@@ -160,7 +188,7 @@ class MenuController extends Controller
     }
 
     public function bill_cart($id) {
-        $rows = Invoice::find($id);
+        $rows = Invoice::with('cart')->find($id);
         return view('billcart', compact('rows'));
     }
 

@@ -17,13 +17,13 @@ class CreateInvoicesTable extends Migration
             $table->id();
             // $table->foreignId('department_id')->constrained('m_departments')->onUpdate('restrict')->onDelete('restrict');
             $table->foreignId('user_id')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('keranjang_id')->constrained('keranjangs')->onUpdate('restrict')->onDelete('cascade');
-            $table->foreignId('ongkir_id')->constrained('ongkirs')->onUpdate('restrict')->onDelete('cascade');
+            $table->foreignId('keranjang_id')->constrained('keranjangs')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('ongkir_id')->constrained('ongkirs')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('voucher_id')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('cascade')->onDelete('restrict');
             $table->integer('jumlah');
             $table->string('total');
-            $table->string('diskon');
+            $table->foreignId('payment_id')->constrained('payments')->onUpdate('cascade')->onDelete('cascade');
             $table->enum('status', ['Belum dibayar', 'Sudah dibayar']);
             $table->string('hitung');
             $table->timestamps();

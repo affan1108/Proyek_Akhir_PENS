@@ -113,13 +113,14 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
-                                    <b>Ekspedisi : </b><br>
-                                    <br>
-                                    <b>{{$ongkir->kota}}</b><br>
-                                    <b>{{$ongkir->kurir}}</b><br>
-                                    <a class="btn btn-primary btn-sm" href="/deleteongkir/{{$ongkir->id}}">
-                                        Ganti Ekspedisi
-                                    </a>
+                                    Ekspedisi
+                                    <address>
+                                        <b>{{$ongkir->kota}}</b><br>
+                                        {{$ongkir->kurir}}<br>
+                                        <a class="btn btn-primary btn-sm" href="/deleteongkir/{{$ongkir->id}}">
+                                            Ganti Ekspedisi
+                                        </a>
+                                    </address>
                                 </div>
                                 <!-- /.col -->
                             </div>
@@ -149,7 +150,7 @@
                                             $jumlah = 0;
                                             @endphp
                                             @foreach($rows as $data)
-                                            @if ($data->user->id == Auth::user()->id && $data->keranjang == 1)
+                                            @if ($data->user->id == Auth::user()->id && $data->keranjang == 1 && $data->payment != 1)
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -273,7 +274,7 @@
                                         <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
                                         <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
                                         <input type="hidden" name="total" value="{{$total + $ongkir->ongkir}}">
-                                        
+
                                     </div>
                                 </div>
                             </form>
@@ -299,15 +300,15 @@
         </div>
         <!-- /.content -->
 
-        <form action="/insertinvoicecart" id="submit_form" method="POST">
-        @csrf
+        <!-- <form action="/insertinvoicecart" id="submit_form" method="POST">
+            @csrf
             <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
             <input type="hidden" name="invoice_id" value="{{$data->id}}">
             <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
             <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
             <input type="hidden" name="diterima" value="0">
             <input type="hidden" name="json" id="json_callback">
-        </form>
+        </form> -->
 
         <!-- Main Footer -->
         @include('components.footer')
@@ -329,40 +330,40 @@
         <!--====== Main js ======-->
         <script src="{{asset('estore/assets/js/main.js')}}"></script>
 
-        <script type="text/javascript">
-        // For example trigger on button clicked, or any time you need
-        var payButton = document.getElementById('pay-button');
-        payButton.addEventListener('click', function () {
-            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-            window.snap.pay('', {
-                onSuccess: function (result) {
-                    /* You may add your own implementation here */
-                    // alert("payment success!"); console.log(result);
-                    send_response_to_form(result);
-                },
-                onPending: function (result) {
-                    /* You may add your own implementation here */
-                    // alert("wating your payment!"); console.log(result);
-                    send_response_to_form(result);
-                },
-                onError: function (result) {
-                    /* You may add your own implementation here */
-                    // alert("payment failed!"); console.log(result);
-                    send_response_to_form(result);
-                },
-                onClose: function () {
-                    /* You may add your own implementation here */
-                    alert('you closed the popup without finishing the payment');
-                }
-            })
-        });
+        <!-- <script type="text/javascript">
+            // For example trigger on button clicked, or any time you need
+            var payButton = document.getElementById('pay-button');
+            payButton.addEventListener('click', function () {
+                // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+                window.snap.pay('', {
+                    onSuccess: function (result) {
+                        /* You may add your own implementation here */
+                        // alert("payment success!"); console.log(result);
+                        send_response_to_form(result);
+                    },
+                    onPending: function (result) {
+                        /* You may add your own implementation here */
+                        // alert("wating your payment!"); console.log(result);
+                        send_response_to_form(result);
+                    },
+                    onError: function (result) {
+                        /* You may add your own implementation here */
+                        // alert("payment failed!"); console.log(result);
+                        send_response_to_form(result);
+                    },
+                    onClose: function () {
+                        /* You may add your own implementation here */
+                        alert('you closed the popup without finishing the payment');
+                    }
+                })
+            });
 
-        function send_response_to_form(result) {
-            document.getElementById('json_callback').value = JSON.stringify(result);
-            // document.getElementById('user').value = JSON.stringify(result);
-            // document.getElementById('invoice').value = JSON.stringify(result);
-            $('#submit_form').submit();
-        }
+            function send_response_to_form(result) {
+                document.getElementById('json_callback').value = JSON.stringify(result);
+                // document.getElementById('user').value = JSON.stringify(result);
+                // document.getElementById('invoice').value = JSON.stringify(result);
+                $('#submit_form').submit();
+            }
 
-    </script>
+        </script> -->
 </body>

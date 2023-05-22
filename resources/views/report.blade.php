@@ -131,7 +131,7 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="example1" class="table">
                                         <thead>
                                             <tr>
                                                 <th>Nama Pembeli</th>
@@ -142,9 +142,14 @@
                                                 <th>Keuntungan</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        @php
+                                        $jual = 0;
+                                        $beli = 0;
+                                        $untung = 0;
+                                        @endphp
                                             @foreach($data as $row)
                                             @if($row->status == 'capture' || $row->status == 'settlement')
+                                        <tbody>
                                             <tr>
                                                 <td>
                                                     {{$row->user->name}}
@@ -166,19 +171,24 @@
                                                     <!-- {{ round((( $row->invoice->keranjang->produk->harga / $row->gross_amount) * 100), PHP_ROUND_HALF_UP)}}% -->
                                                 </td>
                                             </tr>
+                                        </tbody>
+                                        @php
+                                        $jual += $row->invoice->keranjang->produk->harga;
+                                        $beli += $row->gross_amount;
+                                        $untung += $row->gross_amount - $row->invoice->keranjang->produk->harga;
+                                        @endphp
                                             @endif
                                             @endforeach
-                                        </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th>TOTAL</th>
                                                 <th>-</th>
                                                 <th>-</th>
-                                                <th>{{ number_format($row->invoice->keranjang->produk->pluck('harga')->sum(), 0, '.', '.')}}
+                                                <th>{{number_format($jual, 0, '.' ,'.')}}
                                                 </th>
-                                                <th>{{ number_format($data->pluck('gross_amount')->sum(), 0, '.', '.') }}
+                                                <th>{{ number_format($beli, 0, '.', '.') }}
                                                 </th>
-                                                <th>{{ number_format( $data->pluck('gross_amount')->sum() - $row->invoice->keranjang->produk->pluck('harga')->sum(), 0, '.', '.') }}
+                                                <th>{{ number_format( $untung, 0, '.', '.') }}
                                                 </th>
                                             </tr>
                                         </tfoot>
@@ -268,7 +278,7 @@
                                                                 <label for="nama">Saldo</label>
                                                                 <input type="text" class="form-control" id="nama"
                                                                     name="nama" placeholder="Nama Barang"
-                                                                    value="{{ number_format(( $data->pluck('gross_amount')->sum() - $row->invoice->keranjang->produk->pluck('harga')->sum()) - $value->pluck('harga_beli')->sum(), 0, '.', '.') }}"
+                                                                    value="{{ number_format( $untung, 0, '.', '.') }}"
                                                                     disabled>
                                                             </div>
                                                             <div class="modal-body">
@@ -342,27 +352,25 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            <!-- <tr>
                                                 <td>1.</td>
                                                 <td>Total Harga Jual</td>
                                                 <td>
-                                                    {{ number_format($row->invoice->keranjang->produk->pluck('harga')->sum(), 0, '.', '.')}}
+                                                    {{ number_format($jual, 0, '.', '.')}}
                                                 </td>
-                                                <!-- <td><span class="badge bg-danger">55%</span></td> -->
                                             </tr>
                                             <tr>
                                                 <td>2.</td>
                                                 <td>Total Harga Beli</td>
                                                 <td>
-                                                    {{ number_format($data->pluck('gross_amount')->sum(), 0, '.', '.') }}
+                                                    {{ number_format($beli, 0, '.', '.') }}
                                                 </td>
-                                                <!-- <td><span class="badge bg-danger">55%</span></td> -->
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td>3.</td>
                                                 <td>Total Keuntungan</td>
                                                 <td>
-                                                    {{ number_format( $data->pluck('gross_amount')->sum() - $row->invoice->keranjang->produk->pluck('harga')->sum(), 0, '.', '.') }}
+                                                    {{ number_format($untung, 0, '.', '.') }}
                                                 </td>
                                                 <!-- <td><span class="badge bg-danger">55%</span></td> -->
                                             </tr>
@@ -379,7 +387,7 @@
                                             <tr>
                                                 <th>Sisa Saldo</th>
                                                 <th>-</th>
-                                                <th>{{ number_format(( $data->pluck('gross_amount')->sum() - $row->invoice->keranjang->produk->pluck('harga')->sum()) - $value->pluck('harga_beli')->sum(), 0, '.', '.') }}
+                                                <th>{{ number_format( $untung - $value->pluck('harga_beli')->sum(), 0, '.', '.') }}
                                                 </th>
                                             </tr>
                                         </tfoot>
@@ -410,7 +418,7 @@
                         <div class="modal-body">
                             <label for="nama">Saldo</label>
                             <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Barang"
-                                value="{{ number_format(( $data->pluck('gross_amount')->sum() - $row->invoice->keranjang->produk->pluck('harga')->sum()) - $value->pluck('harga_beli')->sum(), 0, '.', '.') }}"
+                                value="{{ number_format($untung, 0, '.', '.') }}"
                                 disabled>
                         </div>
                         <div class="modal-body">

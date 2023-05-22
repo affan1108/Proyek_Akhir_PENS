@@ -67,15 +67,15 @@
                                         <div class="card-body pt-0 mt-2">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="lead"><b>{{$row->invoice->keranjang->produk->nama}}</b></h2>
+                                                    <h2 class="lead"><b>{{$row->keranjang->produk->nama}}</b></h2>
                                                     <p class="text-muted text-sm">
-                                                        <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
+                                                        <b>Warna: </b>{{$row->keranjang->warna->warna}}
                                                         <br>
-                                                        <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
+                                                        <b>Ukuran: </b>{{$row->keranjang->warna->ukuran}}
                                                         <br>
-                                                        <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
+                                                        <b>Qty: </b>{{$row->keranjang->jumlah}}
                                                         <br>
-                                                        <b>Harga: </b>{{$row->invoice->total}}
+                                                        <b>Harga: </b>{{$row->total}}
                                                     </p>
                                                     <ul class="ml-4 mb-0 fa-ul text-muted">
                                                         <li class="small"><span class="fa-li"><i
@@ -86,7 +86,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="col-5 text-center">
-                                                    <img src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}" alt="user-avatar"
+                                                    <img src="{{asset('assets/'.$row->keranjang->produk->foto)}}" alt="user-avatar"
                                                         class="img-circle img-fluid">
                                                 </div>
                                             </div>
@@ -96,11 +96,17 @@
                                                 <!-- <a href="#" class="btn btn-sm bg-teal">
                                                     <i class="fas fa-comments"></i>
                                                 </a> -->
-                                                @if($row->status == 'capture' || $row->status == 'settlement')
-                                                <a href="/dashboard/pesanansaya/viewpesanan/{{$row->id}}" class="btn btn-sm btn-success">
-                                                    Lihat Pesanan
-                                                </a>
-                                                @else($row->status == 'pending')
+                                                @if($row->payment_id != null)
+                                                    @if($row->payment->status == 'capture' || $row->payment->status == 'settlement')
+                                                    <a href="/dashboard/pesanansaya/viewpesanan/{{$row->id}}" class="btn btn-sm btn-success">
+                                                        Lihat Pesanan
+                                                    </a>
+                                                    @elseif($row->payment->status == 'pending')
+                                                    <a href="/dashboard/pesanansaya/viewpesanan/{{$row->id}}" class="btn btn-sm btn-warning">
+                                                        Lihat Pesanan
+                                                    </a>
+                                                    @endif
+                                                @else
                                                 <a href="/dashboard/pesanansaya/viewpesanan/{{$row->id}}" class="btn btn-sm btn-danger">
                                                     Lihat Pesanan
                                                 </a>

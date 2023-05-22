@@ -83,7 +83,7 @@
                                 <!-- info row -->
                                 <div class="row invoice-info">
                                     <div class="col-sm-4 invoice-col">
-                                        Asal
+                                        Pengirim
                                         <address>
                                             <strong>Ameliia Collection</strong><br>
                                             Jl. Gili Raja III/04 Perumnas Giling<br>
@@ -94,7 +94,7 @@
                                     </div>
                                     <!-- /.col -->
                                     <div class="col-sm-4 invoice-col">
-                                        Tujuan
+                                        Penerima
                                         <address>
                                             <strong>{{ Auth::user()->name }}</strong><br>
                                             {{ Auth::user()->alamat }}<br>
@@ -105,12 +105,14 @@
                                     </div>
                                     <!-- /.col -->
                                     <div class="col-sm-4 invoice-col">
-                                        <b>Invoice ID :
-                                            {{$data->invoice->keranjang->id}}{{$data->invoice->keranjang->user_id}}{{$data->invoice->keranjang->produk_id}}{{$data->invoice->keranjang->warna_id}}{{$data->invoice->keranjang->jumlah}}</b><br>
-                                        <br>
-                                        <b>Order ID:</b> {{$data->order_id}}<br>
-                                        <b>Tanggal Pemesanan:</b> {{date_format($data->created_at, 'd-m-y') }}<br>
-                                        <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+                                        Ekspedisi
+                                        <address>
+                                            <!-- <b>{{$data->ongkir->kota}}</b><br> -->
+                                            <b>{{$data->ongkir->kurir}}</b><br>
+                                            Order ID: {{$data->order_id}}<br>
+                                            Tanggal Pemesanan: {{date_format($data->created_at, 'h:i:s, d-m-y') }}<br>
+                                            <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+                                        </address>
                                     </div>
                                     <!-- /.col -->
                                 </div>
@@ -122,43 +124,77 @@
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>#</th>
                                                     <th>Qty</th>
                                                     <th>Products</th>
                                                     <th>Color</th>
                                                     <th>Harga</th>
-                                                    <th>Ekspedisi</th>
-                                                    @if(Auth::user()->name == 'admin')
                                                     <th>Status</th>
+                                                    @if(Auth::user()->name == 'admin')
+                                                    <!-- <th>Status</th> -->
                                                     @endif
                                                 </tr>
                                             </thead>
-                                            @if($data->user->id == Auth::user()->id)
+                                            @php
+                                            $total = 0;
+                                            $jumlah = 0;
+                                            @endphp
+                                            @foreach (App\Models\Keranjang::all() as $r)
+                                            @if($data->id == $r->invoice_id)
                                             <tbody>
                                                 <tr>
-                                                    <td>AC-00{{ Auth::user()->id }}</td>
-                                                    <td>{{$data->invoice->keranjang->jumlah}}</td>
-                                                    <td>{{$data->invoice->keranjang->produk->nama}}</td>
                                                     <td>
-                                                        {{$data->invoice->keranjang->warna->warna}}
+                                                        <form action="/bill" id="submit_form" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="user_id"
+                                                                value="{{auth()->user()->id}}">
+                                                            <input type="hidden" name="invoice_id"
+                                                                value="{{$data->id}}">
+                                                            <input type="hidden" name="warna_id"
+                                                                value="{{$data->warna_id}}">
+                                                            <input type="hidden" name="jumlah"
+                                                                value="{{$data->jumlah}}">
+                                                            <input type="hidden" name="diterima" value="0">
+                                                            <input type="hidden" name="json" id="json_callback">
+
+                                                            <!-- <div class="icheck-primary ml-4 mt-2">
+                                                            <input type="checkbox" value="{{$data->id}}"
+                                                                name="checkbox[]" id="{{$data->id}}" checked>
+                                                            <label for="{{$data->id}}"></label>
+                                                        </div> -->
+                                                        </form>
+                                                    </td>
+                                                    <td>AC-00{{ Auth::user()->id }}</td>
+                                                    <td>{{$r->jumlah}}</td>
+                                                    <td>{{$r->produk->nama}}</td>
+                                                    <td>
+                                                        {{$r->warna->warna}}
                                                     </td>
                                                     <!-- <td>{{$data->ukuran}}</td> -->
                                                     <!-- <td>Rp. {{$data->harga}}</td> -->
                                                     <td>
-                                                        {{$data->invoice->keranjang->produk->harga}}
+                                                        {{$r->produk->harga}}
                                                     </td>
+                                                    <!-- <td>
+                                                        {{$data->ongkir->kurir}}
+                                                    </td> -->
                                                     <td>
-                                                        {{$data->invoice->ongkir->kurir}}
-                                                    </td>
-                                                    @if(Auth::user()->name == 'admin')
-                                                    <td>
-                                                        @if($data->status == 'settlement' || $data->status == 'capture')
-                                                        <span class="badge badge-success">Sudah Dibayar</span>
-                                                        @elseif($data->status == 'pending')
+                                                        @if($data->payment_id != null)
+                                                        @if($data->payment->status == 'settlement' ||
+                                                        $data->payment->status == 'capture')
+                                                        @if($data->payment->resi == null)
+                                                        <span class="badge badge-info">Dikemas</span>
+                                                        @elseif($data->payment->resi != null)
+                                                        <span class="badge badge-success">Dikirim</span>
+                                                        @endif
+                                                        @elseif($data->payment->status == 'pending')
+                                                        <span class="badge badge-warning">Menunggu Pembayaran</span>
+                                                        @endif
+                                                        @else
                                                         <span class="badge badge-danger">Belum Dibayar</span>
                                                         @endif
                                                     </td>
-                                                    @endif
                                                 </tr>
                                                 <!-- <tr>
                                                             <td>1</td>
@@ -168,7 +204,12 @@
                                                             <td>Rp. 9.000</td>
                                                         </tr> -->
                                             </tbody>
+                                            @php
+                                            $total += $r->produk->harga * $r->jumlah;
+                                            $jumlah += $r->jumlah;
+                                            @endphp
                                             @endif
+                                            @endforeach
                                         </table>
                                     </div>
                                     <!-- /.col -->
@@ -178,26 +219,71 @@
                                 <div class="row">
                                     <!-- accepted payments column -->
                                     <div class="col-6">
-                                        @if($data->resi == null && Auth::user()->name == 'admin')
-                                        <p class="lead">Input Resi :</p>
-                                        <form action="/updateresi/{{$data->id}}" method="POST">
-                                            @csrf
-                                            <div class="form-group mt-2">
-                                                <!-- <label class="control-label">Permission *</label> -->
-                                                <div class="select2-green">
-                                                    <input type="text" name="resi" id="resi" class="form-control">
+                                        @if(Auth::user()->name == 'admin')
+                                            @if($data->payment_id != null)
+                                                @if($data->payment->status == 'settlement' || $data->payment->status == 'capture')
+                                                    @if($data->payment->resi == null)
+                                                        <form action="/updateresi/{{$data->payment_id}}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <p class="lead">Resi :</p>
+                                                            <div class="select2-green mt-2">
+                                                                <input type="text" name="resi" id="resi" class="form-control">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary float-left mt-2">
+                                                                Simpan
+                                                            </button>
+                                                        </form>
+                                                    @elseif($data->payment->resi != null)
+                                                        <p class="lead">Resi :</p>
+                                                        <div class="select2-green mt-2">
+                                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                                value="{{$data->payment->resi}}" disabled>
+                                                        </div>
+                                                    @endif
+                                                @elseif($data->payment->status == 'pending')
+                                                    <p class="lead">Resi :</p>
+                                                    <div class="select2-green mt-2">
+                                                        <input type="text" name="resi" id="resi" class="form-control"
+                                                        value="Menunggu Pembayaran" disabled>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <p class="lead">Resi :</p>
+                                                <div class="select2-green mt-2">
+                                                    <input type="text" name="resi" id="resi" class="form-control"
+                                                        value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
                                                 </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">
-                                                Simpan
-                                            </button>
-                                        </form>
+                                            @endif
                                         @else
-                                        <p class="lead">Resi :</p>
-                                        <div class="select2-green mt-2">
-                                            <input type="text" name="resi" id="resi" class="form-control"
-                                                value="{{$data->resi}}" disabled>
-                                        </div>
+                                            @if($data->payment_id != null)
+                                                @if($data->payment->status == 'settlement' || $data->payment->status == 'capture')
+                                                    @if($data->payment->resi == null)
+                                                        <p class="lead">Resi :</p>
+                                                        <div class="select2-green mt-2">
+                                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                                value="Dalam Proses Cetak Resi" disabled>
+                                                        </div>
+                                                    @elseif($data->payment->resi != null)
+                                                        <p class="lead">Resi :</p>
+                                                        <div class="select2-green mt-2">
+                                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                                value="{{$data->payment->resi}}" disabled>
+                                                        </div>
+                                                    @endif
+                                                @elseif($data->payment->status == 'pending')
+                                                    <p class="lead">Resi :</p>
+                                                    <div class="select2-green mt-2">
+                                                        <input type="text" name="resi" id="resi" class="form-control"
+                                                        value="Menunggu Pembayaran" disabled>
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <p class="lead">Resi :</p>
+                                                <div class="select2-green mt-2">
+                                                    <input type="text" name="resi" id="resi" class="form-control"
+                                                        value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
+                                                </div>
+                                            @endif
                                         @endif
                                     </div>
                                     <!-- /.col -->
@@ -207,38 +293,20 @@
                                             <table class="table">
                                                 <tr>
                                                     <th style="width:50%">Subtotal:</th>
-                                                    <td>
-                                                        <?php
-                                                            if(isset($data->invoice->keranjang->hitung)){
-                                                                $jmlh = $data->invoice->keranjang->jumlah;
-                                                                $hrg = $data->invoice->keranjang->produk->harga;
-                                                                $subtotal = $jmlh*$hrg;
-                                                                echo "$subtotal";
-                                                            }
-                                                        ?>
-                                                    </td>
+                                                    <td>Rp. {{number_format($total, 0, '.' ,'.')}}</td>
                                                 </tr>
+                                                <!-- <tr>
+                                                    <th>Tax (9.3%)</th>
+                                                    <td>$10.34</td>
+                                                </tr> -->
                                                 <tr>
                                                     <th>Ongkir:</th>
-                                                    <td>
-                                                        {{$data->invoice->ongkir->ongkir}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-
-                                                    <!-- <th>Diskon:</th>
-                                            <td>
-                                                @if($data->invoice->diskon == null)
-                                                0
-                                                @else
-                                                {{$data->invoice->diskon}}
-                                                @endif
-                                            </td> -->
+                                                    <td>Rp. {{number_format($data->ongkir->ongkir, 0, '.', '.')}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total:</th>
-                                                    <td>
-                                                        {{$data->invoice->total}}
+                                                    <td>Rp.
+                                                        {{number_format($total + $data->ongkir->ongkir, 0, '.', '.')}}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -255,30 +323,58 @@
                                         <a href="/print/{{$data->id}}" rel="noopener" target="_blank"
                                             class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                                         @else
-                                            @if($data->status == 'settlement' || $data->status == 'capture' && $data->resi != null)
-                                            <form action="/pesananditerima/{{$data->id}}" method="POST"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                @method('POST')
-                                                <input type="hidden" name="diterima" value="1">
-                                                <button type="submit" class="btn btn-primary float-right mr-2">
-                                                    Pesanan Diterima
-                                                </button>
-                                            </form>
-                                            @else
-                                            <form action="/batalkanpesanan/{{$data->id}}"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
-                                                <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
-                                                <button class="btn btn-primary float-right mr-2" disabled>
-                                                    Pesanan Diterima
-                                                </button>
-                                                <button type="submit" class="btn btn-danger float-right mr-2">
-                                                    Batalkan Pesanan
-                                                </button>
-                                            </form>
-                                            @endif
+                                        @if($data->payment_id != null)
+                                        @if($data->payment->status == 'settlement' || $data->payment->status ==
+                                        'capture')
+                                        @if($data->payment->resi != null)
+                                        <form action="/pesananditerima/{{$data->payment_id}}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('POST')
+                                            <input type="hidden" name="diterima" value="1">
+                                            <button type="submit" class="btn btn-primary float-right mr-2">
+                                                Pesanan Diterima
+                                            </button>
+                                        </form>
+                                        @elseif($data->payment->resi == null)
+                                        <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                            <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                            <button type="submit" class="btn btn-primary float-right mr-2" disabled>
+                                                Pesanan Diterima
+                                            </button>
+                                            <button type="submit" class="btn btn-danger float-left mr-2">
+                                                Batalkan Pesanan
+                                            </button>
+                                        </form>
+                                        @endif
+                                        @elseif($data->payment->status == 'pending' && $data->payment->resi == null)
+                                        <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                            <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                            <button type="submit" class="btn btn-warning float-right mr-2" disabled>
+                                                Menunggu Pembayaran
+                                            </button>
+                                            <button type="submit" class="btn btn-danger float-left mr-2">
+                                                Batalkan Pesanan
+                                            </button>
+                                        </form>
+                                        @endif
+                                        @else
+                                        <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                            <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                            <button type="submit" class="btn btn-danger float-left mr-2">
+                                                Batalkan Pesanan
+                                            </button>
+                                        </form>
+                                        <button id="pay-button" class="btn btn-success float-right mr-2">
+                                            Submit Payment
+                                        </button>
+                                        @endif
                                         @endif
                                         <!-- <a href="/deletepesanan/{{$data->id}}">
                                                 <button type="submit" class="btn btn-danger float-right"
@@ -317,6 +413,42 @@
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
+    <script type="text/javascript">
+        // For example trigger on button clicked, or any time you need
+        var payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', function () {
+            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+            window.snap.pay('{{$snapToken}}', {
+                onSuccess: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("payment success!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onPending: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("wating your payment!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onError: function (result) {
+                    /* You may add your own implementation here */
+                    // alert("payment failed!"); console.log(result);
+                    send_response_to_form(result);
+                },
+                onClose: function () {
+                    /* You may add your own implementation here */
+                    alert('you closed the popup without finishing the payment');
+                }
+            })
+        });
+
+        function send_response_to_form(result) {
+            document.getElementById('json_callback').value = JSON.stringify(result);
+            // document.getElementById('user').value = JSON.stringify(result);
+            // document.getElementById('invoice').value = JSON.stringify(result);
+            $('#submit_form').submit();
+        }
+
+    </script>
     <script src="js/scripts.js"></script>
     <script>
         $(document).ready(function () {

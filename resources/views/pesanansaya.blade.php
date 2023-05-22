@@ -77,10 +77,10 @@
                                             No
                                         </th>
                                         <th style="width: 20%">
-                                            Nama Produk
+                                            Jumlah Pembelian
                                         </th>
                                         <th style="width: 30%">
-                                            Jumlah Pembelian
+                                            Waktu Pemesanan
                                         </th>
                                         <th>
                                             Biaya Total
@@ -97,17 +97,68 @@
                                     $no = 1;
                                     @endphp
                                     @foreach ($data as $index =>$row)
-                                    <tr>
-                                        @if($row->user_id == Auth::user()->id)
-                                        <td>{{ $index + $data->firstItem() }}</td>
-                                        <td>{{ $row->invoice->keranjang->produk->nama }}</td>
-                                        <td>{{ $row->invoice->keranjang->jumlah }}</td>
-                                        <td>{{ $row->invoice->total }}</td>
-                                        <td class="project-state">
-                                            @if($row->status == 'settlement' || $row->status == 'capture')
-                                                <span class="badge badge-success">Sudah Dibayar</span>
-                                            @elseif($row->status == 'pending')
+                                    @if(Auth::user()->id == $row->user_id && $row->payment_id)
+                                        @if($row->payment->diterima == 0)
+                                        <tr>
+                                            <td>{{ $index + $data->firstItem() }}</td>
+                                            <td>
+                                                @php
+                                                $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                                @endphp
+                                                {{ $total }} Produk
+                                            </td>
+                                            <td>
+                                                {{date_format($row->created_at, 'h:i:s, d-m-y')}}
+                                            </td>
+                                            <td>{{ $row->total }}</td>
+                                            <td class="project-state">
+                                                @if($row->payment_id)
+                                                    @if($row->payment->status == 'settlement' || $row->payment->status == 'capture')
+                                                        @if($row->payment->resi == null)
+                                                            <span class="badge badge-info">Dikemas</span>
+                                                        @elseif($row->payment->resi != null)
+                                                            <span class="badge badge-success">Dikirim</span>
+                                                        @endif
+                                                    @elseif($row->payment->status == 'pending')
+                                                        <span class="badge badge-warning">Menunggu Pembayaran</span>
+                                                    @endif
+                                                @else
                                                 <span class="badge badge-danger">Belum Dibayar</span>
+                                                @endif
+                                            </td>
+                                            <td class="project-actions text-right">
+                                                <a class="btn btn-primary btn-sm" href="/dashboard/pesanansaya/viewpesanan/{{$row->id}}">
+                                                    Lihat Pesanan
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @else
+                                    <tr>
+                                        <td>{{ $index + $data->firstItem() }}</td>
+                                        <td>
+                                            @php
+                                            $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                            @endphp
+                                            {{ $total }} Produk
+                                        </td>
+                                        <td>
+                                            {{date_format($row->created_at, 'h:i:s, d-m-y')}}
+                                        </td>
+                                        <td>{{ $row->total }}</td>
+                                        <td class="project-state">
+                                            @if($row->payment_id)
+                                                @if($row->payment->status == 'settlement' || $row->payment->status == 'capture')
+                                                    @if($row->payment->resi == null)
+                                                        <span class="badge badge-info">Dikemas</span>
+                                                    @elseif($row->payment->resi != null)
+                                                        <span class="badge badge-success">Dikirim</span>
+                                                    @endif
+                                                @elseif($row->payment->status == 'pending')
+                                                    <span class="badge badge-warning">Menunggu Pembayaran</span>
+                                                @endif
+                                            @else
+                                            <span class="badge badge-danger">Belum Dibayar</span>
                                             @endif
                                         </td>
                                         <td class="project-actions text-right">
@@ -115,8 +166,8 @@
                                                 Lihat Pesanan
                                             </a>
                                         </td>
-                                        @endif
                                     </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

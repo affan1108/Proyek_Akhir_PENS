@@ -17,7 +17,7 @@ class CreateKeranjangsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onUpdate('restrict')->onDelete('restrict');
             $table->foreignId('produk_id')->constrained('hijabs')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('warna_id')->constrained('warnas')->onUpdate('cascade')->onDelete('restrict');
             $table->boolean('keranjang')->nullable();
             // $table->string('nama');
             // $table->string('warna');
@@ -27,9 +27,9 @@ class CreateKeranjangsTable extends Migration
             $table->string('hitung');
             // $table->string('_method')->nullable();
             // $table->foreignId('voucher')->constrained('vouchers')->onUpdate('restrict')->onDelete('restrict');
-            $table->foreignId('invoice_id')->constrained('invoices')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreignId('invoice_id')->constrained('invoices')->onUpdate('cascade')->onDelete('cascade');
             // $table->string('voucher')->nullable();
-            $table->string('kota')->nullable();
+            $table->boolean('payment')->nullable();
             $table->string('kurir')->nullable();
             $table->string('ongkir')->nullable();
             $table->timestamps();
