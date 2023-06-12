@@ -59,13 +59,18 @@
                                             <thead>
                                                 <tr>
                                                     <th class="checkbox"></th>
+                                                    <th class="foto">Foto</th>
                                                     <th class="product">Product</th>
                                                     <th class="quantity">Quantity</th>
                                                     <th class="price">Price</th>
+                                                    <!-- <th class="subtotal">Subtotal</th> -->
                                                     <th class="action">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php
+                                                $subtotal = 0;
+                                                @endphp
                                                 @foreach($data as $row)
                                                 @if($row->user_id == Auth::user()->id)
                                                 <tr>
@@ -77,52 +82,60 @@
                                                         </div>
                                                     </td>
                                                     <td>
+                                                        <div class="product-thumb">
+                                                            <img src="{{asset('assets/'.$row->produk->foto)}}" alt=""
+                                                                width="45">
+                                                        </div>
+                                                    </td>
+                                                    <td>
                                                         <div class="product-cart d-flex">
-                                                            <div class="product-thumb">
-                                                                <img src="{{asset('assets/'.$row->produk->foto)}}"
-                                                                    alt="" width="45">
-                                                            </div>
+
                                                             <div class="product-content media-body ml-2">
-                                                                <h5 class="title"><a
-                                                                        href="product-details-page.html">{{$row->produk->nama}}</a>
+                                                                <h5 class="title">{{$row->produk->nama}}
                                                                 </h5>
                                                                 <span>
-                                                                    {{$row->warna->warna}} - {{$row->warna->ukuran}}
-                                                                    <!-- <select class="select2bs4" name="produk_id">
-                                                                    <option value="{{ $row->produk_id }}" selected
-                                                                        disabled>
-                                                                        {{$row->warna->warna}} - {{$row->warna->ukuran}}
-                                                                    </option>
-                                                                    
-                                                                    @foreach (App\Models\Hijab::all() as $u)
-                                                                    @if($u->id == $row->produk_id)
-                                                                    <option value="{{ $u->id }}">
-                                                                    {{$u}}
-                                                                    </option>
-                                                                    @endif
-                                                                    @endforeach
-                                                                </select> -->
-                                                                </span>
+                                                                    <select name="warna_id[{{ $row->id }}]" class="warna" aria-labelledby="navbarDropdown">
+                                                                        @foreach (App\Models\Warna::all() as $u)
+                                                                        @if($u->hijab_id == $row->produk_id)
+                                                                        <option value="{{ $u->id }}"
+                                                                            data-bs-target="#stok{{$u->id}}"
+                                                                            {{ old('id', $u->id) == $row->warna_id ? 'selected' : 'null' }}>
+                                                                            {{ $u->warna }} - {{$u->ukuran}}
+                                                                        </option>
+
+                                                                        @endif
+                                                                        @endforeach
+                                                                    </select>
+                                                                </span><br>
+
+                                                                <!-- <span id="stok"></span> -->
+
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="product-quantity d-inline-flex">
-                                                            <!-- <button type="button" id="sub" class="sub"><i
-                                                                class="mdi mdi-minus"></i></button> -->
-                                                            <input type="text" id="stok" name="jumlah"
-                                                                value="{{$row->jumlah}}">
-                                                            <!-- <button type="button" id="add" class="add"><i
-                                                                class="mdi mdi-plus"></i></button> -->
+                                                            <button type="button" id="sub" class="sub"><i
+                                                                    class="mdi mdi-minus"></i></button>
+                                                            <input type="text" id="jumlah" name="jumlah[{{ $row->id }}]"
+                                                                value="{{ old('jumlah', $row->jumlah) }}">
+                                                            <button type="button" id="add" class="add"><i
+                                                                    class="mdi mdi-plus"></i></button>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <p class="price mt-2">Rp.
-                                                            {{number_format($row->produk['harga'],0,'.','.')}}</p>
+                                                            {{number_format($row->warna['harga'],0,'.','.')}}</p>
                                                     </td>
+                                                    <!-- <td>
+                                                        <p class="price mt-2">
+                                                            Rp.
+                                                            {{number_format($row->jumlah * $row->warna->harga, 0, '.', '.')}}
+                                                        </p>
+                                                    </td> -->
                                                     <td>
-                                                        <a class="btn btn-primary" href="/editpesanan/{{$row->id}}"><i
-                                                                class="mdi mdi-pencil"></i></a>
+                                                        <!-- <a class="btn btn-primary" href="/editpesanan/{{$row->id}}"><i
+                                                                class="mdi mdi-pencil"></i></a> -->
                                                         <a class="btn btn-danger" href="/deletecart/{{$row->id}}"><i
                                                                 class="mdi mdi-delete"></i></a>
                                                     </td>
@@ -214,6 +227,32 @@
 
     <!--====== Main js ======-->
     <script src="{{asset('estore/assets/js/main.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('select[name="warna_id[]"]').on('change', function () {
+                let stokId = $(this).val();
+
+                if (stokId) {
+                    $.ajax({
+                        url: '/hijab/' + stokId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // <input type="text" id="stok" name="stok">
+                            $('#stok').empty();
+                            $.each(data, function (key, value) {
+                                $('#stok').append('<span>Sisa Stok ' + value +
+                                    '</span>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#stok').empty();
+                }
+            });
+        });
+
+    </script>
 </body>
 
 

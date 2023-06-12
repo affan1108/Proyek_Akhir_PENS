@@ -101,7 +101,7 @@
                             <div class="content-content">
                                 <h4 class="title"><a href="javascript:void(0)">Katalog</a></h4>
                                 <p>Segera pesan sebelum kehabisan</p>
-                                <a href="/katalog" class="more">selengkapnya</a>
+                                <a href="/dashboard/katalog" class="more">selengkapnya</a>
                             </div>
                         </div>
                     </div>
@@ -122,10 +122,27 @@
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">{{$row->nama}}</h5>
-                                    <!-- Product price-->
-                                    Rp. {{$row->harga}}
+                                    @foreach (App\Models\Warna::all() as $r)
+                                        @if($row->id == $r->hijab_id)
+                                        @if($r->stok < 1)
+                                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Habis</div>
+                                        @endif
+                                        @endif
+                                    @endforeach
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">{{$row->nama}}</h5>
+                                        <!-- Product price-->
+                                    @foreach (App\Models\Warna::all() as $r)
+                                        @if($row->id == $r->hijab_id)
+                                        @php
+                                        $cpty = $row->warna->count('stok');
+                                        $min = $row->warna->min('harga');
+                                        $max = $row->warna->max('harga');
+                                        @endphp
+                                        <!-- <option value="{{ $r->id }}">{{ $min }} - {{ $max }}</option> -->
+                                        @endif
+                                    @endforeach
+                                    <span value="#">Rp. {{ number_format($min, 0, '.', '.') }}</span>
                                 </div>
                             </div>
                             <!-- Product actions-->
@@ -183,7 +200,7 @@
     <script src="{{asset('/template/dist/js/adminlte.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+    <script src="{{asset('/js/scripts.js')}}"></script>
 </body>
 
 

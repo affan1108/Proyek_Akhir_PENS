@@ -58,7 +58,9 @@
                 <div class="container-fluid">
                         <div class="row">
                             @foreach($data as $row)
-                            @if($row->diterima == '1' && $row->rating == null && $row->user_id == Auth::user()->id)
+                            @if($row->payment_id == null)
+                            @else
+                            @if($row->payment->diterima == '1' && $row->payment->rating == null && $row->user_id == Auth::user()->id)
                             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                 <div class="card bg-light d-flex flex-fill">
                                     <div class="card-header text-muted border-bottom-0">
@@ -67,15 +69,14 @@
                                     <div class="card-body pt-0">
                                         <div class="row">
                                             <div class="col-7">
-                                                <h2 class="lead"><b>{{$row->invoice->keranjang->produk->nama}}</b></h2>
+                                                @php
+                                                $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                                @endphp
+                                                <h2 class="lead"><b>{{$total}} Produk</b></h2>
                                                 <p class="text-muted text-sm">
-                                                <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
-                                                        <br>
-                                                        <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
-                                                        <br>
-                                                    <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
+                                                    <b>Qty: </b>{{$row->jumlah}}
                                                     <br>
-                                                    <b>Harga: </b>{{$row->invoice->total}}
+                                                    <b>Harga: </b>{{number_format($row->payment->gross_amount, 0, '.', '.')}}
                                                 </p>
                                                 <ul class="ml-4 mb-0 fa-ul text-muted">
                                                     <li class="small"><span class="fa-li"><i
@@ -87,8 +88,11 @@
                                                 </ul>
                                             </div>
                                             <div class="col-5 text-center">
-                                                <img src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}" alt="user-avatar"
-                                                    class="img-circle img-fluid">
+                                                @php
+                                                $foto = App\Models\Keranjang::where('invoice_id', $row->id)->first();
+                                                @endphp
+                                                <img src="{{asset('assets/'. $foto->produk->foto)}}"
+                                                    alt="user-avatar" class="img-circle img-fluid">
                                             </div>
                                         </div>
                                     </div>
@@ -105,6 +109,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             @endif
                             @endforeach
                         </div>

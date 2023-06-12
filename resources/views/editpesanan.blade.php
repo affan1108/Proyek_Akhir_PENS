@@ -204,22 +204,27 @@
                 <div class="row">
 
                     <div class="col-12 col-sm-6">
-                        <div class="col-12">
-                            <img src="{{asset('assets/'.$data->produk->foto)}}" class="product-image"
-                                alt="Product Image">
+                        <div class="col-12" id="foto">
+                            <img src="{{asset('assets/'.$data->produk->foto)}}" class="product-image" alt="Product Image">
                         </div>
-                        <!-- <div class="col-12 product-image-thumbs">
-                                    <div class="product-image-thumb active"><img src="{{asset('assets/'.$data->foto)}}"
+                                <div class="col-12 product-image-thumbs">
+                                @foreach (App\Models\Warna::all() as $r)
+                                    @if($data->id == $r->hijab_id)
+                                    @if($r->foto != null)
+                                    <div class="product-image-thumb active"><img src="{{asset('assets/'.$r->foto)}}"
+                                            alt="Product Image"></div>
+                                    <!-- <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
-                                            alt="Product Image"></div>
-                                    <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
-                                            alt="Product Image"></div>
-                                </div> -->
+                                            alt="Product Image"></div> -->
+                                    @endif
+                                    @endif
+                                @endforeach
+                                </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
@@ -289,10 +294,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="py-2 mt-4">
+                            <div class="py-2 mt-4" id="harga">
                                 <h2 class="mb-0">
                                     <!-- <input type="hidden" name="harga" value="{{$data->harga}}"> -->
-                                    Rp: {{$data->produk->harga}}
+                                    Rp: {{ old('harga', $data->warna->harga)}}
                                 </h2>
                                 <!-- <h4 class="mt-0">
                                         <small>Ex Tax: $80.00 </small>
@@ -766,6 +771,51 @@
                         });
                     } else {
                         $('#stok').empty();
+                    }
+                });
+                $('select[name="warna_id"]').on('change', function () {
+                    let stokId = $(this).val();
+
+                    if (stokId) {
+                        $.ajax({
+                            url: '/harga/' + stokId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                // <input type="text" id="stok" name="stok">
+                                $('#harga').empty();
+                                $.each(data, function (key, value) {
+                                    $('#harga').append('<h2>Rp. ' + value + '</h2>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('#harga').empty();
+                    }
+                });
+
+                $('select[name="warna_id"]').on('change', function () {
+                    let stokId = $(this).val();
+
+                    if (stokId) {
+                        $.ajax({
+                            url: '/foto/' + stokId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                // <input type="text" id="stok" name="stok">
+                                $('#foto').empty();
+                                $.each(data, function (key, value) {
+                                    var gambarContainer = document.getElementById('foto');
+                                    var imgElement = document.createElement('img');
+                                    imgElement.src = "{{ asset('assets') }}/" + value;
+                                    gambarContainer.appendChild(imgElement);
+
+                                });
+                            }
+                        });
+                    } else {
+                        $('#foto').empty();
                     }
                 });
             });

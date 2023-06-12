@@ -45,7 +45,7 @@
                                 <th scope="col">Nama Layanan</th>
                                 <th scope="col">Biaya</th>
                                 <th scope="col">ETD (Estimates Days)</th>
-                                <th scope="col"></th>
+                                <!-- <th scope="col"></th> -->
                             </tr>
                         </thead>
 
@@ -62,10 +62,10 @@
                                 <td>Rp. {{ number_format($cost['biaya'], 0, '.', '.') }}</td>
                                 <!-- <input type="hidden" name="ongkir" value="{{ $cost['biaya'] }}"> -->
                                 <td>{{ $cost['etd'] }}</td>
-                                <td>
-                                    <!-- <input type="checkbox" id="checkboxPrimary2"> -->
+                                <!-- <td>
+                                    <input type="checkbox" id="checkboxPrimary2">
                                     <input type="radio" id="radioPrimary3" name="ongkir" value="{{ $cost['biaya'] }}">
-                                </td>
+                                </td> -->
                             </tr>
 
                             @endforeach
@@ -74,10 +74,10 @@
 
 
                     </table>
-                    <button type="submit" class="btn btn-primary float-right mr-2">Pilih</button>
+                    <!-- <button type="submit" class="btn btn-primary float-right mr-2">Pilih</button> -->
                 </form>
 
-                <a href="{{ route('invoice') }}"><button class="btn btn-danger float-right" style="margin-right: 5px;">
+                <a href="/dashboard"><button class="btn btn-danger float-right" style="margin-right: 5px;">
                         👈 Kembali
                     </button></a>
             </div>

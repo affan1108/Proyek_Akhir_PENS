@@ -66,10 +66,28 @@
                                         <!-- Product details-->
                                         <div class="card-body p-4">
                                             <div class="text-center">
+                                                @foreach (App\Models\Warna::all() as $r)
+                                                @if($row->id == $r->hijab_id)
+                                                @if($r->stok < 1)
+                                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Habis</div>
+                                                @endif
+                                                @endif
+                                                @endforeach
                                                 <!-- Product name-->
                                                 <h5 class="fw-bolder">{{$row->nama}}</h5>
                                                 <!-- Product price-->
-                                                Rp. {{$row->harga}}
+                                                @foreach (App\Models\Warna::all() as $r)
+                                                @if($row->id == $r->hijab_id)
+                                                @php
+                                                $cpty = $row->warna->count('stok');
+                                                $min = $row->warna->min('harga');
+                                                $max = $row->warna->max('harga');
+                                                @endphp
+                                                <!-- <option value="{{ $r->id }}">{{ $min }} - {{ $max }}</option> -->
+                                                @endif
+                                                @endforeach
+                                                <span value="#">Rp. {{ number_format($min, 0, '.', '.') }}</span>
+                                                
                                             </div>
                                         </div>
                                         <!-- Product actions-->

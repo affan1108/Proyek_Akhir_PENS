@@ -16,6 +16,7 @@ use App\Models\Payment;
 use App\Models\Riwayat;
 use App\Models\Kas;
 use Auth;
+use Carbon\Carbon;
 
 class MenuController extends Controller
 {
@@ -27,7 +28,7 @@ class MenuController extends Controller
     }
 
     public function pesanansaya() {
-        $data = Invoice::with('payment')->orderBy('created_at', 'DESC')->where('user_id', Auth::user()->id)->paginate(10);
+        $data = Invoice::orderBy('created_at', 'DESC')->where('user_id', Auth::user()->id)->paginate(10);
         return view("pesanansaya", compact('data'));
     }
 
@@ -38,6 +39,7 @@ class MenuController extends Controller
     public function viewpesanan($id)
     {
         $data = Invoice::find($id);
+        $pay = Payment::all();
 
         // Set your Merchant Server Key
         \Midtrans\Config::$serverKey = 'SB-Mid-server-bLySRwVU1rLQ2e80YHvoIIbF';
@@ -62,7 +64,7 @@ class MenuController extends Controller
         );
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
-        return view('viewpesanan', ['snapToken'=>$snapToken, 'data'=>$data]);
+        return view('viewpesanan', ['snapToken'=>$snapToken, 'data'=>$data, 'pay'=>$pay]);
 
         // $data = Payment::find($id);
         // return view('viewpesanan',compact('data'));
@@ -78,13 +80,15 @@ class MenuController extends Controller
     }
 
     public function riwayatpesanan() {
-        $data = Payment::orderBy('rating', 'DESC')->where([['diterima', '=', '1'],['rating', '!=', 'null']])->paginate(6);
+        $cart = Keranjang::all()->pluck('invoice_id');
+        $data = Payment::orderBy('rating', 'DESC')->whereIn('id', $cart)->where([['diterima', '=', '1'],['rating', '!=', 'null']])->paginate(6);
         // return view("pesanansaya", compact('data'));
         return view("riwayatpesanan", compact('data'));
     }
 
     public function penilaianpesanan() {
-        $data = Payment::all();
+        $cart = Keranjang::all()->pluck('invoice_id');
+        $data = Invoice::with('payment')->whereIn('id', $cart)->orderBy('id', 'ASC')->paginate(6);
         return view("penilaianpesanan", compact('data'));
     }
 
@@ -99,11 +103,17 @@ class MenuController extends Controller
     }
 
     public function daftarpesanan() {
-        $data = Invoice::orderBy('id', 'ASC')->paginate(6);
-        return view("daftarpesanan", compact('data'));
+        $cart = Keranjang::all()->pluck('invoice_id');
+        $data = Invoice::with('payment')->whereIn('id', $cart)->orderBy('id', 'ASC')->paginate(6);
+        $items = Invoice::with('payment')->onlyTrashed()->orderBy('id', 'ASC')->paginate(6);
+        return view("daftarpesanan", compact('data','items','cart'));
     }
 
     public function daftarpenilaian() {
+        // $data = Payment::where('rating','!=',null)->pluck('id');
+        // $invoice = Invoice::where('payment_id', $data)->pluck('id');
+        // $cart = Keranjang::where('invoice_id', $invoice)->get();
+        // dd($cart);
         $data = Payment::paginate(10);
         return view("daftarpenilaian", compact('data'));
     }
@@ -130,7 +140,7 @@ class MenuController extends Controller
     }
 
     public function report() {
-        $order = Payment::select(
+        $order = Invoice::select(
             DB::raw("(COUNT(*)) as count"),
             DB::raw('MONTH(created_at) as month')
         )
@@ -139,12 +149,76 @@ class MenuController extends Controller
         ->orderBy('month')
         ->get();
 
+        $pay = Payment::select(
+            DB::raw("(COUNT(*)) as count"),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->where('diterima', 1)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $items = Invoice::select(
+            DB::raw("(COUNT(*)) as count"),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->onlyTrashed()
+        ->get();
+
+        // $paymentID = Payment::all()->pluck('id');
+        // dd($paymentID);
+        // $hppInvoice = Invoice::where('payment_id', '!=', null)->whereIn('payment_id', $paymentID)->sum('hpp');
+        // dd($hppInvoice);
+
+        $monthlyProfits = Payment::select(
+            DB::raw('MONTH(created_at) as month'), 
+            DB::raw("SUM(gross_amount) as total_profit")
+        )
+        ->whereYear('created_at', date('Y'))
+        ->where('diterima', '!=', null)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $donutChart = [];
+        
+        for($j=1; $j<=12; $j++){
+            $months = date('F',mktime(0,0,0,$j,1));
+
+            array_push($donutChart,$months);
+        }
+
+        $chartData = [];
+        $chartColors = [];
+
+        foreach ($monthlyProfits as $item) {
+            $chartData[] = $item->value; // Mengambil nilai yang ingin ditampilkan di chart
+            $chartColors[] = $item->color; // Mengambil warna untuk setiap data
+        }
+
         $labels = [];
         $val = [];
+        $vals = [];
+        $cancel = [];
+        
 
         for($i=1; $i<=12; $i++){
             $month = date('F',mktime(0,0,0,$i,1));
             $count = 0;
+            $coun = 0;
+            $x = 0;
+            $y = date('F',mktime(0,0,0,$i,1));
+
+            foreach($monthlyProfits as $monthly){
+                if($monthly->month == $i){
+                    $y = $monthly->count;
+                    break;
+                }
+            }
 
             foreach($order as $pesan){
                 if($pesan->month == $i){
@@ -153,23 +227,66 @@ class MenuController extends Controller
                 }
             }
 
+            foreach($items as $item){
+                if($item->month == $i){
+                    $coun = $item->count;
+                    break;
+                }
+            }
+
+            foreach($pay as $pays){
+                if($pays->month == $i){
+                    $x = $pays->count;
+                    break;
+                }
+            }
+
             array_push($labels,$month);
             array_push($val,$count);
+            array_push($cancel,$coun);
+            array_push($vals,$x);
         }
 
         $datasets = [
             [
-                'label' => 'Jumlah Order Masuk',
+                'label' => 'Order Masuk',
                 'data' => $val,
+            ],
+
+            [
+                'label' => 'Order Dibatalkan',
+                'data' => $cancel,
+            ],
+
+            [
+                'label' => 'Order Sukses',
+                'data' => $vals,
             ]
         ];
 
-        // dd($data);
-        $data = Payment::all();
+        $now = Carbon::now();
+        $startOfMonth = $now->startOfMonth();
+        $endOfMonth = $now->endOfMonth();
+
+        $revenue = Payment::all()
+            ->sum('gross_amount');
+        $expense = Hijab::all()
+            ->sum('harga');
+
+        
+        // $profitPercentage = ($revenue - $expense) / $revenue * 100;
+
+        $report = Payment::all();
         $kas = Kas::all();
         $user = User::all();
         $produk = Hijab::all();
-        return view('report', compact('data','kas','user','produk','datasets','labels'));
+
+        // dd($monthlyProfits);
+        
+        return view('report', compact('data','kas','user','produk','datasets','labels','report','monthlyProfits','donutChart', 'chartData', 'chartColors', 'months'));
+    
+        
+        // return view('report', compact('data','kas','user','produk','datasets','labels','profitPercentage','report'));
     }
 
     public function ukuran() {

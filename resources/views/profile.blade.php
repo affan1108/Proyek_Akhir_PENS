@@ -55,14 +55,19 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container">
-                <div class="row">
+                    <div class="row">
+                        <div class="callout callout-info">
+                            <h5><i class="fas fa-info"></i> Note:</h5>
+                            Harap Mengisi Form Dibawah Dengan Benar, Karena Akan Menjadi Acuan Pengiriman Kami Ketika
+                            Anda Memesan Barang
+                        </div>
                         <div class="col-md-3">
 
                             <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
                                     <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle" src="{{asset('assets/images/user.png')}}"
-                                            alt="User profile picture">
+                                        <img class="profile-user-img img-fluid img-circle"
+                                            src="{{asset('assets/images/user.png')}}" alt="User profile picture">
                                     </div>
                                     <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
                                     <!-- <p class="text-muted text-center">Software Engineer</p> -->
@@ -110,13 +115,65 @@
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
-                                                <label for="name"><i class="fas fa-user-alt mr-1"></i> Name</label>
+                                                <label for="name">
+                                                    <i class="fas fa-user-alt mr-1"></i>
+                                                    Name
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#nameModal"
+                                                        data-bs-popup="tooltip">
+                                                        <span>
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                    </a>
+                                                    <div class="modal fade" id="nameModal" tabindex="-1"
+                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Penjelasan</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Pastikan Nama Yang Anda Isi Adalah Nama Asli
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
                                                 <input type="text" class="form-control" id="name" name="name"
                                                     value="{{ Auth::user()->name }}">
                                                 <br>
                                                 <!-- <hr> -->
                                                 <label for="alamat"><i class="fas fa-map-marker-alt mr-1"></i>
-                                                    Alamat</label>
+                                                    Alamat
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#alamatModal"
+                                                        data-bs-popup="tooltip">
+                                                        <span>
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                    </a>
+                                                    <div class="modal fade" id="alamatModal" tabindex="-1"
+                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Penjelasan</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Pastikan Alamat Yang Anda Isi Adalah Alamat Asli
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
                                                 <!-- <strong><i class="fas fa-map-marker-alt mr-1"></i> Alamat</strong> -->
                                                 <input type="text" class="form-control" id="alamat" name="alamat"
                                                     value="{{ Auth::user()->alamat }}"
@@ -124,14 +181,65 @@
                                                 <br>
                                                 <!-- <hr> -->
                                                 <label for="nomer"><i class="fas fa-phone-alt mr-1"></i> Nomer
-                                                    Telepon</label>
+                                                    Telepon
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#nomorModal"
+                                                        data-bs-popup="tooltip">
+                                                        <span>
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                    </a>
+                                                    <div class="modal fade" id="nomorModal" tabindex="-1"
+                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Penjelasan</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Pastikan Nomer Yang Anda Isi Adalah Nomer Asli Atau Nomer Yang Masih Aktif
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
                                                 <!-- <strong><i class="fas fa-phone-alt mr-1"></i> Nomor Telepon</strong> -->
                                                 <input type="number" class="form-control" id="nomer" name="nomer"
                                                     value="{{ Auth::user()->nomer }}"
                                                     placeholder="Masukkan Nomer Telepon">
                                                 <br>
                                                 <!-- <hr> -->
-                                                <label for="lainnya"><i class="fas fa-info"></i> Lainnya</label>
+                                                <label for="lainnya"><i class="fas fa-info"></i> 
+                                                Lainnya
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#iModal"
+                                                        data-bs-popup="tooltip">
+                                                        <span>
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </span>
+                                                    </a>
+                                                    <div class="modal fade" id="iModal" tabindex="-1"
+                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Penjelasan</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Isi kolom berikut dengan patokan rumah anda seperti warna cat rumah, nomor rumah, dan lain - lain
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
                                                 <!-- <strong><i class="fas fa-info"></i> Lainnya</strong> -->
                                                 <input type="text" class="form-control" id="lainnya" name="lainnya"
                                                     value="{{ Auth::user()->lainnya }}"
@@ -193,7 +301,8 @@
                             // <input type="text" id="stok" name="stok">
                             $('#stok').empty();
                             $.each(data, function (key, value) {
-                                $('#stok').append('<span>Jumlah Stok '+ value +'</span>');
+                                $('#stok').append('<span>Jumlah Stok ' + value +
+                                    '</span>');
                             });
                         }
                     });

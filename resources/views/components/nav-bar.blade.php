@@ -21,20 +21,51 @@
                         class="dropdown-toggle {{'/pesanansaya'  == request()->path() || 'dashboard/penilaianpesanan'  == request()->path() || 'dashboard/riwayatpesanan'  == request()->path()? 'nav-link active' : 'nav-link' }}">
                         Pages
                         <span>
-                            @php
-                            $a = App\Models\Invoice::all()->count();
+                        @php
+                            $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
+                            $b = App\Models\Payment::where('diterima', 0)->count();
+                            $c = App\Models\Invoice::where('payment_id', null)->count();
+                            $d = $b + $c;
+                            $e = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
+                            1)->where('rating', null)->count();
                             @endphp
-                            ({{$a}})
+                            ({{$d + $e}})
+                            <!-- @php
+                            $sdata = App\Models\Invoice::all();
+                            $b = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
+                            1)->where('rating', null)->count();
+                            @endphp
+                            @foreach($sdata as $data)
+                            @if($data->payment_id != null)
+                            @if($data->payment->diterima == 0)
+                            ({{$data->count() + $b}})
+                            @endif
+                            @endif
+                            @endforeach -->
                         </span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item {{'/pesanansaya' == request()->path() ? 'active' : '' }}"
                                 href="/pesanansaya">Pesanan Saya
                                 <span class="float-right">
-                                    @php
-                                    $data = App\Models\Invoice::all()->count();
+                                @php
+                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
+                                    $b = App\Models\Payment::where('diterima', 0)->count();
+                                    $c = App\Models\Invoice::where('payment_id', null)->count();
+                                    $d = $b + $c;
                                     @endphp
-                                    ({{$data}})
+                                    ({{$d}})    
+                                <!-- @php
+                                    $pay = App\Models\Payment::where('diterima', 0)->pluck('id');
+                                    $sdata = App\Models\Invoice::all();
+                                    @endphp
+                                    @foreach($sdata as $data)
+                                    @if($data->payment_id != null)
+                                    @if($data->payment->diterima == 0)
+                                    ({{$data->count()}})
+                                    @endif
+                                    @endif
+                                    @endforeach -->
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/penilaianpesanan' == request()->path() ? 'active' : '' }}"
@@ -92,12 +123,13 @@
                                 href="/dashboard/daftarpesanan">Daftar Pesanan
                                 <span class="float-right">
                                     @php
-                                    $data = App\Models\Invoice::all()->count();
+                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
+                                    $b = App\Models\Payment::where('diterima', 0)->count();
+                                    $c = App\Models\Invoice::where('payment_id', null)->count();
+                                    $d = App\Models\Invoice::onlyTrashed()->count();
+                                    $e = $b + $c +$d;
                                     @endphp
-                                    @if($data == 0)
-                                    @else
-                                    ({{$data}})
-                                    @endif
+                                    ({{$e}})
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/daftarproduk' == request()->path() ? 'active' : '' }}"
@@ -140,7 +172,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item {{'dashboard/warna' == request()->path() ? 'active' : '' }}"
-                                href="dashboard/warna">Tabel Warna</a></li>
+                                href="/dashboard/warna">Tabel Warna</a></li>
                         <li><a class="dropdown-item {{'dashboard/user' == request()->path() ? 'active' : '' }}"
                                 href="/dashboard/user">Tabel User</a></li>
                         <li><a class="dropdown-item {{'dashboard/payment' == request()->path() ? 'active' : '' }}"
@@ -207,41 +239,43 @@
                 @endif
             </ul>
             @if(Auth::user()->name != 'admin')
-            <div class="navbar-nav mb-lg-0  float-right">
-                @php
-                $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
-                null)->count();
-                @endphp
-                <div class="col-3 mt-2">
-                    <!-- navbar cart start -->
-                    <div class="navbar-cart">
-                        <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
-                            <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
-                            <!-- <i class="lni lni-cart"></i> -->
-                            @if($data > 0)
-                            <span class="icon-text text-style-1">
-                                {{$data}}
-                            </span>
-                            @else
-                            @endif
-                        </a>
-                    </div>
-                    <!-- navbar cart Ends -->
-                </div>
-                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
-                    <li class="nav-item dropdown">
-                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link">
-                            <button
-                                class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
-                                <i class="fas fa-user"></i>
-                                {{Auth::user()->name}}
-                            </button>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
-                                    href="/dashboard/profile">Akun Saya</a></li>
-                            <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                <li class="nav-item dropdown">
+                    <div class="navbar-nav mb-lg-0">
+                        @php
+                        $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                        null)->count();
+                        @endphp
+                        <div class="col-3 mt-2">
+                            <!-- navbar cart start -->
+                            <div class="navbar-cart">
+                                <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
+                                    <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
+                                    <!-- <i class="lni lni-cart"></i> -->
+                                    @if($data > 0)
+                                    <span class="icon-text text-style-1">
+                                        {{$data}}
+                                    </span>
+                                    @else
+                                    @endif
+                                </a>
+                            </div>
+                            <!-- navbar cart Ends -->
+                        </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        class="nav-link">
+                        <button
+                            class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
+                            <i class="fas fa-user"></i>
+                            {{Auth::user()->name}}
+                        </button>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
+                                href="/dashboard/profile">Akun Saya</a></li>
+                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
                                 href="/keranjang">Keranjang
                                 <span class="float-right">
                                     @php
@@ -253,31 +287,31 @@
                                     @endif
                                 </span>
                             </a></li> -->
-                            <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
+                        <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
+                                href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                                                         document.getElementById('logout-form').submit();">Logout</a></li>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </ul>
-                    </li>
-                </ul>
-                @else
-                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
-                    <li class="nav-item dropdown">
-                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link">
-                            <button
-                                class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
-                                <i class="fas fa-user"></i>
-                                {{Auth::user()->name}}
-                            </button>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
-                                    href="/dashboard/profile">Akun Saya</a></li>
-                            <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </ul>
+                </li>
+            </ul>
+            @else
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        class="nav-link">
+                        <button
+                            class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
+                            <i class="fas fa-user"></i>
+                            {{Auth::user()->name}}
+                        </button>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
+                                href="/dashboard/profile">Akun Saya</a></li>
+                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
                                 href="/keranjang">Keranjang
                                 <span class="float-right">
                                     @php
@@ -289,18 +323,18 @@
                                     @endif
                                 </span>
                             </a></li> -->
-                            <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
-                                    href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
+                        <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
+                                href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                                                         document.getElementById('logout-form').submit();">Logout</a></li>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </ul>
-                    </li>
-                </ul>
-                @endif
-            </div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </ul>
+                </li>
+            </ul>
+            @endif
         </div>
+    </div>
     </div>
 </nav>

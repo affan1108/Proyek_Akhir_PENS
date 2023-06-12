@@ -109,11 +109,11 @@
                             </div>
                             <!-- /.info-box -->
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-header border-0">
                                     <div class="d-flex justify-content-between">
-                                        <h3 class="card-title mt-2">Grafik Bar</h3>
+                                        <h3 class="card-title mt-2">Grafik Order</h3>
                                         <!-- <a href="javascript:void(0);">View Report</a> -->
                                     </div>
                                 </div>
@@ -124,74 +124,157 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header border-0">
+                                    <div class="d-flex justify-content-between">
+                                        <h3 class="card-title mt-2">
+                                            Grafik Pendapatan
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#iModal"
+                                                data-bs-popup="tooltip">
+                                                <span>
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                            </a>
+                                            <div class="modal fade" id="iModal" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                                Keterangan</h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <ul>
+                                                            <li>
+                                                                Bulan : {{$months}}
+                                                            </li>
+                                                        </ul>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-center" style="position: relative; height: 255px;">
+                                        <canvas id="profitChart" height="300" style="height: 300px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Report</h3>
+                                    <form action="/filter" method="get" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row pb-3">
+                                            <div class="col-md-5 pt-4">
+                                                <h3 class="card-title">Report</h3>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Start Date :</label>
+                                                <input type="date" name="start_date" class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>End Date :</label>
+                                                <input type="date" name="end_date" class="form-control">
+                                            </div>
+                                            <div class="col-md-1 pt-4 mt-2">
+                                                <button type="submit" class="btn btn-primary">Filter</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
+
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example1" class="table">
+                                    <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Nama Pembeli</th>
                                                 <th>Nama Barang</th>
                                                 <th>Jumlah</th>
-                                                <th>Harga Jual</th>
-                                                <th>Harga Beli</th>
+                                                <th>Tanggal Pembelian</th>
+                                                <th>Total HPP</th>
+                                                <th>Total Harga Beli</th>
                                                 <th>Keuntungan</th>
+                                                <th>%</th>
                                             </tr>
                                         </thead>
+                                        
+                                        <tbody>
                                         @php
                                         $jual = 0;
                                         $beli = 0;
                                         $untung = 0;
+                                        $ongkir = 0;
                                         @endphp
-                                            @foreach($data as $row)
-                                            @if($row->status == 'capture' || $row->status == 'settlement')
-                                        <tbody>
+                                            @foreach($report as $row)
+                                            @if($row->status == 'settlement' || $row->status == 'capture' && $row->diterima != null)
                                             <tr>
                                                 <td>
                                                     {{$row->user->name}}
                                                 </td>
                                                 <td>
-                                                    {{$row->invoice->keranjang->produk->nama}}
+                                                    @php
+                                                    $total = App\Models\Keranjang::where('invoice_id', $row->invoice_id)->pluck('produk_id');
+                                                    $items = App\Models\Hijab::whereIn('id', $total)->pluck('nama');
+                                                    @endphp
+                                                    @foreach($items as $item)
+                                                    {{$item}},
+                                                    @endforeach
                                                 </td>
                                                 <td>
-                                                    {{$row->invoice->keranjang->jumlah}}
+                                                    {{$row->jumlah}}
                                                 </td>
                                                 <td>
-                                                    {{ number_format($row->invoice->keranjang->produk['harga'], 0, '.', '.')}}
+                                                    {{date_format($row->created_at, 'm-d-y')}}
+                                                </td>
+                                                <td>
+                                                    {{number_format($row->invoice->hpp, 0, '.', '.')}}
                                                 </td>
                                                 <td>
                                                     {{ number_format($row['gross_amount'], 0, '.', '.') }}
                                                 </td>
                                                 <td>
-                                                    {{ number_format($row['gross_amount'] - $row->invoice->keranjang->produk['harga'], 0, '.', '.')}}
-                                                    <!-- {{ round((( $row->invoice->keranjang->produk->harga / $row->gross_amount) * 100), PHP_ROUND_HALF_UP)}}% -->
+                                                    {{ number_format(($row['gross_amount'] - $row->invoice->hpp), 0, '.', '.')}}
+                                                </td>
+                                                <td>
+                                                    {{ number_format(($row['gross_amount'] - $row->invoice->hpp) / $row['gross_amount'] * 100, 0, '.', '.')}}%
+                                                    <!-- ($revenue - $expense) / $revenue * 100 -->
                                                 </td>
                                             </tr>
+                                            @endif
+                                            
+                                            @endforeach
                                         </tbody>
                                         @php
-                                        $jual += $row->invoice->keranjang->produk->harga;
-                                        $beli += $row->gross_amount;
-                                        $untung += $row->gross_amount - $row->invoice->keranjang->produk->harga;
-                                        @endphp
-                                            @endif
-                                            @endforeach
-                                        <tfoot>
+                                            $color = App\Models\Keranjang::where('invoice_id', $row->invoice_id)->pluck('warna_id');
+                                            $produk = App\Models\Warna::whereIn('id', $color)->sum('harga');
+                                            $ongkir = $row->invoice->ongkir->ongkir;
+                                            $jual += $produk;
+                                            $beli += $row->gross_amount;
+                                            $untung += $row->gross_amount - $produk;
+                                            @endphp
+                                        <!-- <tfoot>
                                             <tr>
                                                 <th>TOTAL</th>
                                                 <th>-</th>
                                                 <th>-</th>
-                                                <th>{{number_format($jual, 0, '.' ,'.')}}
+                                                <th>-
                                                 </th>
                                                 <th>{{ number_format($beli, 0, '.', '.') }}
                                                 </th>
                                                 <th>{{ number_format( $untung, 0, '.', '.') }}
                                                 </th>
                                             </tr>
-                                        </tfoot>
+                                        </tfoot> -->
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
@@ -481,6 +564,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Page specific script -->
     <script>
+        var ctx = document.getElementById('profitChart').getContext('2d');
+        var monthlyProfits = @json($monthlyProfits);
+
+        var chartData = {
+            // labels: {!!json_encode($donutChart)!!},
+            datasets: [{
+                data: monthlyProfits.map(data => data.total_profit),
+            }]
+        };
+
+        var chartOptions = {
+            // Define chart options (e.g., title, legend, etc.)
+        };
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: chartData,
+            options: chartOptions
+        });
+    </script>
+    <script>
         var ctx = document.getElementById('chart').getContext('2d');
         var orderChart = new Chart(ctx, {
             type: 'bar',
@@ -490,6 +594,7 @@
             },
         });
 
+        
     </script>
     <script>
         $(function () {

@@ -52,8 +52,8 @@
                         class="nav-link dropdown-toggle">Pages</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/pesanansaya">Pesanan Saya</a></li>
-                        <li><a class="dropdown-item" href="/penilaianpesanan">Penilaian Pesanan</a></li>
-                        <li><a class="dropdown-item" href="/riwayatpesanan">Riwayat Pesanan</a></li>
+                        <li><a class="dropdown-item" href="/dashboard/penilaianpesanan">Penilaian Pesanan</a></li>
+                        <li><a class="dropdown-item" href="/dashboard/riwayatpesanan">Riwayat Pesanan</a></li>
                         <!-- <li>
                                     <hr class="dropdown-divider" />
                                 </li>

@@ -1,0 +1,11 @@
+$proID = Keranjang::where('id', $request->checkbox)->pluck('produk_id');
+                // dd($proID);
+                $cart = Keranjang::where('id', $request->checkbox)->where('produk_id', $proID)->pluck('warna_id');
+                // dd($cart);
+                $cpty = Warna::where('id', $cart)->pluck('stok');
+                $sum = Keranjang::whereIn('id', $request->checkbox)->pluck('jumlah');
+                // dd($sum);
+                if( $sum > $cpty){
+                    return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok')->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');;  
+                }
+                else {

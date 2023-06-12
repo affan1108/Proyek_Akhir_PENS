@@ -69,7 +69,7 @@
                                 </button>
                             </div>
                         </div> -->
-                        <div class="card-body p-0">
+                        <div class="card-body p-0 table-responsive">
                             <table class="table table-striped projects">
                                 <thead>
                                     <tr>
@@ -108,7 +108,7 @@
                                                 {{ $total }} Produk
                                             </td>
                                             <td>
-                                                {{date_format($row->created_at, 'h:i:s, d-m-y')}}
+                                                {{date_format($row->created_at, ' d-m-y')}}
                                             </td>
                                             <td>{{ $row->total }}</td>
                                             <td class="project-state">
@@ -143,7 +143,7 @@
                                             {{ $total }} Produk
                                         </td>
                                         <td>
-                                            {{date_format($row->created_at, 'h:i:s, d-m-y')}}
+                                            {{date_format($row->created_at, 'd-m-y')}}
                                         </td>
                                         <td>{{ $row->total }}</td>
                                         <td class="project-state">

@@ -126,25 +126,22 @@
                                                         <input type="name" class="form-control" id="exampleInputName"
                                                             placeholder="Masukkan Nama" name="nama">
                                                     </div>
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <label for="exampleInputHarga">Harga</label>
                                                         <input type="text" class="form-control" id="exampleInputHarga"
                                                             placeholder="Masukkan Harga" name="harga">
-                                                    </div>
+                                                    </div> -->
                                                     <!-- <div class="form-group">
-                                                        <label>Ukuran</label>
-                                                        <div class="select2-green">
-                                                            <select class="select2" multiple="multiple"
-                                                                data-placeholder="Pilih Ukuran"
-                                                                data-dropdown-css-class="select2-green"
-                                                                style="width: 100%;" name="ukuran[]">
-                                                                @foreach (\App\Models\Ukuran::all() as $r)
-                                                                <option value="{{ $r->nama }}"
-                                                                    {{ $r->id==@$dt->ukuran? 'selected' : '' }}>
-                                                                    {{ $r->nama }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                        <label class="control-label">Sale *</label>
+                                                        <select class="form-control select2" name="sale" id="field_versi">
+                                                            <option value="ya">Ya</option>
+                                                            <option value="tidak">Tidak</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group display-hide" id="field_lokasi_asli">
+                                                        <label class="control-label">Potongan Harga *</label>
+                                                            <input type="text" class="form-control" id="exampleInputHarga"
+                                                                placeholder="Masukkan Potongan Harga" name="harga">
                                                     </div> -->
                                                     <a class="btn btn-primary" onclick="stepper.next()">Next</a>
                                                 </div>
@@ -213,6 +210,14 @@
     <script src="{{asset('plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
     <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
     <script>
+        $('#field_versi').change(function(e) {
+            e.preventDefault();
+            if ($(this).val() == 'ya') {
+                $('#field_lokasi_asli').show();
+            } else {
+                $('#field_lokasi_asli').hide();
+            }
+        });
       $('#summernote').summernote({
         placeholder: 'Hello Bootstrap 5',
         tabsize: 2,

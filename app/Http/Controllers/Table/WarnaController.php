@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Table;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Warna;
@@ -11,6 +12,15 @@ class WarnaController extends Controller
 {
     public function insertwarna(Request $request){
         $data = $request->all();
+        if($request->hasFile('foto')){
+            // $imageName = $data['foto'].'-foto-'.time().rand(1,1000).'.'.$foto->extension();
+            // $foto->move(public_path('assets'),$imageName);
+            $data['foto']=$request->file('foto')->getClientOriginalName();
+            // $request->file('foto')->move('assets/', $request->file('foto')->getClientOriginalName());
+            // $data->foto = $request->file('foto')->getClientOriginalName();
+            // $data->save();
+        }
+        
         Warna::create($data);
         Session::flash('status', 'Data Berhasil Ditambahkan');
         return redirect()->route('tables.warna');

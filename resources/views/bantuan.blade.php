@@ -314,7 +314,7 @@
                     <div class="row">
                         <div class="col-12 mt-3 text-center">
                             <p class="lead">
-                                <a href="#">Hubungi Kami</a>,
+                                <a href="/mail">Hubungi Kami</a>,
                                 jika kamu punya pertanyaan lain<br />
                             </p>
                         </div>

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class CreateKeranjangsTable extends Migration
 {
@@ -32,7 +33,9 @@ class CreateKeranjangsTable extends Migration
             $table->boolean('payment')->nullable();
             $table->string('kurir')->nullable();
             $table->string('ongkir')->nullable();
-            $table->timestamps();
+            $table->softDeletes();
+            $table->timestamp('created_at')->default(Carbon::now());
+            $table->timestamp('updated_at')->default(Carbon::now())->nullable();
         });
     }
 

@@ -142,7 +142,7 @@
                                                     @csrf
                                                     <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
                                                         <input type="hidden" name="invoice_id" value="{{$data->id}}">
-                                                        <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                                        <!-- <input type="hidden" name="warna_id" value="{{$data->warna_id}}"> -->
                                                         <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
                                                         <input type="hidden" name="diterima" value="0">
                                                         <input type="hidden" name="json" id="json_callback">
@@ -157,7 +157,7 @@
                                                 <!-- <td>{{$data->ukuran}}</td> -->
                                                 <!-- <td>Rp. {{$data->harga}}</td> -->
                                                 <td>
-                                                    {{$r->produk->harga}}
+                                                    {{$r->warna->harga}}
                                                 </td>
                                                 <!-- <td>
                                                 @if($data->diskon == null)
@@ -179,7 +179,7 @@
                                                         </tr> -->
                                         </tbody>
                                         @php
-                                        $total += $r->produk->harga * $r->jumlah;
+                                        $total += $r->warna->harga * $r->jumlah;
                                         $jumlah += $r->jumlah;
                                         @endphp
                                         @endif
@@ -207,7 +207,7 @@
                                     <!-- </div> -->
                                 </div>
                                 <!-- /.col -->
-                                <div class="col-6">
+                                <div class="col-12">
                                     <p class="lead">Billing :</p>
                                     <div class="table-responsive">
                                         <table class="table">
@@ -322,10 +322,11 @@
 
         <!-- Main Footer -->
         @include('components.footer')
-        @include('sweetalert::alert')
+        
     </div>
     <!-- ./wrapper -->
 
+    @include('sweetalert::alert')
     <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->

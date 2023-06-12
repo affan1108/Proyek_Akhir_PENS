@@ -12,6 +12,7 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Riwayat;
 use App\Models\Kas;
+use Carbon\Carbon;
 // use Auth;
 
 /*
@@ -36,7 +37,7 @@ Route::get('/dashboard', function () {
     $data = Hijab::paginate(4);
     $carts = Keranjang::all();
     if(Auth::user()->name == 'admin'){
-        $order = Payment::select(
+        $order = Invoice::select(
             DB::raw("(COUNT(*)) as count"),
             DB::raw('MONTH(created_at) as month')
         )
@@ -45,12 +46,76 @@ Route::get('/dashboard', function () {
         ->orderBy('month')
         ->get();
 
+        $pay = Payment::select(
+            DB::raw("(COUNT(*)) as count"),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->where('diterima', 1)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $items = Invoice::select(
+            DB::raw("(COUNT(*)) as count"),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->onlyTrashed()
+        ->get();
+
+        // $paymentID = Payment::all()->pluck('id');
+        // dd($paymentID);
+        // $hppInvoice = Invoice::where('payment_id', '!=', null)->whereIn('payment_id', $paymentID)->sum('hpp');
+        // dd($hppInvoice);
+
+        $monthlyProfits = Payment::select(
+            DB::raw('MONTH(created_at) as month'), 
+            DB::raw("SUM(gross_amount) as total_profit")
+        )
+        ->whereYear('created_at', date('Y'))
+        ->where('diterima', '!=', null)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        $donutChart = [];
+        
+        for($j=1; $j<=12; $j++){
+            $months = date('F',mktime(0,0,0,$j,1));
+
+            array_push($donutChart,$months);
+        }
+
+        $chartData = [];
+        $chartColors = [];
+
+        foreach ($monthlyProfits as $item) {
+            $chartData[] = $item->value; // Mengambil nilai yang ingin ditampilkan di chart
+            $chartColors[] = $item->color; // Mengambil warna untuk setiap data
+        }
+
         $labels = [];
         $val = [];
+        $vals = [];
+        $cancel = [];
+        
 
         for($i=1; $i<=12; $i++){
             $month = date('F',mktime(0,0,0,$i,1));
             $count = 0;
+            $coun = 0;
+            $x = 0;
+            $y = date('F',mktime(0,0,0,$i,1));
+
+            foreach($monthlyProfits as $monthly){
+                if($monthly->month == $i){
+                    $y = $monthly->count;
+                    break;
+                }
+            }
 
             foreach($order as $pesan){
                 if($pesan->month == $i){
@@ -59,25 +124,70 @@ Route::get('/dashboard', function () {
                 }
             }
 
+            foreach($items as $item){
+                if($item->month == $i){
+                    $coun = $item->count;
+                    break;
+                }
+            }
+
+            foreach($pay as $pays){
+                if($pays->month == $i){
+                    $x = $pays->count;
+                    break;
+                }
+            }
+
             array_push($labels,$month);
             array_push($val,$count);
+            array_push($cancel,$coun);
+            array_push($vals,$x);
         }
 
         $datasets = [
             [
-                'label' => 'Jumlah Order Masuk',
+                'label' => 'Order Masuk',
                 'data' => $val,
+            ],
+
+            [
+                'label' => 'Order Dibatalkan',
+                'data' => $cancel,
+            ],
+
+            [
+                'label' => 'Order Sukses',
+                'data' => $vals,
             ]
         ];
 
-        // dd($data);
-        $data = Payment::all();
+        $now = Carbon::now();
+        $startOfMonth = $now->startOfMonth();
+        $endOfMonth = $now->endOfMonth();
+
+        $revenue = Payment::all()
+            ->sum('gross_amount');
+        $expense = Hijab::all()
+            ->sum('harga');
+
+        
+        // $profitPercentage = ($revenue - $expense) / $revenue * 100;
+
+        $report = Payment::all();
         $kas = Kas::all();
         $user = User::all();
         $produk = Hijab::all();
-        return view('report', compact('data','kas','user','produk','datasets','labels'));
+        $data = Invoice::all();
+
+        // dd($monthlyProfits);
+        
+        return view('report', compact('data','kas','user','produk','datasets','labels','report','monthlyProfits','donutChart', 'chartData', 'chartColors', 'months'));
     }
     else
+        // $pay = Payment::where('diterima', 0)->pluck('id');
+        // // dd($pay);
+        // $data = Invoice::where('payment_id', !null)->count();
+        // dd($data);
         return view('dashboard', compact('data', 'carts'));
 })->middleware(['auth', 'verified']);
 

@@ -8,6 +8,7 @@ use App\Models\Courier;
 use App\Models\Warna;
 use App\Models\Payment;
 use App\Models\Province;
+use App\Models\Invoice;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 use Session;
@@ -18,10 +19,10 @@ class DetailController extends Controller
 {
     public function hijab($id) {
         $data = Hijab::find($id);
-        // $rows = Payment::all();
+        $rows = Invoice::with('payment')->get();
         $couriers   = Courier::pluck('title', 'code');
         $provinces  = Province::pluck('title', 'province_id');
-        return view("detailhijab", compact('data','couriers', 'provinces'));
+        return view("detailhijab", compact('data','couriers', 'provinces','rows'));
     }
 
     public function view($id) {
@@ -35,12 +36,25 @@ class DetailController extends Controller
         return json_encode($city);
     }
 
+    public function getHarga($id)
+    {
+        $city = Warna::where('id', $id)->pluck('harga');
+        return json_encode($city);
+    }
+
+    public function getFoto($id)
+    {
+        $city = Warna::where('id', $id)->pluck('foto');
+        return json_encode($city);
+    }
+
     public function insert(Request $request) {
         $data = $request->validate([
             'nama' => 'required',
             'harga' => 'required',
             'deskripsi' => 'required',
             'foto' => 'required',
+            'sale' => 'required',
             // 'ukuran' => 'required',
             // 'warna' => 'required',
         ]);
@@ -63,7 +77,7 @@ class DetailController extends Controller
         }
         Session::flash('status', 'Data Berhasil Ditambahkan');
         $data->save();
-        return redirect('daftarproduk');
+        return redirect('dashboard/daftarproduk');
         // $data->update();
         // return redirect()->route('daftarproduk')->with('toast_success', 'Data Berhasil Di update');
         // $data = $request->all();
@@ -137,7 +151,7 @@ class DetailController extends Controller
         if($data){
             $data->update();
             Session::flash('status', 'Data Berhasil Di update');
-            return redirect('daftarproduk');
+            return redirect('dashboard/daftarproduk');
         }
         return redirect()->back();
     }

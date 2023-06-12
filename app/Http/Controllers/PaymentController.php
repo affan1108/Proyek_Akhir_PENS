@@ -9,6 +9,7 @@ use App\Models\Keranjang;
 use App\Models\Invoice;
 use Session;
 use DB;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -49,7 +50,7 @@ class PaymentController extends Controller
         $order->status = $json->transaction_status;
         $order->user_id = $request->user_id;
         $order->invoice_id = $request->invoice_id;
-        $order->warna_id = $request->warna_id;
+        // $order->warna_id = $request->warna_id;
         $order->jumlah = $request->jumlah;
         $order->diterima = isset($request->diterima) ? $request->diterima : null;
         // $order->number = $request->get('number');
@@ -98,26 +99,57 @@ class PaymentController extends Controller
 
     public function batal(Request $request, $id){
         // dd($request);
-        $order = Invoice::find($id);
+        
+
+        $order = Invoice::with('keranjang')->find($id);
         $order->warna_id = $request->warna_id;
         $order->jumlah = $request->jumlah;
-        $cpty = Warna::where('id', $request->warna_id)->sum('stok');
-        $color = [
-            'id' => $request->warna_id,
-            'stok' => round($cpty + ($request->jumlah), PHP_ROUND_HALF_UP),
-        ];
+
+        $delete = Keranjang::where('invoice_id', $id);
+        $cart = Keranjang::where('invoice_id', $id)->pluck('warna_id');
+        // dd($cart);
+        $qty = Keranjang::where('invoice_id', $id)->pluck('jumlah');
+        // dd($qty);
+        $cpty = Warna::whereIn('id', $cart)->pluck('stok');
+        // dd($cpty);
+
+        $result = [];
+        if (count($cpty) === count($qty)) {
+            $count = count($cpty);
+            for ($i = 0; $i < $count; $i++) {
+                $result[] = $cpty[$i] + $qty[$i];
+            }
+            // dd($result);
+            
+            foreach($cart as $key=>$value){
+                foreach($result as $key=>$item){
+                    $min = [
+                        'stok' => $result[$key],
+                    ];
+                    // dd($min);
+                    DB::table('warnas')->where('id', $cart[$key])->update($min);
+                }
+            }
+
+            // dd($min);
+            
+        }
 
         // dd($order, $color);
-        Warna::where('id', $request->warna_id)->update($color);
+        // Warna::where('id', $request->warna_id)->update($color);
         $order->delete();
+        $delete->delete();
 
+        // $delete = Invoice::where('id', $id)->pluck('deleted_at');
+        // dd($delete);
         Session::flash('status', 'Pesanan Berhasil Dibatalkan');
         return redirect('pesanansaya');
     }
 
     public function nilai($id){
-        $data = Payment::find($id);
-        return view('nilaipesanan',compact('data'));
+        $data = Invoice::find($id);
+        $pay = Payment::all();
+        return view('nilaipesanan',['data' => $data,'pay' => $pay]);
     }
 
     public function updateresi(Request $request, $id){
@@ -130,14 +162,17 @@ class PaymentController extends Controller
 
     public function penilaian(Request $request, $id)
     {
-        $data = Payment::findOrFail($id);
-        $data->rating = $request->rating;
-        $data->foto = $request->foto;
-        $data->deskripsi = $request->deskripsi;
+        // $data = Invoice::findOrFail($id);
+        // dd($id);
+        $pay = Payment::where('invoice_id', $id)->first();
+        // dd($pay);
+        $pay->rating = $request->rating;
+        $pay->foto = $request->foto;
+        $pay->deskripsi = $request->deskripsi;
         if($request->hasFile('foto')){
-            $data['foto']=$request->file('foto')->getClientOriginalName();
+            $pay['foto']=$request->file('foto')->getClientOriginalName();
         }
-        $data->update();
+        $pay->update();
         return redirect()->route('riwayatpesanan')->with('success', 'Data Berhasil Di update');
     }
 

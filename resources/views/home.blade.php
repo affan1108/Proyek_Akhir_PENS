@@ -105,15 +105,31 @@
                     @foreach($data as $row)
                     <div class="col mb-5">
                         <div class="card h-100">
+                            
                             <!-- Product image-->
                             <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..." />
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">{{$row->nama}}</h5>
-                                    <!-- Product price-->
-                                    Rp. {{$row->harga}}
+                                <div class="text-center">
+                                                <!-- Product name-->
+                                                <h5 class="fw-bolder">{{$row->nama}}</h5>
+                                                <!-- Product price-->
+                                                @foreach (App\Models\Warna::all() as $r)
+                                                @if($row->id == $r->hijab_id)
+                                                @php
+                                                $min = $row->warna->min('harga');
+                                                $max = $row->warna->max('harga');
+                                                @endphp
+                                                <!-- <option value="{{ $r->id }}">{{ $min }} - {{ $max }}</option> -->
+                                                @endif
+                                                @endforeach
+                                                @if($row->warna->count() > 1)
+                                                <option value="#">Rp. {{ number_format($min, 0, '.', '.') }} - {{ number_format($max, 0, '.', '.') }}</option>
+                                                @else
+                                                <option value="#">Rp. {{ number_format($row->warna->sum('harga'), 0, '.', '.') }}</option>
+                                                @endif
+                                            </div>
                                 </div>
                             </div>
                             <!-- Product actions-->

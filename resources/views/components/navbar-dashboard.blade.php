@@ -1,9 +1,4 @@
-<!--====== Line Icons CSS ======-->
-<link rel="stylesheet" href="{{asset('estore/assets/css/LineIcons.css')}}">
-
-<!--====== Material Design Icons CSS ======-->
-<link rel="stylesheet" href="{{asset('estore/assets/css/materialdesignicons.min.css')}}">
-<nav class="main-header navbar navbar-expand-md navbar-light navbar-light">
+<nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
     <div class="container">
         <a href="/dashboard" class="navbar-brand">
             <img src="{{asset('assets/images/logo.png')}}" alt="AdminLTE Logo"
@@ -27,9 +22,14 @@
                         Pages
                         <span>
                             @php
-                            $a = App\Models\Invoice::all()->count();
+                            $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
+                            $b = App\Models\Payment::where('diterima', 0)->count();
+                            $c = App\Models\Invoice::where('payment_id', null)->count();
+                            $d = $b + $c;
+                            $e = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
+                            1)->where('rating', null)->count();
                             @endphp
-                            ({{$a}})
+                            ({{$d + $e}})
                         </span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -37,9 +37,12 @@
                                 href="/pesanansaya">Pesanan Saya
                                 <span class="float-right">
                                     @php
-                                    $data = App\Models\Invoice::all()->count();
+                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
+                                    $b = App\Models\Payment::where('diterima', 0)->count();
+                                    $c = App\Models\Invoice::where('payment_id', null)->count();
+                                    $d = $b + $c;
                                     @endphp
-                                    ({{$data}})
+                                    ({{$d}})
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/penilaianpesanan' == request()->path() ? 'active' : '' }}"
@@ -76,25 +79,6 @@
                         </div>
                     </div>
                 </form>
-                @php
-                $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
-                null)->count();
-                @endphp
-                <div class="col-3">
-                    <!-- navbar cart start -->
-                    <!-- <div class="navbar-cart">
-                        <a class="icon-btn primary-icon-text icon-text-btn" href="javascript:void(0)">
-                            <i class="lni lni-cart"></i>
-                            @if($data > 0)
-                            <span class="icon-text text-style-1">
-                                {{$data}}
-                            </span>
-                            @else
-                            @endif
-                        </a>
-                    </div> -->
-                    <!-- navbar cart Ends -->
-                </div>
                 @else
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -102,11 +86,11 @@
                         Data
                         <span>
                             @php
-                            $data = App\Models\Payment::where('diterima', 0)->where('rating', null)->count();
+                            $data = App\Models\Invoice::with('payment');
                             @endphp
                             @if($data == 0)
                             @else
-                            ({{$data}})
+                            ({{$data->payment_id}})
                             @endif
                         </span>
                     </a>
@@ -115,12 +99,15 @@
                                 href="/dashboard/daftarpesanan">Daftar Pesanan
                                 <span class="float-right">
                                     @php
-                                    $data = App\Models\Payment::where('diterima', 0)->where('rating', null)->count();
+                                    $sdata = App\Models\Invoice::all();
                                     @endphp
-                                    @if($data == 0)
-                                    @else
-                                    ({{$data}})
+                                    @foreach($sdata as $data)
+                                    @if($data->payment_id)
+                                    @if($data->payment->diterima == 0)
+                                    ({{$data->count()}})
                                     @endif
+                                    @endif
+                                    @endforeach
                                 </span>
                             </a></li>
                         <li><a class="dropdown-item {{'dashboard/daftarproduk' == request()->path() ? 'active' : '' }}"
@@ -204,124 +191,30 @@
                 @endif
             </ul>
             <!-- Right navbar links -->
-            <!-- <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>3</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 mr-3 img-circle">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Brad Diesel
-                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">Call me whenever you can...</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
+                    <div class="navbar-nav mb-lg-0">
+                        @php
+                        $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                        null)->count();
+                        @endphp
+                        <div class="col-3 mt-2">
+                            <!-- navbar cart start -->
+                            <div class="navbar-cart">
+                                <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
+                                    <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
+                                    <!-- <i class="lni lni-cart"></i> -->
+                                    @if($data > 0)
+                                    <span class="icon-text text-style-1">
+                                        {{$data}}
+                                    </span>
+                                    @else
+                                    @endif
+                                </a>
                             </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        John Pierce
-                                        <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">I got your message bro</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <div class="media">
-                                <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
-                                <div class="media-body">
-                                    <h3 class="dropdown-item-title">
-                                        Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i
-                                                class="fas fa-star"></i></span>
-                                    </h3>
-                                    <p class="text-sm">The subject goes here</p>
-                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                    </div>
+                            <!-- navbar cart Ends -->
+                        </div>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span >15</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-header">15 Notifications</span>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                    </div>
-                </li>
-            </ul> -->
-            <!-- <a href="/register">
-                    <button class="btn btn-primary mr-3">
-                        Sign Up
-                    </button>
-                    </a> -->
-
-            <!-- <a href="/profile">
-                <button class="btn btn-outline-primary">
-                    <i class="fas fa-user"></i>
-                    {{Auth::user()->name}}
-                </button>
-            </a> -->
-
-            <div class="navbar-nav mb-lg-0  float-right">
-            @php
-                $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
-                null)->count();
-                @endphp
-                <div class="col-3 mt-2">
-                    <!-- navbar cart start -->
-                    <div class="navbar-cart">
-                        <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
-                            <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
-                            <!-- <i class="lni lni-cart"></i> -->
-                            @if($data > 0)
-                            <span class="icon-text text-style-1">
-                                {{$data}}
-                            </span>
-                            @else
-                            @endif
-                        </a>
-                    </div>
-                    <!-- navbar cart Ends -->
-                </div>
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="nav-link">
@@ -356,7 +249,19 @@
                     </ul>
                 </li>
             </ul>
-            </div>
+            <!-- <a href="/register">
+                    <button class="btn btn-primary mr-3">
+                        Sign Up
+                    </button>
+                    </a> -->
+
+            <!-- <a href="/profile">
+                <button class="btn btn-outline-primary">
+                    <i class="fas fa-user"></i>
+                    {{Auth::user()->name}}
+                </button>
+            </a> -->
         </div>
+    </div>
     </div>
 </nav>

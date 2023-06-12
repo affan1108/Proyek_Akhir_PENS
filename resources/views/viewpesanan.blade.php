@@ -96,9 +96,10 @@
                                     <div class="col-sm-4 invoice-col">
                                         Penerima
                                         <address>
-                                            <strong>{{ Auth::user()->name }}</strong><br>
-                                            {{ Auth::user()->alamat }}<br>
-                                            {{ Auth::user()->lainnya }}<br>
+                                            <strong>Nama : {{ Auth::user()->name }}</strong><br>
+                                            Kota/Kabupaten : {{$data->ongkir->kota}}<br>
+                                            Kecamatan : {{ Auth::user()->alamat }}<br>
+                                            Jalan : {{ Auth::user()->lainnya }}<br>
                                             Phone: {{ Auth::user()->nomer }}<br>
                                             <!-- Email: {{ Auth::user()->email }} -->
                                         </address>
@@ -108,10 +109,17 @@
                                         Ekspedisi
                                         <address>
                                             <!-- <b>{{$data->ongkir->kota}}</b><br> -->
+
                                             <b>{{$data->ongkir->kurir}}</b><br>
-                                            Order ID: {{$data->order_id}}<br>
-                                            Tanggal Pemesanan: {{date_format($data->created_at, 'h:i:s, d-m-y') }}<br>
+                                            @foreach($pay as $x)
+                                            @if($x->id == $data->payment_id)
+                                            Order ID: {{$x->order_id}}<br>
+                                            Payment Code: {{$x->payment_code}} <br>
+                                            @endif
+                                            @endforeach
+                                            Tanggal Pemesanan: {{date_format($data->created_at, 'h:i:s, d-m-y') }}
                                             <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+
                                         </address>
                                     </div>
                                     <!-- /.col -->
@@ -174,7 +182,7 @@
                                                     <!-- <td>{{$data->ukuran}}</td> -->
                                                     <!-- <td>Rp. {{$data->harga}}</td> -->
                                                     <td>
-                                                        {{$r->produk->harga}}
+                                                        {{$r->warna->harga}}
                                                     </td>
                                                     <!-- <td>
                                                         {{$data->ongkir->kurir}}
@@ -205,7 +213,7 @@
                                                         </tr> -->
                                             </tbody>
                                             @php
-                                            $total += $r->produk->harga * $r->jumlah;
+                                            $total += $r->warna->harga * $r->jumlah;
                                             $jumlah += $r->jumlah;
                                             @endphp
                                             @endif
@@ -218,76 +226,84 @@
 
                                 <div class="row">
                                     <!-- accepted payments column -->
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         @if(Auth::user()->name == 'admin')
-                                            @if($data->payment_id != null)
-                                                @if($data->payment->status == 'settlement' || $data->payment->status == 'capture')
-                                                    @if($data->payment->resi == null)
-                                                        <form action="/updateresi/{{$data->payment_id}}" method="POST" enctype="multipart/form-data">
-                                                            @csrf
-                                                            <p class="lead">Resi :</p>
-                                                            <div class="select2-green mt-2">
-                                                                <input type="text" name="resi" id="resi" class="form-control">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary float-left mt-2">
-                                                                Simpan
-                                                            </button>
-                                                        </form>
-                                                    @elseif($data->payment->resi != null)
-                                                        <p class="lead">Resi :</p>
-                                                        <div class="select2-green mt-2">
-                                                            <input type="text" name="resi" id="resi" class="form-control"
-                                                                value="{{$data->payment->resi}}" disabled>
-                                                        </div>
-                                                    @endif
-                                                @elseif($data->payment->status == 'pending')
-                                                    <p class="lead">Resi :</p>
-                                                    <div class="select2-green mt-2">
-                                                        <input type="text" name="resi" id="resi" class="form-control"
-                                                        value="Menunggu Pembayaran" disabled>
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <p class="lead">Resi :</p>
-                                                <div class="select2-green mt-2">
-                                                    <input type="text" name="resi" id="resi" class="form-control"
-                                                        value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
-                                                </div>
-                                            @endif
+                                        @if($data->payment_id != null)
+                                        @if($data->payment->status == 'settlement' || $data->payment->status ==
+                                        'capture')
+                                        @if($data->payment->resi == null)
+                                        <form action="/updateresi/{{$data->payment_id}}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <p class="lead">Resi :</p>
+                                            <div class="select2-green mt-2">
+                                                <input type="text" name="resi" id="resi" class="form-control">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary float-left mt-2">
+                                                Simpan
+                                            </button>
+                                        </form>
+                                        @elseif($data->payment->resi != null)
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="{{$data->payment->resi}}" disabled>
+                                        </div>
+                                        @endif
+                                        @elseif($data->payment->status == 'pending')
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="Menunggu Pembayaran" disabled>
+                                        </div>
+                                        @endif
                                         @else
-                                            @if($data->payment_id != null)
-                                                @if($data->payment->status == 'settlement' || $data->payment->status == 'capture')
-                                                    @if($data->payment->resi == null)
-                                                        <p class="lead">Resi :</p>
-                                                        <div class="select2-green mt-2">
-                                                            <input type="text" name="resi" id="resi" class="form-control"
-                                                                value="Dalam Proses Cetak Resi" disabled>
-                                                        </div>
-                                                    @elseif($data->payment->resi != null)
-                                                        <p class="lead">Resi :</p>
-                                                        <div class="select2-green mt-2">
-                                                            <input type="text" name="resi" id="resi" class="form-control"
-                                                                value="{{$data->payment->resi}}" disabled>
-                                                        </div>
-                                                    @endif
-                                                @elseif($data->payment->status == 'pending')
-                                                    <p class="lead">Resi :</p>
-                                                    <div class="select2-green mt-2">
-                                                        <input type="text" name="resi" id="resi" class="form-control"
-                                                        value="Menunggu Pembayaran" disabled>
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <p class="lead">Resi :</p>
-                                                <div class="select2-green mt-2">
-                                                    <input type="text" name="resi" id="resi" class="form-control"
-                                                        value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
-                                                </div>
-                                            @endif
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
+                                        </div>
+                                        @endif
+                                        @else
+                                        @if($data->payment_id != null)
+                                        @if($data->payment->status == 'settlement' || $data->payment->status ==
+                                        'capture')
+                                        @if($data->payment->resi == null)
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="Dalam Proses Cetak Resi" disabled>
+                                        </div>
+                                        @elseif($data->payment->resi != null)
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="{{$data->payment->resi}}" disabled>
+                                        </div>
+                                        @endif
+                                        @elseif($data->payment->status == 'pending')
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="Menunggu Pembayaran" disabled>
+                                        </div>
+                                        @endif
+                                        @else
+                                        <p class="lead">Resi :</p>
+                                        <div class="select2-green mt-2">
+                                            <input type="text" name="resi" id="resi" class="form-control"
+                                                value="Segera Lakukan Pembayaran Terlebih Dahulu" disabled>
+                                        </div>
+                                        @endif
                                         @endif
                                     </div>
                                     <!-- /.col -->
-                                    <div class="col-6">
+
+                                    <!-- /.col -->
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-12">
                                         <p class="lead">Billing :</p>
                                         <div class="table-responsive mt-2">
                                             <table class="table">
@@ -312,7 +328,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <!-- /.col -->
                                 </div>
                                 <!-- /.row -->
 
@@ -350,17 +365,31 @@
                                         </form>
                                         @endif
                                         @elseif($data->payment->status == 'pending' && $data->payment->resi == null)
-                                        <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
-                                            @csrf
-                                            <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
-                                            <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
-                                            <button type="submit" class="btn btn-warning float-right mr-2" disabled>
-                                                Menunggu Pembayaran
-                                            </button>
-                                            <button type="submit" class="btn btn-danger float-left mr-2">
-                                                Batalkan Pesanan
-                                            </button>
-                                        </form>
+                                            @if($data->payment->pdf_url == null)
+                                                <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                                    <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                                    <button class="btn btn-warning float-right mr-2" disabled>
+                                                        Menunggu Pembayaran
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger float-left mr-2">
+                                                        Batalkan Pesanan
+                                                    </button>
+                                                </form>
+                                            @else
+                                            <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                                <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                                <a href="{{$data->payment->pdf_url}}" class="btn btn-warning float-right mr-2">
+                                                    Bayar Sekarang
+                                                </a>
+                                                <button type="submit" class="btn btn-danger float-left mr-2">
+                                                    Batalkan Pesanan
+                                                </button>
+                                            </form>
+                                            @endif
                                         @endif
                                         @else
                                         <form action="/batalkanpesanan/{{$data->id}}" enctype="multipart/form-data">
@@ -389,7 +418,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- /.invoice -->
                         </div><!-- /.col -->
                     </div>

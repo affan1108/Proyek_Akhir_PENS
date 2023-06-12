@@ -62,6 +62,12 @@
                             <h5><i class="fas fa-info"></i> Note:</h5>
                             Silahkan Melengkapi Profil Anda Terlebih Dahulu Agar Dapat Membuat Pesanan
                         </div>
+                        @else
+                        <div class="callout callout-info">
+                            <h5><i class="fas fa-info"></i> Note:</h5>
+                            Pastikan Alamat Dan Ekspedisi Yang Anda Pilih Sesuai Dengan Tempat Tinggal Anda. Jika Tidak,
+                            Anda Bisa Ganti Alamat Terlebih Dahulu
+                        </div>
                         @endif
 
                         <!-- Main content -->
@@ -98,7 +104,7 @@
                                         {{ Auth::user()->alamat }}<br>
                                         {{ Auth::user()->lainnya }}<br>
                                         Phone: {{ Auth::user()->nomer }}<br>
-                                        <a class="btn btn-primary btn-sm" href="/profile">
+                                        <a class="btn btn-primary btn-sm" href="/dashboard/profile">
                                             Edit Alamat
                                         </a>
                                         <!-- @if( Auth::user()->alamat == null && Auth::user()->lainnya == null && Auth::user()->nomer )
@@ -150,7 +156,8 @@
                                             $jumlah = 0;
                                             @endphp
                                             @foreach($rows as $data)
-                                            @if ($data->user->id == Auth::user()->id && $data->keranjang == 1 && $data->payment != 1)
+                                            @if ($data->user->id == Auth::user()->id && $data->keranjang == 1 &&
+                                            $data->payment != 1)
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -166,13 +173,15 @@
                                                         <div class="mt-2">{{$data->jumlah}}</div>
                                                     </td>
                                                     <td>
-                                                        <div class="mt-2">{{$data->produk->nama}}</div>
+                                                        <div class="mt-2">
+                                                            {{$data->produk->nama}}
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <div class="mt-2">{{$data->warna->warna}}</div>
                                                     </td>
                                                     <td>
-                                                        <div class="mt-2">{{$data->produk->harga}}</div>
+                                                        <div class="mt-2">{{$data->warna->harga}}</div>
                                                     </td>
                                                     <td>
                                                         <div class="mt-2"><a class="btn btn-danger btn-sm"
@@ -216,7 +225,7 @@
                                                     </tr> -->
                                             </tbody>
                                             @php
-                                            $total += $data->produk->harga * $data->jumlah;
+                                            $total += $data->warna->harga * $data->jumlah;
                                             $jumlah += $data->jumlah;
                                             @endphp
                                             @endif
@@ -245,39 +254,40 @@
                                                     </td>
                                                 </tr>
                                             </table>
-                                            <a href="/dashboard">
-                                                <button class="btn btn-danger float-left" style="margin-right: 5px;">
-                                                    Batal
-                                                </button>
-                                            </a>
-                                            @if(Auth::user()->alamat == null && Auth::user()->nomer == null &&
-                                            Auth::user()->lainnya == null)
-                                            <button type="submit" class="btn btn-success float-right mr-2" disabled><i
-                                                    class="fas fa-shopping-cart"></i>
-                                                <input type="hidden" name="hitung" value="hitung">
-                                                Buat Pesanan
-                                            </button>
-                                            @else
-                                            <button type="submit" class="btn btn-success float-right mr-2"><i
-                                                    class="far fa-credit-card"></i>
-                                                <input type="hidden" name="hitung" value="hitung">
-                                                Buat Pesanan
-                                            </button>
-                                            @endif
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <!-- <input type="hidden" name="id" value="1"> -->
                                         <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
                                         <input type="hidden" name="ongkir_id" value="{{$ongkir->id}}">
-                                        <input type="hidden" name="keranjang_id" value="{{$data->id}}">
-                                        <input type="hidden" name="warna_id" value="{{$data->warna_id}}">
+                                        <!-- <input type="hidden" name="keranjang_id" value="{{$data->id}}"> -->
+                                        <!-- <input type="hidden" name="warna_id" value="{{$data->warna_id}}"> -->
                                         <input type="hidden" name="jumlah" value="{{$data->jumlah}}">
+                                        <input type="hidden" name="hpp">
                                         <input type="hidden" name="total" value="{{$total + $ongkir->ongkir}}">
 
                                     </div>
                                 </div>
+                                @if(Auth::user()->alamat == null && Auth::user()->nomer == null &&
+                                Auth::user()->lainnya == null)
+                                <button type="submit" class="btn btn-success float-right mr-2" disabled><i
+                                        class="fas fa-shopping-cart"></i>
+                                    <input type="hidden" name="hitung" value="hitung">
+                                    Buat Pesanan
+                                </button>
+                                @else
+                                <button type="submit" class="btn btn-success float-right mr-2"><i
+                                        class="far fa-credit-card"></i>
+                                    <input type="hidden" name="hitung" value="hitung">
+                                    Buat Pesanan
+                                </button>
+                                @endif
                             </form>
+                            <a href="/dashboard">
+                                <button class="btn btn-danger float-left" style="margin-right: 5px;">
+                                    Batal
+                                </button>
+                            </a>
                             <!-- /.row -->
 
                             <!-- this row will not appear when printing -->

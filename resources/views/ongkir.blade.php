@@ -92,6 +92,7 @@
         </div>
     </div>
     @include('components.script')
+    @include('sweetalert::alert')
 
     <!-- <script>
         function cekOngkir(){

@@ -66,10 +66,31 @@
                                         <!-- Product details-->
                                         <div class="card-body p-4">
                                             <div class="text-center">
+                                                @foreach (App\Models\Warna::all() as $r)
+                                                @if($row->id == $r->hijab_id)
+                                                @if($r->stok < 1)
+                                                <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Habis</div>
+                                                @endif
+                                                @endif
+                                                @endforeach
                                                 <!-- Product name-->
                                                 <h5 class="fw-bolder">{{$row->nama}}</h5>
                                                 <!-- Product price-->
-                                                Rp. {{$row->harga}}
+                                                @foreach (App\Models\Warna::all() as $r)
+                                                @if($row->id == $r->hijab_id)
+                                                @php
+                                                $cpty = $row->warna->count('stok');
+                                                $min = $row->warna->min('harga');
+                                                $max = $row->warna->max('harga');
+                                                @endphp
+                                                <!-- <option value="{{ $r->id }}">{{ $min }} - {{ $max }}</option> -->
+                                                @endif
+                                                @endforeach
+                                                @if($min == $max)
+                                                <span value="#">Rp. {{ number_format($min, 0, '.', '.') }}</span>
+                                                @else
+                                                <span value="#">Rp. {{ number_format($min, 0, '.', '.') }} - {{ number_format($max, 0, '.', '.') }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                         <!-- Product actions-->
@@ -81,33 +102,33 @@
                                 </div>
                                 @endforeach
                                 <!-- <div class="col mb-5">
-                        <div class="card h-100">
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                 
-                                    <h5 class="fw-bolder">Special Item</h5>
-                                  
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
+                                    <div class="card h-100">
+                                        <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                                        
+                                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                        
+                                        <div class="card-body p-4">
+                                            <div class="text-center">
+                                            
+                                                <h5 class="fw-bolder">Special Item</h5>
+                                            
+                                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                                    <div class="bi-star-fill"></div>
+                                                    <div class="bi-star-fill"></div>
+                                                    <div class="bi-star-fill"></div>
+                                                    <div class="bi-star-fill"></div>
+                                                    <div class="bi-star-fill"></div>
+                                                </div>
+                                        
+                                                <span class="text-muted text-decoration-line-through">$20.00</span>
+                                                $18.00
+                                            </div>
+                                        </div>
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                        </div>
                                     </div>
-                              
-                                    <span class="text-muted text-decoration-line-through">$20.00</span>
-                                    $18.00
-                                </div>
-                            </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div> -->
+                                </div> -->
                             </div>
                         </div>
                     </section>

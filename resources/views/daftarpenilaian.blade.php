@@ -69,7 +69,7 @@
                                                 <tr>
                                                     <th>Qty</th>
                                                     <th>Nama Pembeli</th>
-                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah</th>
                                                     <th>Warna - Ukuran</th>
                                                     <th>Harga</th>
                                                     <th>Alamat</th>
@@ -77,13 +77,15 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($data as $row)
+                                                @php
+                                                $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                                @endphp
                                                 @if($row->rating != null)
                                                 <tr data-widget="expandable-table" aria-expanded="false">
-                                                    <td>{{$row->invoice->keranjang->jumlah}}</td>
+                                                    <td>{{$total}} Produk</td>
                                                     <td>{{$row->user->name}}</td>
-                                                    <td>{{$row->invoice->keranjang->produk->nama}}</td>
-                                                    <td>{{$row->invoice->keranjang->warna->warna}} -
-                                                        {{$row->invoice->keranjang->warna->ukuran}}</td>
+                                                    <td>{{$row->jumlah}}</td>
+                                                    <td>{{$row->invoice->ongkir->kurir}}</td>
                                                     <td>{{$row->invoice->total}}</td>
                                                     <td>{{$row->user->alamat}}</td>
                                                 </tr>
@@ -136,7 +138,7 @@
                                                             <div class="form-group">
                                                                 <div class="col-6 mt-2 product-image-thumbs">
                                                                     <div class="product-image-thumb active"><img
-                                                                            src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}"
+                                                                            src="{{asset('assets/'.$row->foto)}}"
                                                                             alt="Product Image"></div>
 
                                                                 </div>

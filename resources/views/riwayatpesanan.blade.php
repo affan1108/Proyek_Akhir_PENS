@@ -68,16 +68,14 @@
                                         <div class="card-body pt-0">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="lead"><b>{{$row->invoice->keranjang->produk->nama}}</b>
-                                                    </h2>
+                                                    @php
+                                                    $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                                    @endphp
+                                                    <h2 class="lead"><b>{{$total}} Produk</b></h2>
                                                     <p class="text-muted text-sm">
-                                                        <b>Warna: </b>{{$row->invoice->keranjang->warna->warna}}
+                                                        <b>Qty: </b>{{$row->jumlah}}
                                                         <br>
-                                                        <b>Ukuran: </b>{{$row->invoice->keranjang->warna->ukuran}}
-                                                        <br>
-                                                        <b>Qty: </b>{{$row->invoice->keranjang->jumlah}}
-                                                        <br>
-                                                        <b>Harga: </b>{{$row->invoice->total}}
+                                                        <b>Harga: </b>{{number_format($row->gross_amount, 0, '.', '.')}}
                                                     </p>
                                                     <ul class="ml-4 mb-0 fa-ul text-muted">
                                                         <li class="small"><span class="fa-li"><i
@@ -90,14 +88,17 @@
                                                     </ul>
                                                 </div>
                                                 <div class="col-5 text-center">
-                                                    <img src="{{asset('assets/'.$row->invoice->keranjang->produk->foto)}}"
+                                                    @php
+                                                    $foto = App\Models\Keranjang::where('invoice_id', $row->id)->first();
+                                                    @endphp
+                                                    <img src="{{asset('assets/'. $foto->produk->foto)}}"
                                                         alt="user-avatar" class="img-circle img-fluid">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-footer">
                                             <div class="text-right">
-                                                <a href="/detailhijab/{{$row->invoice->keranjang->produk->id}}"
+                                                <a href="#"
                                                     class="btn btn-sm btn-danger">
                                                     Beli Lagi
                                                 </a>

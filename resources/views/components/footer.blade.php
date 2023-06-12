@@ -30,7 +30,7 @@
 
                         <ul class="footer-link">
                             <li><a href="/dashboard/katalog">Katalog</a></li>
-                            <!-- <li><a href="/petunjuk">Petunjuk Penggunaan</a></li> -->
+                            <li><a href="/home">Cek Ongkir</a></li>
                             <li><a href="/bantuan">Bantuan</a></li>
                             <!-- <li><a href="javascript:void(0)">Voucher</a></li> -->
                             <!-- <li><a href="javascript:void(0)">Apps and Games</a></li> -->

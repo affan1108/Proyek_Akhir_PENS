@@ -34,6 +34,8 @@
 
     <!--====== Style CSS ======-->
     <link rel="stylesheet" href="{{asset('estore/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('template/plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
         integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -72,21 +74,27 @@
                 <div class="row">
 
                     <div class="col-12 col-sm-6">
-                        <div class="col-12">
+                        <div class="col-12" id="foto">
                             <img src="{{asset('assets/'.$data->foto)}}" class="product-image" alt="Product Image">
                         </div>
-                        <!-- <div class="col-12 product-image-thumbs">
-                                    <div class="product-image-thumb active"><img src="{{asset('assets/'.$data->foto)}}"
+                                <div class="col-12 product-image-thumbs">
+                                @foreach (App\Models\Warna::all() as $r)
+                                    @if($data->id == $r->hijab_id)
+                                    @if($r->foto != null)
+                                    <div class="product-image-thumb active"><img src="{{asset('assets/'.$r->foto)}}"
+                                            alt="Product Image"></div>
+                                    <!-- <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
                                             alt="Product Image"></div>
                                     <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
-                                            alt="Product Image"></div>
-                                    <div class="product-image-thumb"><img src="{{asset('assets/'.$data->foto)}}"
-                                            alt="Product Image"></div>
-                                </div> -->
+                                            alt="Product Image"></div> -->
+                                    @endif
+                                    @endif
+                                @endforeach
+                                </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
@@ -105,12 +113,16 @@
                             <!-- <h4>Available Colors</h4> -->
                             <div class="form-group">
                                 <h4 class="mt-3">Pilihan Warna <small>(Pilih salah satu)</small></h4>
-                                <select class="form-control select2bs4 js-example-basic form-control"
+                                <select class="form-control select2bs4"
                                     style="width: 100%;" id="warna" name="warna_id">
-                                    <option selected disabled>--Pilih Warna--</option>
+                                    <option selected disabled>Warna - Ukuran</option>
                                     @foreach (App\Models\Warna::all() as $r)
                                     @if($data->id == $r->hijab_id)
+                                    @if($r->stok < 1)
+                                    <span>Stok Habis</span>
+                                    @else
                                     <option value="{{ $r->id }}">{{ $r->warna }} - {{ $r->ukuran }}</option>
+                                    @endif
                                     @endif
                                     @endforeach
                                 </select>
@@ -156,9 +168,9 @@
                                 </div>
                             </div>
                             <div class="py-2 mt-4">
-                                <h2 class="mb-0">
+                                <h2 class="mb-0" id="harga">
                                     <!-- <input type="hidden" name="harga" value="{{$data->harga}}"> -->
-                                    Rp: {{$data->harga}}
+                                    Rp: -
                                 </h2>
                                 <!-- <h4 class="mt-0">
                                         <small>Ex Tax: $80.00 </small>
@@ -508,8 +520,12 @@
 
                         <div class="tab-pane fade" id="product-comments" role="tabpanel"
                             aria-labelledby="product-comments-tab">
-                            @foreach(App\Models\Payment::all() as $row)
-                            @if($data->id == $row->invoice->keranjang->produk->id && $row->rating != null)
+                            @foreach($rows as $x)
+                            @foreach(App\Models\Keranjang::all() as $row)
+                            @if($data->id == $row->produk_id)
+                            @if($x->payment_id == null)
+                            @else
+                            @if($x->id == $row->invoice_id && $x->payment->diterima != null && $x->payment->rating != null)
                             <!-- {{$row->invoice_id}} -->
                             <div class="tab-pane fade show active" id="profile" role="tabpanel"
                                 aria-labelledby="profile-tab">
@@ -527,31 +543,31 @@
                                                             <h6 class="name">{{$row->user->name}}</h6>
 
                                                             <p>
-                                                                @if($row->rating == '1')
+                                                                @if($x->payment->rating == '1')
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
-                                                                @elseif($row->rating == '2')
-                                                                <i class="nav-icon fas fa-star"
-                                                                    style="color: yellow"></i>
-                                                                <i class="nav-icon fas fa-star"
-                                                                    style="color: yellow"></i>
-                                                                @elseif($row->rating == '3')
+                                                                @elseif($x->payment->rating == '2')
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
-                                                                <i class="nav-icon fas fa-star"
-                                                                    style="color: yellow"></i>
-                                                                @elseif($row->rating == '4')
+                                                                @elseif($x->payment->rating == '3')
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
+                                                                @elseif($x->payment->rating == '4')
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
-                                                                @elseif($row->rating == '5')
+                                                                <i class="nav-icon fas fa-star"
+                                                                    style="color: yellow"></i>
+                                                                <i class="nav-icon fas fa-star"
+                                                                    style="color: yellow"></i>
+                                                                <i class="nav-icon fas fa-star"
+                                                                    style="color: yellow"></i>
+                                                                @elseif($x->payment->rating == '5')
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
                                                                 <i class="nav-icon fas fa-star"
@@ -563,19 +579,19 @@
                                                                 <i class="nav-icon fas fa-star"
                                                                     style="color: yellow"></i>
                                                                 @endif
-                                                                <span class="rating"><strong>{{$row->rating}}</strong>
+                                                                <span class="rating"><strong>{{$x->payment->rating}}</strong>
                                                                     of 5</span>
                                                                 <!-- number_format($row['gross_amount'], 0, '.', '.') -->
                                                                 <span
-                                                                    class="date">{{date_format($row['updated_at'], 'd-m-y')}}</span>
+                                                                    class="date">{{date_format($x->payment['updated_at'], 'd-m-y')}}</span>
                                                             </p>
                                                         </div>
                                                     </div>
                                                     <div class="comment-user-text">
-                                                        <p>{{$row->deskripsi}}</p>
+                                                        <p>{{$x->payment->deskripsi}}</p>
                                                         <div class="comment-image flex-wrap">
                                                             <div class="image">
-                                                                <img src="{{asset('assets/'.$row->foto)}}" alt=""
+                                                                <img src="{{asset('assets/'.$x->payment->foto)}}" alt=""
                                                                     width="50">
                                                             </div>
                                                         </div>
@@ -592,6 +608,9 @@
                                 </div>
                             </div>
                             @endif
+                            @endif
+                            @endif
+                            @endforeach
                             @endforeach
                         </div>
 
@@ -628,11 +647,20 @@
         <!-- REQUIRED SCRIPTS -->
 
         <!-- jQuery -->
-        <script src="../../plugins/jquery/jquery.min.js"></script>
+        <script src="{{asset('/template/plugins/jquery/jquery.min.js')}}"></script>
         <!-- Bootstrap 4 -->
-        <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="{{asset('/template/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <!-- AdminLTE App -->
-        <script src="../../dist/js/adminlte.min.js"></script>
+        <script src="{{asset('/template/dist/js/adminlte.min.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script>
+
+            $('.select2bs4').select2({
+            theme: 'bootstrap4'
+            })
+        </script>
         <script>
             $(document).ready(function () {
                 $('select[name="warna_id"]').on('change', function () {
@@ -655,6 +683,53 @@
                         $('#stok').empty();
                     }
                 });
+
+                $('select[name="warna_id"]').on('change', function () {
+                    let stokId = $(this).val();
+
+                    if (stokId) {
+                        $.ajax({
+                            url: '/harga/' + stokId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                // <input type="text" id="stok" name="stok">
+                                $('#harga').empty();
+                                $.each(data, function (key, value) {
+                                    $('#harga').append('<h2>Rp. ' + value + '</h2>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('#harga').empty();
+                    }
+                });
+
+                $('select[name="warna_id"]').on('change', function () {
+                    let stokId = $(this).val();
+
+                    if (stokId) {
+                        $.ajax({
+                            url: '/foto/' + stokId,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                // <input type="text" id="stok" name="stok">
+                                $('#foto').empty();
+                                $.each(data, function (key, value) {
+                                    var gambarContainer = document.getElementById('foto');
+                                    var imgElement = document.createElement('img');
+                                    imgElement.src = "{{ asset('assets') }}/" + value;
+                                    gambarContainer.appendChild(imgElement);
+
+                                });
+                            }
+                        });
+                    } else {
+                        $('#foto').empty();
+                    }
+                });
+
             });
             // $('#warna').change(function(e) {
             //     e.preventDefault();

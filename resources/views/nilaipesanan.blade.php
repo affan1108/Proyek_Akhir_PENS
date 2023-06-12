@@ -117,12 +117,21 @@
                                     </div>
                                     <!-- /.col -->
                                     <div class="col-sm-4 invoice-col">
-                                        <b>Invoice ID :
-                                            {{$data->invoice->keranjang->id}}{{$data->invoice->keranjang->user_id}}{{$data->invoice->keranjang->produk_id}}{{$data->invoice->keranjang->warna_id}}{{$data->invoice->keranjang->jumlah}}</b><br>
-                                        <br>
-                                        <b>Order ID:</b> {{$data->order_id}}<br>
-                                        <!-- <b>Payment Due:</b> 2/22/2014<br> -->
-                                        <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+                                        Ekspedisi
+                                        <address>
+                                            <!-- <b>{{$data->ongkir->kota}}</b><br> -->
+
+                                            <b>{{$data->ongkir->kurir}}</b><br>
+                                            @foreach($pay as $x)
+                                            @if($x->id == $data->payment_id)
+                                            Order ID: {{$x->order_id}}<br>
+                                            Payment Code: {{$x->payment_code}} <br>
+                                            @endif
+                                            @endforeach
+                                            Tanggal Pemesanan: {{date_format($data->created_at, 'h:i:s, d-m-y') }}
+                                            <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+
+                                        </address>
                                     </div>
                                     <!-- /.col -->
                                 </div>
@@ -143,29 +152,31 @@
                                                     <th>Ekspedisi</th>
                                                 </tr>
                                             </thead>
+                                            @foreach (App\Models\Keranjang::all() as $r)
+                                            @if($data->id == $r->invoice_id)
                                             @if($data->user->id == Auth::user()->id)
                                             <tbody>
                                                 <tr>
                                                     <td>AC-00{{ Auth::user()->id }}</td>
-                                                    <td>{{$data->invoice->keranjang->jumlah}}</td>
-                                                    <td>{{$data->invoice->keranjang->produk->nama}}</td>
+                                                    <td>{{$r->jumlah}}</td>
+                                                    <td>{{$r->produk->nama}}</td>
                                                     <td>
-                                                        {{$data->invoice->keranjang->warna->warna}}
+                                                        {{$r->warna->warna}}
                                                     </td>
                                                     <!-- <td>{{$data->ukuran}}</td> -->
                                                     <!-- <td>Rp. {{$data->harga}}</td> -->
                                                     <td>
-                                                        {{$data->invoice->keranjang->produk->harga}}
+                                                        {{$r->warna->harga}}
                                                     </td>
                                                     <!-- <td>
-                                                        @if($data->invoice->diskon == null)
+                                                        @if($data->diskon == null)
                                                         Tidak Ada Voucher
-                                                        @elseif($data->invoice->diskon != null)
+                                                        @elseif($data->diskon != null)
                                                         Berhasil Mendapatkan Voucher
                                                         @endif
                                                     </td> -->
                                                     <td>
-                                                        {{$data->invoice->ongkir->kurir}}
+                                                        {{$data->ongkir->kurir}}
                                                     </td>
                                                 </tr>
                                                 <!-- <tr>
@@ -177,6 +188,8 @@
                                                         </tr> -->
                                             </tbody>
                                             @endif
+                                            @endif
+                                            @endforeach
                                         </table>
                                     </div>
                                     <!-- /.col -->

@@ -28,27 +28,33 @@ class OngkirController extends Controller
         // dd($data);
         $data->save();
         // Session::flash('status', 'Data Berhasil Di Update');
-        return redirect()->route('invoice');
+        return redirect()->route('invoicecart');
     }
 
     public function addongkir(Request $request){
-        $data = $request->validate([
-            'user' => 'required',
-            'layanan' => '',
-            'kota' => 'required',
-            'kurir' => 'required',
-            'ongkir' => 'required',
-        ]);
-        $data = new Ongkir;
-        $data->user = $request->user;
-        // $data->layanan = $request->layanan;
-        $data->kota = $request->kota;
-        $data->kurir = $request->kurir;
-        $data->ongkir = $request->ongkir;
-        // dd($data);
-        $data->save();
-        // Session::flash('status', 'Data Berhasil Di Update');
-        return redirect()->route('invoicecart');
+        if($request == null){
+            return redirect()->back()->with('toast_info', 'Pilih Ongkir Terlebih Dahulu');
+        }
+        else 
+        {
+            $data = $request->validate([
+                'user' => 'required',
+                'layanan' => '',
+                'kota' => 'required',
+                'kurir' => 'required',
+                'ongkir' => 'required',
+            ]);
+            $data = new Ongkir;
+            $data->user = $request->user;
+            // $data->layanan = $request->layanan;
+            $data->kota = $request->kota;
+            $data->kurir = $request->kurir;
+            $data->ongkir = $request->ongkir;
+            // dd($data);
+            $data->save();
+            // Session::flash('status', 'Data Berhasil Di Update');
+            return redirect()->route('invoicecart');
+        }
     }
 
     public function deleteongkir($id){

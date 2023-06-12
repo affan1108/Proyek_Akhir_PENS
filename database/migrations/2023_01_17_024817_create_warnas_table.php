@@ -20,6 +20,8 @@ class CreateWarnasTable extends Migration
             $table->string('warna');
             $table->integer('stok');
             $table->string('ukuran');
+            $table->string('harga');
+            $table->string('foto');
             $table->timestamps();
         });
     }

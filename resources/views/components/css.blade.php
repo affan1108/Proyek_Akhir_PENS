@@ -22,3 +22,6 @@
 <link rel="stylesheet" href="{{asset('/template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{asset('/template/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
 <link rel="shortcut icon" href="{{asset('assets/images/logo2.png')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
+        integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />

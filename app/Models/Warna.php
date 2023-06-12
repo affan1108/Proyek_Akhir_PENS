@@ -12,10 +12,18 @@ class Warna extends Model
     protected $table = "warnas";
     protected $guarded = []; 
     protected $fillable = [
+        'hijab_id',
         'warna',
         'stok',
         'ukuran',
+        'harga',
+        'foto',
     ];
+
+    public function getPathAttribute($value)
+    {
+        return asset('storage/' . $value);
+    }
 
     public function hijab()
     {

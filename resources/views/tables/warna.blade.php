@@ -99,7 +99,7 @@
                                                         <th style="width: 20%">
                                                             Nama
                                                         </th>
-                                                        <th style="width: 30%">
+                                                        <th style="width: 10%">
                                                             Warna
                                                         </th>
                                                         <th style="width: 10%">
@@ -107,6 +107,12 @@
                                                         </th>
                                                         <th style="width: 10%">
                                                             Ukuran
+                                                        </th>
+                                                        <th style="width: 20%">
+                                                            Harga
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Foto
                                                         </th>
                                                         <th style="width: 30%">
                                                             Aksi
@@ -133,6 +139,12 @@
                                                         </td>
                                                         <td>
                                                             {{$row->ukuran}}
+                                                        </td>
+                                                        <td>
+                                                            {{$row->harga}}
+                                                        </td>
+                                                        <td>
+                                                            <img src="{{asset('assets/'.$row->foto)}}" alt="Foto">
                                                         </td>
                                                         <td class="project-actions">
                                                             <!-- <a class="btn btn-primary btn-sm" href="/view/{{$row->id}}">
@@ -200,6 +212,21 @@
                                                                             placeholder="Ukuran"
                                                                             value="{{ $row->ukuran }}">
                                                                     </div>
+                                                                    <div class="modal-body">
+                                                                        <label for="harga">Harga</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="harga" name="harga"
+                                                                            placeholder="Harga"
+                                                                            value="{{ $row->harga }}">
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <label>Foto Produk</label>
+                                                                        <div class="custom-file">
+                                                                            <input type="file" class="form-control" value="{{ old('foto', $row->foto) }}" name="foto"
+                                                                                id="exampleInputFile">
+                                                                            <label class="custom-file-label"for="exampleInputFile">{{$row->foto}}</label>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary"
                                                                             data-bs-dismiss="modal">Close</button>
@@ -264,6 +291,20 @@
                                                 <label for="ukuran">Ukuran</label>
                                                 <input type="text" class="form-control" id="ukuran" name="ukuran"
                                                     placeholder="Ukuran">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="harga">Harga</label>
+                                                <input type="text" class="form-control" id="harga" name="harga"
+                                                    placeholder="Harga">
+                                            </div>
+                                            <div class="modal-body">
+                                                <label>Foto Produk</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="form-control" id="customFile"
+                                                        name="foto">
+                                                    <!-- <label class="custom-file-label" for="customFile">Choose
+                                                        file</label> -->
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"

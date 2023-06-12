@@ -22,6 +22,7 @@
 
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    
 </head>
 
 <body class="hold-transition layout-top-nav">
@@ -150,8 +151,10 @@
                                                                 </i>
                                                                 Edit
                                                             </a> -->
-                                                            <a class="btn btn-danger btn-sm"
-                                                                href="/deletepayment/{{$row->id}}">
+                                                            <!-- <a href="#" class="btn btn-outline-danger btn-sm delete"data-id="{{ $row->id}}"
+                                                                data-nama="{{ $row->nama }}"> -->
+                                                            <a class="btn btn-danger btn-sm delete"
+                                                                href="#" data-id="{{ $row->id}}">
                                                                 <i class="fas fa-trash">
                                                                 </i>
                                                                 Delete
@@ -237,10 +240,12 @@
 
         <!-- Main Footer -->
         @include('components.footer')
+        
     </div>
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    @include('sweetalert::alert')
 
     <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
@@ -249,9 +254,32 @@
     <!-- AdminLTE App -->
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+                integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <script>
+        $('.delete').click(function () {
+            var jenisid = $(this).attr('data-id');
+            // var nama = $(this).attr('data-nama');
+            swal({
+                    title: "Yakin?",
+                    text: "Akan menghapus dokumen ID " + jenisid + " ",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location = "/deletepayment/{{$row->id}}/" + jenisid + ""
+                    } else {
+                        swal("Dokumen Tidak Terhapus");
+                    }
+                });
+        }); 
+
         $(document).ready(function () {
             $('select[name="warna_id"]').on('change', function () {
                 let stokId = $(this).val();

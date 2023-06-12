@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('hijab/{id}', [App\Http\Controllers\DetailController::class, 'index'])->name('hijab');
     Route::get('/hijab/{id}', [App\Http\Controllers\DetailController::class, 'getCities']);
+    Route::get('/harga/{id}', [App\Http\Controllers\DetailController::class, 'getHarga']);
+    Route::get('/foto/{id}', [App\Http\Controllers\DetailController::class, 'getFoto']);
 
     Route::get('ongkir', [App\Http\Controllers\OngkirController::class, 'index'])->name('ongkir');
     Route::get('/province/{id}/cities', [App\Http\Controllers\OngkirController::class, 'getCities']);
@@ -127,6 +129,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/print/{id}', [App\Http\Controllers\MenuController::class, 'print'])->name('print');
     Route::get('/addproduk', [App\Http\Controllers\MenuController::class, 'addproduk'])->name('addproduk');
     Route::post('/kas', [App\Http\Controllers\KasController::class, 'insertkas'])->name('kas');
+    Route::get('/filter', [App\Http\Controllers\KasController::class, 'filter']);
     Route::get('/deletekas/{id}', [App\Http\Controllers\KasController::class, 'deletekas'])->name('deletekas');
     Route::post('/updatekas/{id}', [App\Http\Controllers\KasController::class, 'updatekas'])->name('updatekas');
     Route::post('/updatewarna/{id}', [App\Http\Controllers\Table\WarnaController::class, 'updatewarna'])->name('updatewarna');
@@ -151,4 +154,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/payment', [App\Http\Controllers\MenuController::class, 'payment'])->name('tables.payment');
     Route::get('/deleteuser/{id}', [App\Http\Controllers\UserController::class, 'deleteuser'])->name('deleteuser');
     Route::get('/deletepayment/{id}', [App\Http\Controllers\PaymentController::class, 'deletepayment'])->name('deletepayment');
+    Route::get('/mail', [App\Http\Controllers\MailController::class, 'mail'])->name('mail');
+    Route::post('/sendmail', [App\Http\Controllers\MailController::class, 'send']);
 });

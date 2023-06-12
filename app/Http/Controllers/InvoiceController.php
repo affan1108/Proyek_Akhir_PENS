@@ -11,6 +11,7 @@ use App\Models\Invoice;
 use App\Models\Voucher;
 use App\Models\Payment;
 use App\Models\Warna;
+use App\Models\Hijab;
 use Auth;
 use DB;
 
@@ -119,20 +120,37 @@ class InvoiceController extends Controller
     }
 
     public function insertinvoicecart(Request $request){
-        // $request->request->add(['status' => 'Belum Dibayar']);
         // dd($request);
-        // $data = Invoice::create($request->all());
-        // $rows = new Keranjang; 
+        $x = Keranjang::whereIn('id', $request->checkbox)->pluck('produk_id');
+        $y = Keranjang::whereIn('id', $request->checkbox)->pluck('jumlah');
+        $hpp = Hijab::whereIn('id', $x)->pluck('harga');
+        // dd($hpp);
+        $total = "";
+        $result = [];
+        if (count($hpp) === count($y)) {
+            $count = count($hpp);
+            for ($i = 0; $i < $count; $i++) {
+                $result[] = $hpp[$i] * $y[$i];
+                $total = collect($result)->sum();
+            }
+            // dd($total);
+            // DB::table('warnas')->where('id', $cart[$key])->update($min);
+        }
+        // dd($hpp);
         $data = new Invoice;
         $data->user_id = $request->user_id;
-        $data->keranjang_id = isset($request->keranjang_id) ? $request->keranjang_id : null;
+        // $data->keranjang_id = isset($request->keranjang_id) ? $request->keranjang_id : null;
         $data->ongkir_id = isset($request->ongkir_id) ? $request->ongkir_id : null;
         $data->voucher_id = $request->voucher_id;
-        $data->warna_id = $request->warna_id;
-        $data->jumlah = $request->jumlah;
+        // $data->warna_id = $request->warna_id;
+        // $data->jumlah += $request->jumlah;
+        $data->jumlah = Keranjang::whereIn('id', $request->checkbox)->sum('jumlah');
         $data->total = $request->total;
-        $data->status = $request->status;
+        // $data->status = $request->status;
+        $data->hpp = $total;
+        // dd($data->jumlah);
         $data->save();
+        
         
 
         $cart = Keranjang::whereIn('id', $request->checkbox)->pluck('warna_id');
