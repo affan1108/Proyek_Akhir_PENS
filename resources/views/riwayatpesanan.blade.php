@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="card-footer">
                                             <div class="text-right">
-                                                <a href="#"
+                                                <a href="/dashboard/katalog"
                                                     class="btn btn-sm btn-danger">
                                                     Beli Lagi
                                                 </a>

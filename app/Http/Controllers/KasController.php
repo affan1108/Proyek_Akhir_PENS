@@ -153,14 +153,14 @@ class KasController extends Controller
         $kas = Kas::all();
         $user = User::all();
         $produk = Hijab::all();
-        $data = Invoice::all();
+        // $data = Invoice::all();
         
 
         $chartData = [];
         $chartColors = [];
 
         $monthlyProfits = Payment::select(
-            DB::raw('MONTH(created_at) as month'), 
+            DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), 
             DB::raw("SUM(gross_amount) as total_profit")
         )
         ->whereYear('created_at', date('Y'))
@@ -168,14 +168,21 @@ class KasController extends Controller
         ->groupBy('month')
         ->orderBy('month')
         ->get();
+        $donutChart = [];
+        $label = [];
+        
+        foreach ($monthlyProfits as $z) {
+            $bulan = Carbon::createFromFormat('Y-m', $z->month)->locale('id')->monthName; // Mengubah angka menjadi nama bulan
+            $label[] = $bulan;
+        }
         foreach ($monthlyProfits as $item) {
             $chartData[] = $item->value; // Mengambil nilai yang ingin ditampilkan di chart
             $chartColors[] = $item->color; // Mengambil warna untuk setiap data
         }
         
-        $data = Payment::whereDate('created_at','>=',$start)->whereDate('created_at','<=',$end)->get();
+        $data = Invoice::whereDate('created_at','>=',$start)->whereDate('created_at','<=',$end)->get();
         // dd($data);
         // return view('report', compact('data','kas','user','produk','datasets','labels'));
-        return view('report', compact('data','monthlyProfits','kas','user','donutChart','produk','datasets','labels','profitPercentage','report','months'));
+        return view('report', compact('label','data','monthlyProfits','kas','user','donutChart','produk','datasets','labels','profitPercentage','report','months'));
     }
 }

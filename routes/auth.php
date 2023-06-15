@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/riwayatpesanan', [App\Http\Controllers\MenuController::class, 'riwayatpesanan'])->name('riwayatpesanan');
     Route::get('/dashboard/penilaianpesanan', [App\Http\Controllers\MenuController::class, 'penilaianpesanan'])->name('penilaianpesanan');
     Route::get('/dashboard/profile', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
+    Route::get('/dashboard/profil', [App\Http\Controllers\ProfileController::class, 'profil'])->name('profil');
     
     
     
@@ -147,6 +148,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/update/{id}', [App\Http\Controllers\DetailController::class, 'update'])->name('update');
     Route::get('/deleteproduk/{id}', [App\Http\Controllers\DetailController::class, 'delete'])->name('delete');
     Route::put('/updateprofile', [App\Http\Controllers\ProfileController::class, 'updateprofile'])->name('updateprofile');
+    Route::put('/updateprofil', [App\Http\Controllers\ProfileController::class, 'updateprofil'])->name('updateprofil');
     Route::post('/insert', [App\Http\Controllers\DetailController::class, 'insert'])->name('insert');
     Route::post('/store', [App\Http\Controllers\DetailController::class, 'store'])->name('store');
     Route::get('/dashboard/warna', [App\Http\Controllers\MenuController::class, 'warna'])->name('tables.warna');

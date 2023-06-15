@@ -72,7 +72,7 @@ Route::get('/dashboard', function () {
         // dd($hppInvoice);
 
         $monthlyProfits = Payment::select(
-            DB::raw('MONTH(created_at) as month'), 
+            DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), 
             DB::raw("SUM(gross_amount) as total_profit")
         )
         ->whereYear('created_at', date('Y'))
@@ -80,13 +80,12 @@ Route::get('/dashboard', function () {
         ->groupBy('month')
         ->orderBy('month')
         ->get();
-
         $donutChart = [];
+        $label = [];
         
-        for($j=1; $j<=12; $j++){
-            $months = date('F',mktime(0,0,0,$j,1));
-
-            array_push($donutChart,$months);
+        foreach ($monthlyProfits as $z) {
+            $bulan = Carbon::createFromFormat('Y-m', $z->month)->locale('id')->monthName; // Mengubah angka menjadi nama bulan
+            $label[] = $bulan;
         }
 
         $chartData = [];
@@ -173,15 +172,15 @@ Route::get('/dashboard', function () {
         
         // $profitPercentage = ($revenue - $expense) / $revenue * 100;
 
-        $report = Payment::all();
+        $data = Invoice::all();
         $kas = Kas::all();
         $user = User::all();
         $produk = Hijab::all();
-        $data = Invoice::all();
+        // $data = Invoice::all();
 
         // dd($monthlyProfits);
         
-        return view('report', compact('data','kas','user','produk','datasets','labels','report','monthlyProfits','donutChart', 'chartData', 'chartColors', 'months'));
+        return view('report', compact('label','data','kas','user','produk','datasets','labels','monthlyProfits','donutChart', 'chartData', 'chartColors'));
     }
     else
         // $pay = Payment::where('diterima', 0)->pluck('id');

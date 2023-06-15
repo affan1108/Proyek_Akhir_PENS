@@ -130,7 +130,7 @@
                                     <div class="d-flex justify-content-between">
                                         <h3 class="card-title mt-2">
                                             Grafik Pendapatan
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#iModal"
+                                            <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#iModal"
                                                 data-bs-popup="tooltip">
                                                 <span>
                                                     <i class="fas fa-info-circle"></i>
@@ -147,7 +147,9 @@
                                                         <div class="modal-body">
                                                         <ul>
                                                             <li>
-                                                                Bulan : {{$months}}
+                                                                @foreach($label as $x)
+                                                                    Bulan : {{$x}}<br/>
+                                                                @endforeach
                                                             </li>
                                                         </ul>
                                                         </div>
@@ -157,7 +159,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </h3>
                                     </div>
                                 </div>
@@ -214,9 +216,11 @@
                                         $beli = 0;
                                         $untung = 0;
                                         $ongkir = 0;
+                                        $hpp = 0;
                                         @endphp
-                                            @foreach($report as $row)
-                                            @if($row->status == 'settlement' || $row->status == 'capture' && $row->diterima != null)
+                                            @foreach($data as $row)
+                                            @if($row->payment_id != null)
+                                            @if($row->payment->status == 'settlement' || $row->payment->status == 'capture' && $row->payment->diterima == 1)
                                             <tr>
                                                 <td>
                                                     {{$row->user->name}}
@@ -237,31 +241,31 @@
                                                     {{date_format($row->created_at, 'm-d-y')}}
                                                 </td>
                                                 <td>
-                                                    {{number_format($row->invoice->hpp, 0, '.', '.')}}
+                                                    {{number_format($row->hpp, 0, '.', '.')}}
                                                 </td>
                                                 <td>
-                                                    {{ number_format($row['gross_amount'], 0, '.', '.') }}
+                                                    {{ number_format($row->payment['gross_amount'], 0, '.', '.') }}
                                                 </td>
                                                 <td>
-                                                    {{ number_format(($row['gross_amount'] - $row->invoice->hpp), 0, '.', '.')}}
+                                                    {{ number_format(($row->payment['gross_amount'] - $row->hpp), 0, '.', '.')}}
                                                 </td>
                                                 <td>
-                                                    {{ number_format(($row['gross_amount'] - $row->invoice->hpp) / $row['gross_amount'] * 100, 0, '.', '.')}}%
+                                                    {{ number_format(($row->payment['gross_amount'] - $row->hpp) / $row->payment['gross_amount'] * 100, 0, '.', '.')}}%
                                                     <!-- ($revenue - $expense) / $revenue * 100 -->
                                                 </td>
                                             </tr>
                                             @endif
-                                            
+                                            @endif
                                             @endforeach
                                         </tbody>
                                         @php
                                             $color = App\Models\Keranjang::where('invoice_id', $row->invoice_id)->pluck('warna_id');
-                                            $produk = App\Models\Warna::whereIn('id', $color)->sum('harga');
-                                            $ongkir = $row->invoice->ongkir->ongkir;
+                                            $produk = App\Models\Invoice::where('payment_id', '!=', null)->sum('hpp');
                                             $jual += $produk;
-                                            $beli += $row->gross_amount;
-                                            $untung += $row->gross_amount - $produk;
-                                            @endphp
+                                            $beli += $row->payment->gross_amount;
+                                            $hpp += $row->hpp;
+                                            $untung += $beli - $hpp;
+                                        @endphp
                                         <!-- <tfoot>
                                             <tr>
                                                 <th>TOTAL</th>
@@ -564,24 +568,25 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Page specific script -->
     <script>
-        var ctx = document.getElementById('profitChart').getContext('2d');
-        var monthlyProfits = @json($monthlyProfits);
-
-        var chartData = {
-            // labels: {!!json_encode($donutChart)!!},
-            datasets: [{
-                data: monthlyProfits.map(data => data.total_profit),
-            }]
-        };
-
-        var chartOptions = {
-            // Define chart options (e.g., title, legend, etc.)
-        };
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: chartData,
-            options: chartOptions
+        document.addEventListener('DOMContentLoaded', function() {
+            var monthlyProfits = @json($monthlyProfits);
+            var labels = Object.keys(monthlyProfits);
+            var values = Object.values(monthlyProfits);
+            
+            var ctx = document.getElementById('profitChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: {!!json_encode($label) !!},
+                    datasets: [{
+                        data: monthlyProfits.map(data => data.total_profit),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
         });
     </script>
     <script>

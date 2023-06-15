@@ -185,14 +185,16 @@ class KeranjangController extends Controller
                 //         DB::table('keranjangs')->where('id', $request->checkbox[$key])->update($insert);
                 //     }
                 // }
+                $quantities = $request->input('jumlah');
+                // dd($quantities);
                 $proID = Keranjang::whereIn('id', $request->checkbox)->pluck('produk_id');
-                // dd($proID);
+                // dd($proID,$quantities);
                 $cart = Keranjang::whereIn('id', $request->checkbox)->whereIn('produk_id', $proID)->pluck('warna_id');
                 // dd($cart);
                 $cpty = Warna::whereIn('id', $cart)->pluck('stok');
                 // dd($cpty);
-                $sum = Keranjang::whereIn('id', $request->checkbox)->sum('jumlah');
-                // dd($sum);
+                $sum = Keranjang::whereIn('id', $request->checkbox)->pluck('jumlah');
+                // dd($cpty,$sum);
                 if( $sum > $cpty){
                     return back()->with('toast_info', 'Jumlah Melebihi Ketersedian Stok')->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');;  
                 }

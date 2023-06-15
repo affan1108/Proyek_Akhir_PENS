@@ -23,8 +23,8 @@
                         <span>
                             @php
                             $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
-                            $b = App\Models\Payment::where('diterima', 0)->count();
-                            $c = App\Models\Invoice::where('payment_id', null)->count();
+                            $b = App\Models\Payment::where('diterima', 0)->where('user_id', Auth::user()->id)->count();
+                            $c = App\Models\Invoice::where('payment_id', null)->where('user_id', Auth::user()->id)->count();
                             $d = $b + $c;
                             $e = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
                             1)->where('rating', null)->count();
@@ -37,9 +37,9 @@
                                 href="/pesanansaya">Pesanan Saya
                                 <span class="float-right">
                                     @php
-                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
-                                    $b = App\Models\Payment::where('diterima', 0)->count();
-                                    $c = App\Models\Invoice::where('payment_id', null)->count();
+                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->where('user_id', Auth::user()->id)->pluck('id');
+                                    $b = App\Models\Payment::where('diterima', 0)->where('user_id', Auth::user()->id)->count();
+                                    $c = App\Models\Invoice::where('payment_id', null)->where('user_id', Auth::user()->id)->count();
                                     $d = $b + $c;
                                     @endphp
                                     ({{$d}})
@@ -262,6 +262,5 @@
                 </button>
             </a> -->
         </div>
-    </div>
     </div>
 </nav>

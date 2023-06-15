@@ -243,7 +243,7 @@
                         <div class="card-body pb-0">
                             <div class="row">
                                 @foreach($items as $item)
-                                @if($row->payment->diterima == 0 && $item->deleted_at != null)
+                                @if($item->deleted_at != null)
                                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                     <div class="card bg-light d-flex flex-fill">
                                         <div class="card-header text-muted border-bottom-0">
@@ -253,7 +253,7 @@
                                             <div class="row">
                                                 <div class="col-7">
                                                     @php
-                                                    $total = App\Models\Keranjang::where('invoice_id', $row->id)->count();
+                                                    $total = App\Models\Keranjang::where('invoice_id', $item->id)->count();
                                                     @endphp
                                                     <h2 class="lead"><b>{{$total}} produk</b></h2>
                                                     <p class="text-muted text-sm">
@@ -268,10 +268,10 @@
                                                     <ul class="ml-4 mb-0 fa-ul text-muted">
                                                         <li class="small"><span class="fa-li"><i
                                                                     class="fas fa-lg fa-building"></i></span> Alamat:
-                                                            {{$row->user->alamat}}</li>
+                                                            {{$item->user->alamat}}</li>
                                                         <li class="small"><span class="fa-li"><i
                                                                     class="fas fa-lg fa-phone"></i></span> Nomor
-                                                            Telepon: {{$row->user->nomer}}</li>
+                                                            Telepon: {{$item->user->nomer}}</li>
                                                     </ul>
                                                 </div>
                                                 <div class="col-5 text-center">
@@ -285,6 +285,79 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <nav aria-label="Contacts Page Navigation">
+                                <ul class="pagination justify-content-center m-0">
+                                    {{$items->links()}}
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+                    <div class="card card-solid">
+                        <div class="card-header">
+                            <h3 class="card-title mt-2">Order Sukses</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool mt-auto" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <!-- <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button> -->
+                            </div>
+                        </div>
+                        <div class="card-body pb-0">
+                            <div class="row">
+                                @foreach($data as $item)
+                                @if($item->payment_id != null)
+                                @if($item->payment->diterima != null)
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                                    <div class="card bg-light d-flex flex-fill">
+                                        <div class="card-header text-muted border-bottom-0">
+                                            {{$item->user->name}}
+                                        </div>
+                                        <div class="card-body pt-0 mt-2">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    @php
+                                                    $total = App\Models\Keranjang::where('invoice_id', $item->id)->count();
+                                                    @endphp
+                                                    <h2 class="lead"><b>{{$total}} produk</b></h2>
+                                                    <p class="text-muted text-sm">
+                                                        <!-- <b>Warna: </b>{{$item->keranjang_id}}
+                                                        <br>
+                                                        <b>Ukuran: </b>{{$item->keranjang_id}}
+                                                        <br> -->
+                                                        <b>Qty: </b>{{$item->jumlah}}
+                                                        <br>
+                                                        <b>Harga: </b>{{$item->total}}
+                                                    </p>
+                                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                        <li class="small"><span class="fa-li"><i
+                                                                    class="fas fa-lg fa-building"></i></span> Alamat:
+                                                            {{$item->user->alamat}}</li>
+                                                        <li class="small"><span class="fa-li"><i
+                                                                    class="fas fa-lg fa-phone"></i></span> Nomor
+                                                            Telepon: {{$item->user->nomer}}</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-5 text-center">
+                                                    @php
+                                                    $foto = App\Models\Keranjang::where('invoice_id', $row->id)->first();
+                                                    @endphp
+                                                    <img src="{{asset('assets/'. $foto->produk->foto)}}"
+                                                        alt="user-avatar" class="img-circle img-fluid">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                                 @endif
                                 @endforeach
                             </div>

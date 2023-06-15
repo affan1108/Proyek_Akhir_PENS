@@ -56,10 +56,10 @@ class MenuController extends Controller
                 'gross_amount' => $data->total,
             ),
             'customer_details' => array(
-                'first_name' => 'budi',
-                'last_name' => 'pratama',
-                'email' => 'budi.pra@example.com',
-                'phone' => '08111222333',
+                'first_name' => Auth::user()->name,
+                'last_name' => '',
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->nomer,
             ),
         );
 

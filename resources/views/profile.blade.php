@@ -207,6 +207,7 @@
                                                         </div>
                                                     </div>
                                                 </label>
+                                                <input type="hidden" name="previous_url" value="{{ url()->previous() }}">
                                                 <!-- <strong><i class="fas fa-phone-alt mr-1"></i> Nomor Telepon</strong> -->
                                                 <input type="number" class="form-control" id="nomer" name="nomer"
                                                     value="{{ Auth::user()->nomer }}"
@@ -273,6 +274,7 @@
 
         <!-- Main Footer -->
         @include('components.footer')
+        @include('sweetalert::alert')
     </div>
     <!-- ./wrapper -->
 

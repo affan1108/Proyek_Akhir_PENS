@@ -580,10 +580,11 @@
                                                                     style="color: yellow"></i>
                                                                 @endif
                                                                 <span class="rating"><strong>{{$x->payment->rating}}</strong>
-                                                                    of 5</span>
+                                                                of 5</span>
                                                                 <!-- number_format($row['gross_amount'], 0, '.', '.') -->
                                                                 <span
-                                                                    class="date">{{date_format($x->payment['updated_at'], 'd-m-y')}}</span>
+                                                                class="date">{{date_format($x->payment['updated_at'], 'd-m-y')}}</span><br>
+                                                                <span>Varian : {{$row->warna->warna}} - {{$row->warna->ukuran}}</span>
                                                             </p>
                                                         </div>
                                                     </div>
