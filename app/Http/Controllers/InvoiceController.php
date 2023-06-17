@@ -20,7 +20,7 @@ class InvoiceController extends Controller
     public function invoice() {
         $data = Keranjang::all()->last();
         // $rows = Keranjang::all();
-        $ongkir = Ongkir::all()->last();
+        $ongkir = Ongkir::where('user', Auth::user()->id)->latest()->first();
         $kupon = Voucher::all();
         $couriers   = Courier::pluck('title', 'code');
         $provinces  = Province::pluck('title', 'province_id');
@@ -29,7 +29,7 @@ class InvoiceController extends Controller
 
     public function index(Request $request) {
         $rows = Keranjang::all();
-        $ongkir = Ongkir::all()->last();
+        $ongkir = Ongkir::where('user', Auth::user()->id)->latest()->first();
         $kupon = Voucher::all();
         $couriers   = Courier::pluck('title', 'code');
         $provinces  = Province::pluck('title', 'province_id');
@@ -120,6 +120,7 @@ class InvoiceController extends Controller
     }
 
     public function insertinvoicecart(Request $request){
+        $ongkir = Ongkir::where('user', Auth::user()->id)->latest()->first();
         // dd($request);
         $x = Keranjang::whereIn('id', $request->checkbox)->pluck('produk_id');
         $y = Keranjang::whereIn('id', $request->checkbox)->pluck('jumlah');
@@ -141,7 +142,7 @@ class InvoiceController extends Controller
         $data->user_id = $request->user_id;
         // $data->keranjang_id = isset($request->keranjang_id) ? $request->keranjang_id : null;
         $data->ongkir_id = isset($request->ongkir_id) ? $request->ongkir_id : null;
-        $data->voucher_id = $request->voucher_id;
+        // $data->voucher_id = $request->voucher_id;
         // $data->warna_id = $request->warna_id;
         // $data->jumlah += $request->jumlah;
         $data->jumlah = Keranjang::whereIn('id', $request->checkbox)->sum('jumlah');
@@ -159,84 +160,98 @@ class InvoiceController extends Controller
         $cpty = Warna::whereIn('id', $cart)->pluck('stok');
         
 
-        $result = [];
+        $item = true;
         if (count($cpty) === count($qty)) {
             $count = count($cpty);
             for ($i = 0; $i < $count; $i++) {
-                $result[] = $cpty[$i] - $qty[$i];
+                $item = $cpty[$i] < $qty[$i];
             }
-            // dd($result);
-            
-            foreach($cart as $key=>$value){
-                foreach($result as $key=>$item){
-                    $min = [
-                        'stok' => $result[$key],
-                    ];
-                    // dd($min);
-                    DB::table('warnas')->where('id', $cart[$key])->update($min);
+        }
+        // dd($item);
+        
+        if($item){
+            return back()->with('toast_info', 'Stok Barang Sudah Habis');
+        }
+        else{
+            $result = [];
+            if (count($cpty) === count($qty)) {
+                $count = count($cpty);
+                for ($i = 0; $i < $count; $i++) {
+                    $result[] = $cpty[$i] - $qty[$i];
                 }
+                // dd($result);
+                
+                foreach($cart as $key=>$value){
+                    foreach($result as $key=>$item){
+                        $min = [
+                            'stok' => $result[$key],
+                        ];
+                        // dd($min);
+                        DB::table('warnas')->where('id', $cart[$key])->update($min);
+                    }
+                }
+
+                // dd($min);
+                
             }
 
-            // dd($min);
             
+            
+            foreach($request->checkbox as $key=>$name) {
+                $insert = [
+                    'invoice_id' => $data->id,
+                    'payment' => 1
+                ];
+                DB::table('keranjangs')->where('id', $request->checkbox[$key])->update($insert);
+            }
+
+            
+            // dd($data, $result, $insert);
+            // DB::table('warnas')->where('id', $data->keranjang->warna_id)->update($min);
+            
+            // Set your Merchant Server Key
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+            \Midtrans\Config::$isProduction = false;
+            // Set sanitization on (default)
+            \Midtrans\Config::$isSanitized = true;
+            // Set 3DS transaction for credit card to true
+            \Midtrans\Config::$is3ds = true;
+
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => rand(),
+                    'gross_amount' => $request->total,
+                ),
+                // 'item_details' => array(
+                //     [
+                //       'id'=> 'a01',
+                //       'price'=> 7000,
+                //       'quantity'=> 1,
+                //       'name'=> 'Apple'
+                //     ],
+                //     [
+                //       'id'=> 'b02',
+                //       'price'=> 3000,
+                //       'quantity'=> 2,
+                //       'name'=> 'Orange'
+                //     ]
+                // ),
+                'customer_details' => array(
+                    'first_name' => Auth::user()->name,
+                    'last_name' => '',
+                    'email' => Auth::user()->email,
+                    'phone' => Auth::user()->nomer,
+                ),
+            );
+            // dd($insert);
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            // return redirect()->back()->with($snapToken);
+            
+            // dd($request->checkbox);
+            return view('billcart', compact('data', 'snapToken','ongkir'))->with('toast_success', 'Produk Berhasil Dipesan');
+            // return url("billcart/{$data->id}");
         }
-
-        
-        
-        foreach($request->checkbox as $key=>$name) {
-            $insert = [
-                'invoice_id' => $data->id,
-                'payment' => 1
-            ];
-            DB::table('keranjangs')->where('id', $request->checkbox[$key])->update($insert);
-        }
-
-        
-        // dd($data, $result, $insert);
-        // DB::table('warnas')->where('id', $data->keranjang->warna_id)->update($min);
-        
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
-
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => $request->total,
-            ),
-            // 'item_details' => array(
-            //     [
-            //       'id'=> 'a01',
-            //       'price'=> 7000,
-            //       'quantity'=> 1,
-            //       'name'=> 'Apple'
-            //     ],
-            //     [
-            //       'id'=> 'b02',
-            //       'price'=> 3000,
-            //       'quantity'=> 2,
-            //       'name'=> 'Orange'
-            //     ]
-            // ),
-            'customer_details' => array(
-                'first_name' => Auth::user()->name,
-                'last_name' => '',
-                'email' => Auth::user()->email,
-                'phone' => Auth::user()->nomer,
-            ),
-        );
-        // dd($insert);
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        // return redirect()->back()->with($snapToken);
-        
-        // dd($request->checkbox);
-        return view('billcart', compact('data', 'snapToken'))->with('toast_success', 'Produk Berhasil Dipesan');
-        // return url("billcart/{$data->id}");
     }
 
     public function payment_post(Request $request){

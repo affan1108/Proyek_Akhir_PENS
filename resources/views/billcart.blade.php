@@ -104,10 +104,14 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-sm-4 invoice-col">
-
-                                    <!-- <b>Order ID:</b> 4F3S8J<br> -->
-                                    <!-- <b>Payment Due:</b> 2/22/2014<br> -->
-                                    <!-- <b>Account:</b> AC-00{{ Auth::user()->id }} -->
+                                    Ekspedisi
+                                    <address>
+                                        <b>{{$ongkir->kota}}</b><br>
+                                        {{$ongkir->kurir}}<br>
+                                        <!-- <a class="btn btn-primary btn-sm" href="/deleteongkir/{{$ongkir->id}}">
+                                            Ganti Ekspedisi
+                                        </a> -->
+                                    </address>
                                 </div>
                                 <!-- /.col -->
                             </div>

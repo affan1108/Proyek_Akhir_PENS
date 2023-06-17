@@ -306,7 +306,8 @@ class MenuController extends Controller
 
     public function bill_cart($id) {
         $rows = Invoice::with('cart')->find($id);
-        return view('billcart', compact('rows'));
+        $ongkir = Ongkir::where('user', Auth::user()->id)->latest()->first();
+        return view('billcart', compact('rows','ongkir'));
     }
 
     public function show() {

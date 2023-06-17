@@ -24,7 +24,7 @@ class CreateInvoicesTable extends Migration
             $table->integer('jumlah');
             $table->string('total');
             $table->foreignId('payment_id')->constrained('payments')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('hpp');
+            $table->string('hpp');
             $table->string('hitung');
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();

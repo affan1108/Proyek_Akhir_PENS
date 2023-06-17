@@ -43,7 +43,7 @@ class KeranjangController extends Controller
         // $data->save();
         //     return redirect('home');
   
-        $cek = Keranjang::where('invoice_id', null)->where('produk_id', $request->produk_id)->pluck('warna_id');
+        $cek = Keranjang::where('invoice_id', null)->where('produk_id', $request->produk_id)->where('user_id', Auth::user()->id)->pluck('warna_id');
         // $x = explode(',', $cek);
         // dd($cek);
         if($request->warna_id == null){

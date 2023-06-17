@@ -322,6 +322,7 @@
 
         <!-- Main Footer -->
         @include('components.footer')
+        @include('sweetalert::alert')
 
         <!-- REQUIRED SCRIPTS -->
 
