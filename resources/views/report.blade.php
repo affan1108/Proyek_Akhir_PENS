@@ -262,23 +262,9 @@
                                             $color = App\Models\Keranjang::where('invoice_id', $row->invoice_id)->pluck('warna_id');
                                             $produk = App\Models\Invoice::where('payment_id', '!=', null)->sum('hpp');
                                             $jual += $produk;
-                                            $beli += $row->payment->gross_amount;
                                             $hpp += $row->hpp;
-                                            $untung += $beli - $hpp;
+                                            $untung += $hpp;
                                         @endphp
-                                        <!-- <tfoot>
-                                            <tr>
-                                                <th>TOTAL</th>
-                                                <th>-</th>
-                                                <th>-</th>
-                                                <th>-
-                                                </th>
-                                                <th>{{ number_format($beli, 0, '.', '.') }}
-                                                </th>
-                                                <th>{{ number_format( $untung, 0, '.', '.') }}
-                                                </th>
-                                            </tr>
-                                        </tfoot> -->
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
@@ -450,7 +436,6 @@
                                                 <td>2.</td>
                                                 <td>Total Harga Beli</td>
                                                 <td>
-                                                    {{ number_format($beli, 0, '.', '.') }}
                                                 </td>
                                             </tr> -->
                                             <tr>

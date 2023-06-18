@@ -127,9 +127,6 @@
                                                             {{$row->user->name}}
                                                         </td>
                                                         <td>
-                                                            {{$row->invoice->keranjang->produk->nama}}
-                                                        </td>
-                                                        <td>
                                                             {{ number_format($row['gross_amount'], 0, '.', '.') }}
                                                         </td>
                                                         <td>

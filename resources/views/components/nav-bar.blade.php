@@ -5,10 +5,7 @@
                 class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Ameliia Collection</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link {{'dashboard' == request()->path() ? 'active' : '' }}"
                         aria-current="page" href="/dashboard">Home</a>
@@ -238,31 +235,7 @@
                 </div> -->
                 @endif
             </ul>
-            @if(Auth::user()->name != 'admin')
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-                <li class="nav-item dropdown">
-                    <div class="navbar-nav mb-lg-0">
-                        @php
-                        $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
-                        null)->count();
-                        @endphp
-                        <div class="col-3 mt-2">
-                            <!-- navbar cart start -->
-                            <div class="navbar-cart">
-                                <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
-                                    <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
-                                    <!-- <i class="lni lni-cart"></i> -->
-                                    @if($data > 0)
-                                    <span class="icon-text text-style-1">
-                                        {{$data}}
-                                    </span>
-                                    @else
-                                    @endif
-                                </a>
-                            </div>
-                            <!-- navbar cart Ends -->
-                        </div>
-                </li>
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-2">
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="nav-link">
@@ -297,44 +270,36 @@
                     </ul>
                 </li>
             </ul>
-            @else
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-3">
-                <li class="nav-item dropdown">
-                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        class="nav-link">
-                        <button
-                            class="btn {{'dashboard/profile' == request()->path() ? 'btn-primary ' : 'btn-outline-primary ' }}">
-                            <i class="fas fa-user"></i>
-                            {{Auth::user()->name}}
-                        </button>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item {{'dashboard/profile' == request()->path() ? 'active' : '' }}"
-                                href="/dashboard/profile">Akun Saya</a></li>
-                        <!-- <li><a class="dropdown-item {{ 'keranjang' == request()->path() ? 'active' : '' }}"
-                                href="/keranjang">Keranjang
-                                <span class="float-right">
-                                    @php
-                                    $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment', null)->count();
-                                    @endphp
-                                    @if($data == 0)
-                                    @else
-                                    ({{$data}})
-                                    @endif
-                                </span>
-                            </a></li> -->
-                        <li><a class="dropdown-item {{ 'logout' == request()->path() ? '' : 'active bg-danger' }}"
-                                href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                                                        document.getElementById('logout-form').submit();">Logout</a></li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </ul>
-                </li>
-            </ul>
-            @endif
         </div>
-    </div>
+        <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+            <li class="nav-item dropdown">
+                <div class="navbar-nav mb-lg-0">
+                    @php
+                    $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                    null)->count();
+                    @endphp
+                    <div class="col-3 mt-1">
+                        <!-- navbar cart start -->
+                        <div class="navbar-cart">
+                            <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
+                                <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
+                                <!-- <i class="lni lni-cart"></i> -->
+                                @if($data > 0)
+                                <span class="icon-text text-style-1">
+                                    {{$data}}
+                                </span>
+                                @else
+                                @endif
+                            </a>
+                        </div>
+                        <!-- navbar cart Ends -->
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>

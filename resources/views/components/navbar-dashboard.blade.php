@@ -5,10 +5,8 @@
                 class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Ameliia Collection</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        
+        <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link {{'dashboard' == request()->path() ? 'active' : '' }}"
                         aria-current="page" href="/dashboard">Home</a>
@@ -24,7 +22,8 @@
                             @php
                             $a = App\Models\Invoice::where('payment_id', '!=', null)->pluck('id');
                             $b = App\Models\Payment::where('diterima', 0)->where('user_id', Auth::user()->id)->count();
-                            $c = App\Models\Invoice::where('payment_id', null)->where('user_id', Auth::user()->id)->count();
+                            $c = App\Models\Invoice::where('payment_id', null)->where('user_id',
+                            Auth::user()->id)->count();
                             $d = $b + $c;
                             $e = App\Models\Payment::where('user_id', Auth::user()->id)->where('diterima',
                             1)->where('rating', null)->count();
@@ -37,9 +36,12 @@
                                 href="/pesanansaya">Pesanan Saya
                                 <span class="float-right">
                                     @php
-                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->where('user_id', Auth::user()->id)->pluck('id');
-                                    $b = App\Models\Payment::where('diterima', 0)->where('user_id', Auth::user()->id)->count();
-                                    $c = App\Models\Invoice::where('payment_id', null)->where('user_id', Auth::user()->id)->count();
+                                    $a = App\Models\Invoice::where('payment_id', '!=', null)->where('user_id',
+                                    Auth::user()->id)->pluck('id');
+                                    $b = App\Models\Payment::where('diterima', 0)->where('user_id',
+                                    Auth::user()->id)->count();
+                                    $c = App\Models\Invoice::where('payment_id', null)->where('user_id',
+                                    Auth::user()->id)->count();
                                     $d = $b + $c;
                                     @endphp
                                     ({{$d}})
@@ -158,63 +160,10 @@
                                 href="/dashboard/report">Inventory</a></li>
                     </ul>
                 </li>
-                <div class="col-3">
-                    <li class="nav-item dropdown">
-                        <a class="icon-btn primary-icon-text icon-text-btn" data-toggle="dropdown" href="#">
-                            <i class="far fa-bell"></i>
-                            <span class="icon-text text-style-1">
-                                0
-                            </span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                            <span class="dropdown-item dropdown-header">15 Notifications</span>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                                <span class="float-right text-muted text-sm">3 mins</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-users mr-2"></i> 8 friend requests
-                                <span class="float-right text-muted text-sm">12 hours</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-file mr-2"></i> 3 new reports
-                                <span class="float-right text-muted text-sm">2 days</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                        </div>
-                    </li>
-                </div>
                 @endif
             </ul>
             <!-- Right navbar links -->
-            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-                <li class="nav-item dropdown">
-                    <div class="navbar-nav mb-lg-0">
-                        @php
-                        $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
-                        null)->count();
-                        @endphp
-                        <div class="col-3 mt-2">
-                            <!-- navbar cart start -->
-                            <div class="navbar-cart">
-                                <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
-                                    <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
-                                    <!-- <i class="lni lni-cart"></i> -->
-                                    @if($data > 0)
-                                    <span class="icon-text text-style-1">
-                                        {{$data}}
-                                    </span>
-                                    @else
-                                    @endif
-                                </a>
-                            </div>
-                            <!-- navbar cart Ends -->
-                        </div>
-                </li>
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto mb-2">
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         class="nav-link">
@@ -249,18 +198,36 @@
                     </ul>
                 </li>
             </ul>
-            <!-- <a href="/register">
-                    <button class="btn btn-primary mr-3">
-                        Sign Up
-                    </button>
-                    </a> -->
-
-            <!-- <a href="/profile">
-                <button class="btn btn-outline-primary">
-                    <i class="fas fa-user"></i>
-                    {{Auth::user()->name}}
-                </button>
-            </a> -->
         </div>
+        <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+            <li class="nav-item dropdown">
+                <div class="navbar-nav mb-lg-0">
+                    @php
+                    $data = App\Models\Keranjang::where('user_id', Auth::user()->id)->where('payment',
+                    null)->count();
+                    @endphp
+                    <div class="col-3 mt-1">
+                        <!-- navbar cart start -->
+                        <div class="navbar-cart">
+                            <a class="icon-btn primary-icon-text icon-text-btn" href="/keranjang">
+                                <img src="{{asset('estore/assets/images/icon-svg/cart-1.svg')}}" alt="Icon">
+                                <!-- <i class="lni lni-cart"></i> -->
+                                @if($data > 0)
+                                <span class="icon-text text-style-1">
+                                    {{$data}}
+                                </span>
+                                @else
+                                @endif
+                            </a>
+                        </div>
+                        <!-- navbar cart Ends -->
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </nav>

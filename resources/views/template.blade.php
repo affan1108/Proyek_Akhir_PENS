@@ -7,9 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Name : {{$data['name']}}</p><br>
-    <p>E-mail : {{$data['email']}}</p><br>
-    <p>Subject : {{$data['subject']}}</p><br>
-    <p>Message : {{$data['message']}}</p><br>
+    <p>Name : {{$data['name']}}</p>
+    <p>E-mail : {{$data['email']}}</p>
+    <p>Subject : {{$data['subject']}}</p>
+    <p>Message : {{$data['message']}}</p>
 </body>
 </html>

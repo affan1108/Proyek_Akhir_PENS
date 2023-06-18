@@ -28,7 +28,7 @@ class MailController extends Controller
             'message' => $request->message,
         );
 
-        Mail::to("affanhendi1108@gmail.com")->send(new SendMail($data));
+        Mail::to("ameliiacollection1@gmail.com")->send(new SendMail($data));
         return back()->with("toast_success", "Berhasil Mengirimkan Email");
 
     }
