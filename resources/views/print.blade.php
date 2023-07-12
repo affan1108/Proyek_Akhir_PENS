@@ -55,10 +55,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>Invoice ID :
-                        {{$data->invoice->keranjang->id}}{{$data->invoice->keranjang->user_id}}{{$data->invoice->keranjang->produk_id}}{{$data->invoice->keranjang->warna_id}}{{$data->invoice->keranjang->jumlah}}</b><br>
-                    <br>
-                    <b>Order ID:</b> {{$data->order_id}}<br>
+                    
                 </div>
                 <!-- /.col -->
             </div>
@@ -70,77 +67,72 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>#</th>
                                 <th>Qty</th>
                                 <th>Products</th>
                                 <th>Color</th>
                                 <th>Harga</th>
-                                <th>Ekspedisi</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        @if($data->user->id == Auth::user()->id)
+                        @php
+                        $total = 0;
+                        $jumlah = 0;
+                        @endphp
+                        @foreach (App\Models\Keranjang::all() as $r)
+                        @if($data->id == $r->invoice_id)
                         <tbody>
                             <tr>
-                                <td>AC-00{{ Auth::user()->id }}</td>
-                                <td>{{$data->invoice->keranjang->jumlah}}</td>
-                                <td>{{$data->invoice->keranjang->produk->nama}}</td>
                                 <td>
-                                    {{$data->invoice->keranjang->warna->warna}}
+                                    
+                                </td>
+                                <td>AC-00{{ Auth::user()->id }}</td>
+                                <td>{{$r->jumlah}}</td>
+                                <td>{{$r->produk->nama}}</td>
+                                <td>
+                                    {{$r->warna->warna}}
                                 </td>
                                 <!-- <td>{{$data->ukuran}}</td> -->
                                 <!-- <td>Rp. {{$data->harga}}</td> -->
                                 <td>
-                                    {{$data->invoice->keranjang->produk->harga}}
+                                    {{$r->warna->harga}}
                                 </td>
+                                <!-- <td>
+                                    {{$data->ongkir->kurir}}
+                                </td> -->
                                 <td>
-                                    {{$data->invoice->ongkir->kurir}}
+                                    @if($data->payment_id != null)
+                                    @if($data->payment->status == 'settlement' ||
+                                    $data->payment->status == 'capture')
+                                    @if($data->payment->resi == null)
+                                    <span class="badge badge-info">Dikemas</span>
+                                    @elseif($data->payment->resi != null)
+                                    <span class="badge badge-success">Dikirim</span>
+                                    @endif
+                                    @elseif($data->payment->status == 'pending')
+                                    <span class="badge badge-warning">Menunggu Pembayaran</span>
+                                    @endif
+                                    @else
+                                    <span class="badge badge-danger">Belum Dibayar</span>
+                                    @endif
                                 </td>
+                            </tr>
+                            <!-- <tr>
+                                        <td>1</td>
+                                        <td>Hijab</td>
+                                        <td>Red</td>
+                                        <td>L</td>
+                                        <td>Rp. 9.000</td>
+                                    </tr> -->
                         </tbody>
+                        @php
+                        $total += $r->warna->harga * $r->jumlah;
+                        $jumlah += $r->jumlah;
+                        @endphp
                         @endif
+                        @endforeach
                     </table>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-
-            <div class="row">
-                <!-- accepted payments column -->
-                <div class="col-6">
-                </div>
-                <!-- /.col -->
-                <div class="col-6">
-                    <p class="lead">Billing :</p>
-                    <div class="table-responsive mt-2">
-                        <table class="table">
-                            <tr>
-                                <th style="width:50%">Subtotal:</th>
-                                <td>
-                                    <?php
-                                                            if(isset($data->invoice->keranjang->hitung)){
-                                                                $jmlh = $data->invoice->keranjang->jumlah;
-                                                                $hrg = $data->invoice->keranjang->produk->harga;
-                                                                $subtotal = $jmlh*$hrg;
-                                                                echo "$subtotal";
-                                                            }
-                                                        ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Ongkir:</th>
-                                <td>
-                                    {{$data->invoice->ongkir->ongkir}}
-                                </td>
-                            </tr>
-                            <tr>
-                            </tr>
-                            <tr>
-                                <th>Total:</th>
-                                <td>
-                                    {{$data->invoice->total}}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
                 </div>
                 <!-- /.col -->
             </div>

@@ -29,13 +29,15 @@ use Carbon\Carbon;
 Route::get('/', function () {
     $data = Hijab::paginate(4);
     $carts = Keranjang::all();
-    return view('home', compact('data', 'carts'));
+    $rows = Invoice::with('payment')->get();
+    return view('home', compact('data', 'carts','rows'));
     // return view('home');
 });
 
 Route::get('/dashboard', function () {
     $data = Hijab::paginate(4);
     $carts = Keranjang::all();
+    $rows = Invoice::with('payment')->get();
     if(Auth::user()->name == 'admin'){
         $order = Invoice::select(
             DB::raw("(COUNT(*)) as count"),
@@ -176,18 +178,19 @@ Route::get('/dashboard', function () {
         $kas = Kas::all();
         $user = User::all();
         $produk = Hijab::all();
+        $rows = Invoice::with('payment')->get();
         // $data = Invoice::all();
 
         // dd($monthlyProfits);
         
-        return view('report', compact('label','data','kas','user','produk','datasets','labels','monthlyProfits','donutChart', 'chartData', 'chartColors'));
+        return view('report', compact('label','data','kas','user','produk','datasets','labels','monthlyProfits','donutChart', 'chartData', 'chartColors','rows'));
     }
     else
         // $pay = Payment::where('diterima', 0)->pluck('id');
         // // dd($pay);
         // $data = Invoice::where('payment_id', !null)->count();
         // dd($data);
-        return view('dashboard', compact('data', 'carts'));
+        return view('dashboard', compact('data', 'carts','rows'));
 })->middleware(['auth', 'verified']);
 
 // Route::get('/detailhijab/{id}', function ($id) {

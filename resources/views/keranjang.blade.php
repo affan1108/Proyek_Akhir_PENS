@@ -228,6 +228,14 @@
     <!--====== Main js ======-->
     <script src="{{asset('estore/assets/js/main.js')}}"></script>
     <script>
+        window.addEventListener('beforeunload', function() {
+            var sweetAlertElement = document.querySelector('.swal2-container');
+            if (sweetAlertElement){
+                sweetAlertElement.remove();
+            }
+        });
+    </script>
+    <script>
         $(document).ready(function () {
             $('select[name="warna_id[]"]').on('change', function () {
                 let stokId = $(this).val();

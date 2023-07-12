@@ -93,7 +93,7 @@ class MenuController extends Controller
     }
 
     public function print($id) {
-        $data = Payment::find($id);
+        $data = Invoice::find($id);
         return view('print',compact('data'));
     }
 
@@ -327,15 +327,22 @@ class MenuController extends Controller
     }
 
     public function katalog(Request $request) {
+        // $data = Hijab::all()->pluck('id');
+        // $rows = Invoice::where('payment_id', '!=', null)->pluck('id');
+        // $cart = Keranjang::whereIn('produk_id', $data)->whereIn('invoice_id', $rows)->pluck('invoice_id');
+        // $val = Payment::whereIn('invoice_id', $cart)->where('diterima', '!=', null)->where('rating', '!=', null)->pluck('rating');
+        // dd($rows, $cart, $val);
 
         $theme = $request->cookie('theme');
+        $rows = Invoice::all();
         if($request->has('search')){
             // dd($request);
             $data = Hijab::where('nama','LIKE','%'.$request->search.'%')->paginate(100);
         } else {
             $data = Hijab::all();
         }
-        return view('katalog', compact('data','theme'));
+        // dd($data, $rows);
+        return view('katalog', compact('data','theme','rows'));
     }
 
     public function view($id)

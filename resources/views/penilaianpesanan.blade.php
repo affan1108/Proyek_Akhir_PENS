@@ -57,7 +57,7 @@
                 <div class="container">
                 <div class="container-fluid">
                         <div class="row">
-                            @foreach($data as $row)
+                            @foreach($data as $index =>$row)
                             @if($row->payment_id == null)
                             @else
                             @if($row->payment->diterima == '1' && $row->payment->rating == null && $row->user_id == Auth::user()->id)
@@ -115,19 +115,12 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <nav aria-label="Contacts Page Navigation">
-                            <ul class="pagination justify-content-center m-0">
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                <li class="page-item"><a class="page-link" href="#">8</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+                                <nav aria-label="Contacts Page Navigation">
+                                    <ul class="pagination justify-content-center m-0">
+                                        {{$data->links()}}
+                                    </ul>
+                                </nav>
+                            </div>
                     <!-- Modal -->
                     <div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
                         <div class="modal-dialog">

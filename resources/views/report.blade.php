@@ -227,7 +227,7 @@
                                                 </td>
                                                 <td>
                                                     @php
-                                                    $total = App\Models\Keranjang::where('invoice_id', $row->invoice_id)->pluck('produk_id');
+                                                    $total = App\Models\Keranjang::where('invoice_id', $row->id)->pluck('produk_id');
                                                     $items = App\Models\Hijab::whereIn('id', $total)->pluck('nama');
                                                     @endphp
                                                     @foreach($items as $item)
@@ -429,7 +429,6 @@
                                                 <td>1.</td>
                                                 <td>Total Harga Jual</td>
                                                 <td>
-                                                    {{ number_format($jual, 0, '.', '.')}}
                                                 </td>
                                             </tr>
                                             <tr>

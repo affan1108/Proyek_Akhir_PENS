@@ -102,7 +102,7 @@ class KeranjangController extends Controller
         } else {
             Warna::create($data);
             Session::flash('status', 'Berhasil Menambahkan Ke Keranjang');
-            return redirect()->back()->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            return redirect()->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         }
     }
 

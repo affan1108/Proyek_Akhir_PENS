@@ -60,7 +60,7 @@ class OngkirController extends Controller
     public function deleteongkir($id){
         $data = Ongkir::find($id);
         $data->delete();
-        return redirect()->route('home');
+        return redirect()->route('ongkir');
         // return view("detailhijab");
     }
 

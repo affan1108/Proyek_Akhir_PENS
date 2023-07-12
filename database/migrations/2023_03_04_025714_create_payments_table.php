@@ -30,7 +30,7 @@ class CreatePaymentsTable extends Migration
             $table->string('pdf_url')->nullable();
             $table->string('resi')->nullable();
             $table->boolean('diterima')->nullable();
-            $table->string('rating')->nullable();
+            $table->integer('rating')->nullable();
             $table->string('foto')->nullable();
             $table->string('deskripsi')->nullable();
             $table->timestamps();

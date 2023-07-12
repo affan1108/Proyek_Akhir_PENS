@@ -35,7 +35,7 @@ class ProfileController extends Controller
     }
 
     public function updateprofil(UpdateProfileRequest $request){
-        dd($request->url());
+        // dd($request->url());
         $user = auth()->user();
 
         $user->update([

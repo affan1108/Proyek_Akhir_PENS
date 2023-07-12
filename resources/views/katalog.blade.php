@@ -62,7 +62,7 @@
                                 <div class="col mb-5">
                                     <div class="card h-100">
                                         <!-- Product image-->
-                                        <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..." />
+                                        <img class="card-img-top" src="{{asset('assets/'.$row->foto)}}" alt="..."/>
                                         <!-- Product details-->
                                         <div class="card-body p-4">
                                             <div class="text-center">
@@ -73,8 +73,62 @@
                                                 @endif
                                                 @endif
                                                 @endforeach
+                                                <!-- @php
+                                                $val = App\Models\Keranjang::where('produk_id', $row->id)->pluck('invoice_id');
+                                                $item = App\Models\Payment::whereIn('invoice_id', $val)->where('diterima', '!=', null)->where('rating', '!=', null)->get();
+                                                $a = $item->sum('rating');
+                                                $b = $item->count('rating');
+                                                @endphp
+                                                @if ($a != 0 && $b != 0) 
+                                                    @php
+                                                    $result = round($a / $b);
+                                                    @endphp
+                                                    {{$result}}
+                                                @else 
+                                                    (belum ada rating)
+                                                @endif -->
                                                 <!-- Product name-->
                                                 <h5 class="fw-bolder">{{$row->nama}}</h5>
+                                                <div class="d-flex justify-content-center small text-warning mb-2">
+                                                    @php
+                                                    $val = App\Models\Keranjang::where('produk_id', $row->id)->pluck('invoice_id');
+                                                    $item = App\Models\Payment::whereIn('invoice_id', $val)->where('diterima', '!=', null)->where('rating', '!=', null)->get();
+                                                    $a = $item->sum('rating');
+                                                    $b = $item->count('rating');
+                                                    @endphp
+                                                    @if ($a != 0 && $b != 0) 
+                                                        @php
+                                                        $result = round($a / $b, 1);
+                                                        @endphp
+                                                        <div class="bi-star-fill mr-1"></div>
+                                                        {{$result}} / 5 <br>
+                                                        <!-- @if($result == 1)
+                                                        <div class="bi-star-fill"></div>
+                                                        @elseif($result == 2)
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        @elseif($result == 3)
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        @elseif($result == 4)
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        @elseif($result == 5)
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        <div class="bi-star-fill"></div>
+                                                        @endif
+                                                        <br>
+                                                        {{$result}} -->
+                                                    @else 
+                                                        (belum ada rating)
+                                                    @endif
+                                                </div>
                                                 <!-- Product price-->
                                                 @foreach (App\Models\Warna::all() as $r)
                                                 @if($row->id == $r->hijab_id)

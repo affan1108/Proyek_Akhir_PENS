@@ -657,6 +657,14 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script>
+            window.addEventListener('beforeunload', function() {
+                var sweetAlertElement = document.querySelector('.swal2-container');
+                if (sweetAlertElement){
+                    sweetAlertElement.remove();
+                }
+            });
+        </script>
+        <script>
 
             $('.select2bs4').select2({
             theme: 'bootstrap4'
@@ -697,7 +705,7 @@
                                 // <input type="text" id="stok" name="stok">
                                 $('#harga').empty();
                                 $.each(data, function (key, value) {
-                                    $('#harga').append('<h2>Rp. ' + value + '</h2>');
+                                    $('#harga').append('<h2>Rp. ' + value.toLocaleString('id-ID', { minimumFractionDigits: 0 }) + '</h2>');
                                 });
                             }
                         });
